@@ -1,6 +1,7 @@
 const { sendToQueue } = require('../services/rabbitMQService');
 const redisClient = require('../services/redisService');
 const Task = require('../models/task');
+const mongoose = require('mongoose');
 
 /**
  * @swagger

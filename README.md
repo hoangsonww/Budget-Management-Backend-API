@@ -274,6 +274,7 @@ Budget-Management-Backend-API/
 | `/api/tasks`               | GET        | Get all tasks.                           |
 | `/api/tasks`               | POST       | Add a new task.                          |
 | `/api/tasks/:id`           | GET        | Get a specific task.                     |
+| `/api/tasks/:id`           | PUT        | Update a task.                           |
 | `/api/tasks/:id`           | DELETE     | Delete a task.                           |
 | `/api/graphql`             | POST       | Perform a GraphQL query.                 |
 | `/api/notifications`       | POST       | Send a real-time notification.           |
