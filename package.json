@@ -58,6 +58,7 @@
     "kafkajs": "^2.2.4",
     "mongodb": "^6.9.0",
     "mongoose": "^8.4.1",
+    "morgan": "^1.10.0",
     "node-fetch": "^3.3.2",
     "pg": "^8.13.1",
     "prettier": "^3.3.3",

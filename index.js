@@ -12,7 +12,9 @@ const { connectToRabbitMQ } = require('./services/rabbitMQService');
 const seedMongoData = require('./services/dataSeeder');
 const startGrpcServer = require('./grpcServer');
 const cors = require('cors');
+const morgan = require('morgan');
 
+// Environment Variable Configuration
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const app = express();
@@ -23,6 +25,9 @@ app.use(cors()); // Enable All CORS Requests
 // Body Parser Middleware
 app.use(express.json());
 
+// Request Logging Middleware
+app.use(morgan('dev')); // Logs all incoming requests to the console
+
 // Serve Static Files
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -30,22 +35,36 @@ app.use(express.static(path.join(__dirname, 'public')));
 const swaggerOptions = { customSiteTitle: 'Budget Management API Documentation' };
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs, swaggerOptions));
 
+// Function to Retry Connections
+const retryConnection = async (connectFunction, serviceName, delay = 5000) => {
+  while (true) {
+    try {
+      await connectFunction();
+      console.log(`${serviceName} connected successfully.`);
+      break; // Exit the retry loop on success
+    } catch (error) {
+      console.error(`${serviceName} connection failed. Retrying in ${delay / 1000} seconds...`, error.message);
+      await new Promise(resolve => setTimeout(resolve, delay)); // Wait before retrying
+    }
+  }
+};
+
 // MongoDB Connection
-mongoose
-  .connect(config.mongoURI, {})
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.error('MongoDB Connection Error:', err));
+retryConnection(
+  async () => {
+    await mongoose.connect(config.mongoURI, {});
+  },
+  'MongoDB'
+);
 
 // Kafka Connection (optional, non-critical)
-connectToKafka().catch(err => {
-  console.warn('Kafka initialization failed. The application will continue without Kafka.');
-});
+retryConnection(connectToKafka, 'Kafka');
 
 // RabbitMQ Connection
-connectToRabbitMQ();
+retryConnection(connectToRabbitMQ, 'RabbitMQ');
 
 // Seed MongoDB Data
-seedMongoData();
+seedMongoData().catch(err => console.error('Failed to seed MongoDB data:', err.message));
 
 // Routes
 app.use('/api', routes);
