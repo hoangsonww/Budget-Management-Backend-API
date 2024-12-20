@@ -37,7 +37,7 @@ module.exports = async () => {
           sampleOrders.push({
             customerId: customer._id,
             amount: parseFloat((Math.random() * 1000).toFixed(2)),
-            status: faker.helpers.arrayElement(['pending', 'shipped', 'delivered', 'returned', 'canceled'])
+            status: faker.helpers.arrayElement(['pending', 'shipped', 'delivered', 'returned', 'canceled']),
           });
         }
       }
@@ -53,9 +53,21 @@ module.exports = async () => {
 
       // Different categories of budgets
       const budgetCategories = [
-        'Household', 'Groceries', 'Travel', 'Office Supplies', 'Entertainment',
-        'Utilities', 'Health & Fitness', 'Transportation', 'Clothing', 'Education',
-        'Dining Out', 'Home Improvement', 'Subscription Services', 'Gifts', 'Insurance'
+        'Household',
+        'Groceries',
+        'Travel',
+        'Office Supplies',
+        'Entertainment',
+        'Utilities',
+        'Health & Fitness',
+        'Transportation',
+        'Clothing',
+        'Education',
+        'Dining Out',
+        'Home Improvement',
+        'Subscription Services',
+        'Gifts',
+        'Insurance',
       ];
 
       const numBudgets = 50;
@@ -83,7 +95,7 @@ module.exports = async () => {
         () => `Hotel stay in ${faker.location.city()}`,
         () => `Airline ticket - ${faker.airline.airline()}`,
         () => `Gift from ${faker.company.name()}`,
-        () => `Electronics purchase: ${faker.commerce.productName()}`
+        () => `Electronics purchase: ${faker.commerce.productName()}`,
       ];
 
       const sampleExpenses = [];
@@ -139,7 +151,7 @@ module.exports = async () => {
           budgetId: exp.budgetId.toString(),
           description: exp.description,
           amount: exp.amount,
-          createdAt: exp.createdAt
+          createdAt: exp.createdAt,
         });
       }
 
@@ -168,7 +180,7 @@ module.exports = async () => {
       for (let i = 1; i <= numTasks; i++) {
         sampleTasks.push({
           description: `Task ${i}: ${faker.hacker.phrase()}`,
-          status: faker.helpers.arrayElement(['completed', 'pending', 'in-progress', 'on-hold'])
+          status: faker.helpers.arrayElement(['completed', 'pending', 'in-progress', 'on-hold']),
         });
       }
       await Task.insertMany(sampleTasks);

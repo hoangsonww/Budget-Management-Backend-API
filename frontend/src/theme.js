@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 
-export const getDesignTokens = (mode) => {
+export const getDesignTokens = mode => {
   const brownMain = '#8B4513'; // Warm brown
 
   return {
@@ -14,23 +14,23 @@ export const getDesignTokens = (mode) => {
       },
       ...(mode === 'light'
         ? {
-          background: {
-            default: '#f5f2e9',
-            paper: '#ffffff',
-          },
-          text: {
-            primary: '#333',
-          },
-        }
+            background: {
+              default: '#f5f2e9',
+              paper: '#ffffff',
+            },
+            text: {
+              primary: '#333',
+            },
+          }
         : {
-          background: {
-            default: '#2c2c2c',
-            paper: '#3c3c3c',
-          },
-          text: {
-            primary: '#eee',
-          },
-        }),
+            background: {
+              default: '#2c2c2c',
+              paper: '#3c3c3c',
+            },
+            text: {
+              primary: '#eee',
+            },
+          }),
     },
     typography: {
       fontFamily: 'Poppins, sans-serif',
@@ -47,4 +47,4 @@ export const getDesignTokens = (mode) => {
   };
 };
 
-export const createAppTheme = (mode) => createTheme(getDesignTokens(mode));
+export const createAppTheme = mode => createTheme(getDesignTokens(mode));

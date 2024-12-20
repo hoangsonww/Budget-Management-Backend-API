@@ -5,7 +5,7 @@ const api = axios.create({
   baseURL: 'https://budget-management-backend-api.onrender.com',
 });
 
-api.interceptors.request.use((config) => {
+api.interceptors.request.use(config => {
   const token = getToken();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -14,8 +14,8 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
-  (res) => res,
-  (error) => {
+  res => res,
+  error => {
     if (error.response && error.response.status === 401) {
       logout();
       window.location.href = '/login';

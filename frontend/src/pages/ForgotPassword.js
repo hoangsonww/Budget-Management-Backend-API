@@ -11,7 +11,7 @@ function ForgotPassword() {
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [success,setSuccess] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const navigate = useNavigate();
 
@@ -24,11 +24,11 @@ function ForgotPassword() {
         setStep('resetPassword');
         setError(null);
       } else {
-        setError("Email not found. Please try again.");
+        setError('Email not found. Please try again.');
       }
     } catch (err) {
       console.error(err);
-      setError("Failed to verify email. Please try again.");
+      setError('Failed to verify email. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -38,7 +38,7 @@ function ForgotPassword() {
     setLoading(true);
     setError(null);
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError('Passwords do not match.');
       setLoading(false);
       return;
     }
@@ -51,66 +51,89 @@ function ForgotPassword() {
       }, 1500);
     } catch (err) {
       console.error(err);
-      setError("Failed to reset password. Please try again.");
+      setError('Failed to reset password. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Container sx={{ mt:4, maxWidth:'400px !important' }}>
+    <Container sx={{ mt: 4, maxWidth: '400px !important' }}>
       <LoadingOverlay loading={loading} />
-      <Paper sx={{ p:4 }} elevation={3}>
+      <Paper sx={{ p: 4 }} elevation={3}>
         {step === 'verifyEmail' && (
           <>
-            <Typography variant="h4" mb={2} sx={{ fontWeight:600 }}>Forgot Password</Typography>
-            {error && <Typography color="error" mb={2}>{error}</Typography>}
+            <Typography variant="h4" mb={2} sx={{ fontWeight: 600 }}>
+              Forgot Password
+            </Typography>
+            {error && (
+              <Typography color="error" mb={2}>
+                {error}
+              </Typography>
+            )}
             <TextField
               fullWidth
               label="Enter your email"
-              sx={{ mb:2 }}
+              sx={{ mb: 2 }}
               value={email}
-              onChange={e=>setEmail(e.target.value)}
-              onKeyPress={e=>e.key==='Enter'&&handleVerifyEmail()}
+              onChange={e => setEmail(e.target.value)}
+              onKeyPress={e => e.key === 'Enter' && handleVerifyEmail()}
             />
-            <Button variant="contained" fullWidth onClick={handleVerifyEmail}>Verify Email</Button>
+            <Button variant="contained" fullWidth onClick={handleVerifyEmail}>
+              Verify Email
+            </Button>
           </>
         )}
 
         {step === 'resetPassword' && (
           <>
-            <Typography variant="h4" mb={2} sx={{ fontWeight:600 }}>Reset Password</Typography>
-            {error && <Typography color="error" mb={2}>{error}</Typography>}
-            {success && <Typography color="primary" mb={2}>Password reset successful. Redirecting...</Typography>}
+            <Typography variant="h4" mb={2} sx={{ fontWeight: 600 }}>
+              Reset Password
+            </Typography>
+            {error && (
+              <Typography color="error" mb={2}>
+                {error}
+              </Typography>
+            )}
+            {success && (
+              <Typography color="primary" mb={2}>
+                Password reset successful. Redirecting...
+              </Typography>
+            )}
             {!success && (
               <>
                 <TextField
                   fullWidth
                   label="New Password"
                   type="password"
-                  sx={{ mb:2 }}
+                  sx={{ mb: 2 }}
                   value={password}
-                  onChange={e=>setPassword(e.target.value)}
-                  onKeyPress={e=>e.key==='Enter'&&handleResetPassword()}
+                  onChange={e => setPassword(e.target.value)}
+                  onKeyPress={e => e.key === 'Enter' && handleResetPassword()}
                 />
                 <TextField
                   fullWidth
                   label="Confirm New Password"
                   type="password"
-                  sx={{ mb:2 }}
+                  sx={{ mb: 2 }}
                   value={confirmPassword}
-                  onChange={e=>setConfirmPassword(e.target.value)}
-                  onKeyPress={e=>e.key==='Enter'&&handleResetPassword()}
+                  onChange={e => setConfirmPassword(e.target.value)}
+                  onKeyPress={e => e.key === 'Enter' && handleResetPassword()}
                 />
-                <Button variant="contained" fullWidth onClick={handleResetPassword}>Reset Password</Button>
+                <Button variant="contained" fullWidth onClick={handleResetPassword}>
+                  Reset Password
+                </Button>
               </>
             )}
           </>
         )}
         {/* Horizontal divider */}
         <hr style={{ margin: '20px 0' }} />
-        <Typography variant="body2" sx={{ textAlign:'center' }}>
-          Remembered your password? <a href="/login" style={{ textDecoration: 'underline' }}>Login</a>
+        <Typography variant="body2" sx={{ textAlign: 'center' }}>
+          Remembered your password?{' '}
+          <a href="/login" style={{ textDecoration: 'underline' }}>
+            Login
+          </a>
         </Typography>
       </Paper>
     </Container>

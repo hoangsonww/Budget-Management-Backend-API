@@ -50,12 +50,9 @@ const retryConnection = async (connectFunction, serviceName, delay = 5000) => {
 };
 
 // MongoDB Connection
-retryConnection(
-  async () => {
-    await mongoose.connect(config.mongoURI, {});
-  },
-  'MongoDB'
-);
+retryConnection(async () => {
+  await mongoose.connect(config.mongoURI, {});
+}, 'MongoDB');
 
 // Kafka Connection (optional, non-critical)
 retryConnection(connectToKafka, 'Kafka');

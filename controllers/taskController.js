@@ -321,11 +321,7 @@ exports.updateTaskById = async (req, res, next) => {
       return res.status(400).json({ error: 'Invalid task ID format' });
     }
 
-    const updatedTask = await Task.findByIdAndUpdate(
-      id,
-      { description, status },
-      { new: true, runValidators: true }
-    );
+    const updatedTask = await Task.findByIdAndUpdate(id, { description, status }, { new: true, runValidators: true });
 
     if (!updatedTask) {
       return res.status(404).json({ error: 'Task not found' });

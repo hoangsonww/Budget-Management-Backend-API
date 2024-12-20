@@ -23,53 +23,67 @@ function Budgets() {
     try {
       const res = await api.get('/api/budgets');
       setBudgets(res.data);
-    } catch(err) {
+    } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => { fetchBudgets(); }, []);
+  useEffect(() => {
+    fetchBudgets();
+  }, []);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async id => {
     setLoading(true);
     try {
       await api.delete(`/api/budgets/${id}`);
       fetchBudgets();
-    } catch(err) {
+    } catch (err) {
       console.error(err);
       setLoading(false);
     }
   };
 
-  const handleEditClick = (budget) => {
+  const handleEditClick = budget => {
     setCurrentBudget(budget);
     setEditOpen(true);
   };
 
-  const handleChangePage = (event, newPage) => { setPage(newPage); };
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+  const handleChangeRowsPerPage = event => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
 
-  const displayedBudgets = budgets.slice(page*rowsPerPage, page*rowsPerPage+rowsPerPage);
+  const displayedBudgets = budgets.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
-    <Container sx={{ mt:4 }}>
+    <Container sx={{ mt: 4 }}>
       <LoadingOverlay loading={loading} />
       <Fade in timeout={500}>
-        <Paper sx={{ p:4, overflowX:'auto' }}>
-          <Typography variant="h4" mb={2} sx={{ fontWeight:600 }}>Budgets</Typography>
-          <Button variant="contained" sx={{ mb:2, mr:2 }} onClick={()=>setAddOpen(true)}>Add Budget</Button>
+        <Paper sx={{ p: 4, overflowX: 'auto' }}>
+          <Typography variant="h4" mb={2} sx={{ fontWeight: 600 }}>
+            Budgets
+          </Typography>
+          <Button variant="contained" sx={{ mb: 2, mr: 2 }} onClick={() => setAddOpen(true)}>
+            Add Budget
+          </Button>
           {budgets.length > 0 && <BudgetChart budgets={budgets} />}
-          <Table sx={{ mt:2, minWidth:600 }}>
+          <Table sx={{ mt: 2, minWidth: 600 }}>
             <TableHead>
               <TableRow>
-                <TableCell><Typography sx={{fontWeight:600}}>Name</Typography></TableCell>
-                <TableCell><Typography sx={{fontWeight:600}}>Limit</Typography></TableCell>
-                <TableCell><Typography sx={{fontWeight:600}}>Actions</Typography></TableCell>
+                <TableCell>
+                  <Typography sx={{ fontWeight: 600 }}>Name</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography sx={{ fontWeight: 600 }}>Limit</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography sx={{ fontWeight: 600 }}>Actions</Typography>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -78,8 +92,12 @@ function Budgets() {
                   <TableCell>{b.name}</TableCell>
                   <TableCell>{b.limit}</TableCell>
                   <TableCell>
-                    <IconButton onClick={()=>handleEditClick(b)}><Edit /></IconButton>
-                    <IconButton onClick={()=>handleDelete(b._id)}><Delete /></IconButton>
+                    <IconButton onClick={() => handleEditClick(b)}>
+                      <Edit />
+                    </IconButton>
+                    <IconButton onClick={() => handleDelete(b._id)}>
+                      <Delete />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -93,8 +111,8 @@ function Budgets() {
             rowsPerPage={rowsPerPage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
-          <AddBudgetModal open={addOpen} onClose={()=>setAddOpen(false)} onAdded={fetchBudgets}/>
-          <EditBudgetModal open={editOpen} onClose={()=>setEditOpen(false)} onUpdated={fetchBudgets} budget={currentBudget}/>
+          <AddBudgetModal open={addOpen} onClose={() => setAddOpen(false)} onAdded={fetchBudgets} />
+          <EditBudgetModal open={editOpen} onClose={() => setEditOpen(false)} onUpdated={fetchBudgets} budget={currentBudget} />
         </Paper>
       </Fade>
     </Container>

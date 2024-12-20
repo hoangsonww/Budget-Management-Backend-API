@@ -1,15 +1,7 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { useTheme } from '@mui/material/styles';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-} from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -23,44 +15,44 @@ function BudgetChart({ budgets }) {
       {
         label: 'Budget Limit',
         data: budgets.map(b => b.limit),
-        backgroundColor: 'rgba(139,69,19,0.7)'
-      }
-    ]
+        backgroundColor: 'rgba(139,69,19,0.7)',
+      },
+    ],
   };
 
   const options = {
     plugins: {
       legend: {
         labels: {
-          color: textColor
-        }
+          color: textColor,
+        },
       },
       title: {
         display: true,
         text: 'Budgets',
-        color: textColor
-      }
+        color: textColor,
+      },
     },
     scales: {
       x: {
         ticks: {
-          color: textColor
+          color: textColor,
         },
         title: {
           display: false,
-          color: textColor
-        }
+          color: textColor,
+        },
       },
       y: {
         ticks: {
-          color: textColor
+          color: textColor,
         },
         title: {
           display: false,
-          color: textColor
-        }
-      }
-    }
+          color: textColor,
+        },
+      },
+    },
   };
 
   return <Bar data={data} options={options} />;

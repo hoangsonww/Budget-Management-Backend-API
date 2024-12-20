@@ -31,11 +31,13 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {/* Outer container to ensure footer at bottom */}
-      <Box sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh'
-      }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh',
+        }}
+      >
         <Navbar mode={mode} setMode={setMode} />
         {/* Main content area grows as needed */}
         <Box component="main" sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -83,10 +85,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/forgot-password"
-              element={<ForgotPassword />}
-            />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Box>

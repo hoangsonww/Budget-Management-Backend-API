@@ -11,38 +11,40 @@ const wobbleAnimation = {
     '50%': { transform: 'translateX(5%)' },
     '75%': { transform: 'translateX(-5%)' },
     '100%': { transform: 'translateX(0%)' },
-  }
+  },
 };
 
 function NotFound() {
   return (
-    <Container sx={{
-      mt:4,
-      display:'flex',
-      flexDirection:'column',
-      alignItems:'center',
-      justifyContent:'center',
-      flexGrow:1,
-      textAlign:'center'
-    }}>
+    <Container
+      sx={{
+        mt: 4,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexGrow: 1,
+        textAlign: 'center',
+      }}
+    >
       <Box
         sx={{
-          fontSize:'6rem',
-          fontWeight:'bold',
-          mb:2,
+          fontSize: '6rem',
+          fontWeight: 'bold',
+          mb: 2,
           animation: 'wobble 1s ease-in-out infinite',
-          ...wobbleAnimation
+          ...wobbleAnimation,
         }}
       >
         404
       </Box>
-      <Typography variant="h4" sx={{ fontWeight:600, mb:2 }}>
+      <Typography variant="h4" sx={{ fontWeight: 600, mb: 2 }}>
         Oops! Page Not Found
       </Typography>
-      <Typography variant="body1" sx={{ mb:3 }}>
+      <Typography variant="body1" sx={{ mb: 3 }}>
         The page you're looking for doesn't exist or has been moved.
       </Typography>
-      <Button variant="contained" component={Link} to="/" sx={{ textTransform:'none' }}>
+      <Button variant="contained" component={Link} to="/" sx={{ textTransform: 'none' }}>
         Go Back Home
       </Button>
     </Container>
