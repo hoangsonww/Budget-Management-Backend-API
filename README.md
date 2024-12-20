@@ -238,20 +238,45 @@ Budget-Management-Backend-API/
 
 ## **Available Endpoints**
 
-| **Endpoint**           | **Method** | **Description**                          |
-|------------------------|------------|------------------------------------------|
-| `/api/auth/register`   | POST       | Register a new user.                     |
-| `/api/auth/login`      | POST       | Login and receive a JWT token.           |
-| `/api/users/profile`   | GET        | Get the authenticated user's profile.    |
-| `/api/budgets`         | GET        | Get all budgets.                         |
-| `/api/budgets`         | POST       | Create a new budget.                     |
-| `/api/expenses`        | GET        | Get all expenses.                        |
-| `/api/expenses`        | POST       | Add a new expense.                       |
-| `/api/orders`          | GET        | Get all orders.                          |
-| `/api/orders`          | POST       | Create a new order.                      |
-| `/api/graphql`         | POST       | Perform a GraphQL query.                 |
-| `/api/notifications`   | POST       | Send a real-time notification.           |
-| `/api/search/expenses` | POST       | Search for expenses using Elasticsearch. |
+| **Endpoint**               | **Method** | **Description**                          |
+|----------------------------|------------|------------------------------------------|
+| `/api/auth/register`       | POST       | Register a new user.                     |
+| `/api/auth/login`          | POST       | Login and receive a JWT token.           |
+| `/api/auth/logout`         | POST       | Logout and invalidate the token.         |
+| `/api/auth/verify-email`   | POST       | Verify the user's email address.         |
+| `/api/auth/reset-password` | POST       | Reset the user's password.               |
+| `/api/users/profile`       | GET        | Get the authenticated user's profile.    |
+| `/api/budgets`             | GET        | Get all budgets.                         |
+| `/api/budgets`             | POST       | Create a new budget.                     |
+| `/api/budgets/:id`         | GET        | Get a specific budget.                   |
+| `/api/budgets/:id`         | PUT        | Update a budget.                         |
+| `/api/budgets/:id`         | DELETE     | Delete a budget.                         |
+| `/api/customers`           | GET        | Get all customers.                       |
+| `/api/customers`           | POST       | Create a new customer.                   |
+| `/api/customers/:id`       | GET        | Get a specific customer.                 |
+| `/api/customers/:id`       | PUT        | Update a customer.                       |
+| `/api/customers/:id`       | DELETE     | Delete a customer.                       |
+| `/api/expenses`            | GET        | Get all expenses.                        |
+| `/api/expenses`            | POST       | Add a new expense.                       |
+| `/api/expenses/:budgetId`  | GET        | Get all expenses for a budget.           |
+| `/api/expenses/:id`        | PUT        | Update an expense.                       |
+| `/api/expenses/:id`        | DELETE     | Delete an expense.                       |
+| `/api/orders`              | GET        | Get all orders.                          |
+| `/api/orders`              | POST       | Create a new order.                      |
+| `/api/orders/:id`          | GET        | Get a specific order.                    |
+| `/api/orders/:id`          | PUT        | Update an order.                         |
+| `/api/orders/:id`          | DELETE     | Delete an order.                         |
+| `/api/transactions`        | GET        | Get all transactions.                    |
+| `/api/transactions`        | POST       | Add a new transaction.                   |
+| `/api/transactions/:id`    | GET        | Get a specific transaction.              |
+| `/api/transactions/:id`    | PUT        | Update a transaction.                    |
+| `/api/transactions/:id`    | DELETE     | Delete a transaction.                    |
+| `/api/tasks`               | POST       | Add a new task.                          |
+| `/api/tasks/:id`           | GET        | Get a specific task.                     |
+| `/api/tasks/:id`           | DELETE     | Delete a task.                           |
+| `/api/graphql`             | POST       | Perform a GraphQL query.                 |
+| `/api/notifications`       | POST       | Send a real-time notification.           |
+| `/api/search`              | POST       | Search for expenses using Elasticsearch. |
 
 Additionally, the root `/` endpoint provides a welcome message and information about the API.
 
@@ -269,18 +294,45 @@ More endpoints and features are available in the API. Refer to the [Swagger docu
 | `username`  | String   | Unique username.            |
 | `email`     | String   | Unique email address.       |
 | `password`  | String   | Hashed password.            |
+| `createdAt` | Date     | User creation date.         |
 
 ### **Budget**
 | **Field**   | **Type** | **Description**             |
 |-------------|----------|-----------------------------|
 | `name`      | String   | Budget name.                |
 | `limit`     | Number   | Budget limit.               |
+| `createdAt` | Date     | Budget creation date.       |
 
 ### **Expense**
-| **Field**  | **Type** | **Description**              |
-|------------|----------|------------------------------|
-| `budgetId` | String   | ID of the associated budget. |
-| `amount`   | Number   | Expense amount.              |
+| **Field**     | **Type** | **Description**              |
+|---------------|----------|------------------------------|
+| `budgetId`    | String   | ID of the associated budget. |
+| `description` | String   | Expense description.         |
+| `amount`      | Number   | Expense amount.              |
+| `createdAt`   | Date     | Expense creation date.       |
+
+### **Order**
+| **Field**    | **Type** | **Description**                |
+|--------------|----------|--------------------------------|
+| `customerId` | String   | ID of the associated customer. |
+| `amount`     | Number   | Order amount.                  |
+| `status`     | String   | Order status.                  |
+| `createdAt`  | Date     | Order creation date.           |
+
+### **Customer**
+| **Field**   | **Type** | **Description**              |
+|-------------|----------|------------------------------|
+| `name`      | String   | Customer name.               |
+| `email`     | String   | Customer email address.      |
+| `phone`     | String   | Customer phone number.       |
+
+### **Task**
+
+| **Field**     | **Type** | **Description**              |
+|---------------|----------|------------------------------|
+| `description` | String   | Task description.            |
+| `status`      | String   | Task status.                 |
+| `createdAt`   | Date     | Task creation date.          |
 
 ## **Features and Integrations**
 
@@ -393,8 +445,8 @@ The Budget Management API interacts with various services and databases to provi
 |   Redis  |    | RabbitMQ /  |      | Kafka (Event   |
 |   Cache  |    | Kafka Queue |      |   Streaming)   |
 +----------+    +-------------+      +----------------+
-                    |
-                    | (Asynchronous Tasks)
+     |              |                        |
+     +--------------|-(Asynchronous Tasks)---+
                     |
           +----------------------+
           |   External Services  |

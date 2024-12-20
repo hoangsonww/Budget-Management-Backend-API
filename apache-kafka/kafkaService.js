@@ -37,10 +37,10 @@ async function connectToKafka() {
 }
 
 // Kafka Message Producer
-async function sendMessageToKafka(message) {
+async function sendMessageToKafka(topic, message) {
   try {
     await producer.send({
-      topic: 'test-topic',
+      topic: topic,
       messages: [{ value: message }],
     });
     console.log(`Sent message to Kafka: ${message}`);
