@@ -47,6 +47,8 @@ The purpose of this API is to demonstrate the capabilities of modern backend tec
 
 The Budget Management API is deployed live at [https://budget-management-backend-api.onrender.com](https://budget-management-backend-api.onrender.com).
 
+Additionally, the frontend UI is also available, hosted at [https://budget-manage-app.vercel.app](https://budget-manage-app.vercel.app).
+
 You can access the API and test the endpoints directly from the browser. Feel free to use the API for your own projects or applications. Simply add some attribution to the original repository and the creator. Also, be sure that you use your own credentials and tokens, otherwise your data may clash with mine and other users' data!
 
 > Note: Be mindful of the rate limits and usage policies when testing the live API. Additionally, because the API is hosted on the free plan of Render, it may take a while (1-2 minutes) to wake up if it has been inactive for some time. Kindly be patient during this process!
@@ -576,6 +578,8 @@ To run the frontend UI, follow these steps:
    ```
    
 4. Access the frontend UI at `http://localhost:3001` (or whichever port is specified in the console).
+
+Alternatively, it is also deployed live at [https://budget-manage-app.vercel.app](https://budget-manage-app.vercel.app). Feel free to use the live version for testing and exploration.
 
 ### **UI Images**
 

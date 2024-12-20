@@ -1,6 +1,6 @@
 {
-  "name": "mongo-redis-postgresql-elk-stack",
-  "displayName": "Mongo Redis PostgreSQL ELK Stack Backend Project",
+  "name": "budget-management-system",
+  "displayName": "Budget Management System - Backend API",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -8,6 +8,7 @@
     "dev": "nodemon index.js",
     "api": "nodemon index.js",
     "cli": "node cli.js",
+    "frontend": "cd frontend && npm start",
     "backend": "nodemon index.js",
     "install-deps": "npm install",
     "test": "jest --runInBand --detectOpenHandles --forceExit",
@@ -31,13 +32,13 @@
   ],
   "author": "Son Nguyen",
   "license": "MIT",
-  "description": "A demo project to show how to use Redis, MongoDB, PostgreSQL, and ELK stack in a Node.js project",
+  "description": "Budget Management System - Backend API, with a Frontend to demonstrate the API",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hoangsonww/Mongo-Redis-RabbitMQ-ELK-Stack.git"
+    "url": "git+https://github.com/hoangsonww/Budget-Management-Backend-API.git"
   },
   "bugs": {
-    "url": "https://github.com/hoangsonww/Mongo-Redis-RabbitMQ-ELK-Stack/issues"
+    "url": "https://github.com/hoangsonww/Budget-Management-Backend-API/issues"
   },
   "dependencies": {
     "@faker-js/faker": "^9.3.0",
