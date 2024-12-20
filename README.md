@@ -552,6 +552,77 @@ Follow these steps to use the CLI:
    
 The CLI provides a simple way to interact with the backend API and perform various operations. It can be used for testing, debugging, and managing the application without a frontend interface or using the Swagger documentation.
 
+## **Demo Frontend UI**
+
+The Budget Management API includes a demo frontend UI for interacting with the backend.
+
+It gives developers an idea of how the API can be used in a real-world application. The frontend UI is built using React, Redux, and Material-UI components.
+
+To run the frontend UI, follow these steps:
+
+1. Navigate to the `frontend` directory:
+   ```bash
+   cd frontend
+   ```
+   
+2. Install dependencies: (use `npm install --legacy-peer-deps` if you encounter peer dependency issues)
+   ```bash
+    npm install
+    ```
+   
+3. Start the development server:
+   ```bash
+   npm start
+   ```
+   
+4. Access the frontend UI at `http://localhost:3001` (or whichever port is specified in the console).
+
+### **UI Images**
+
+Here are some screenshots of the frontend UI:
+
+**Dashboard:**
+
+<p align="center">
+  <img src="images/dashboard.png" alt="Frontend UI" style="border-radius: 8px;">
+</p>
+
+**Budgets:**
+
+<p align="center">
+  <img src="images/budgets.png" alt="Frontend UI" style="border-radius: 8px;">
+</p>
+
+**Expenses:**
+
+<p align="center">
+  <img src="images/expenses.png" alt="Frontend UI" style="border-radius: 8px;">
+</p>
+
+**Profile:**
+
+<p align="center">
+  <img src="images/profile.png" alt="Frontend UI" style="border-radius: 8px;">
+</p>
+
+**Login:**
+
+<p align="center">
+  <img src="images/login.png" alt="Frontend UI" style="border-radius: 8px;">
+</p>
+
+**Register:**
+
+<p align="center">
+  <img src="images/register.png" alt="Frontend UI" style="border-radius: 8px;">
+</p>
+
+**Users:**
+
+<p align="center">
+  <img src="images/users.png" alt="Frontend UI" style="border-radius: 8px;">
+</p>
+
 ## **Swagger Documentation**
 
 - Comprehensive API documentation is available at `/docs`.

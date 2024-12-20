@@ -117,10 +117,12 @@ function Expenses() {
             <Button variant="contained" onClick={()=>setAddOpen(true)}>Add Expense</Button>
             <Box sx={{ display:'flex', alignItems:'center', gap:1, flexWrap:'wrap' }}>
               <TextField
-                placeholder="Search Expenses"
+                placeholder="Search Expenses by Description"
                 value={query}
                 onChange={e=>setQuery(e.target.value)}
                 size="small"
+                onKeyPress={e=>e.key==='Enter'&&handleSearch()}
+                sx={{ minWidth:280 }}
               />
               <Button variant="outlined" onClick={handleSearch}>Search</Button>
             </Box>
@@ -128,7 +130,7 @@ function Expenses() {
 
           {filteredExpenses.length > 0 && (
             <Box sx={{ width:'100%', overflow:'hidden', mb:2 }}>
-              {/* Line chart of expenses by budget over time */}
+              {/* Previously line chart, now Scatter chart in ExpenseChart.js */}
               <ExpenseChart expenses={filteredExpenses} budgetMap={budgetMap}/>
             </Box>
           )}

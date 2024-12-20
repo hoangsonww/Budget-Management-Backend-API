@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Button, Typography, TextField, IconButton, CircularProgress, Paper } from '@mui/material';
-import { GitHub, LinkedIn, Facebook, Instagram, Twitter, Edit as EditIcon, Save as SaveIcon } from '@mui/icons-material';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Box, Button, Typography, TextField, IconButton, Paper } from '@mui/material';
+import { Edit as EditIcon } from '@mui/icons-material';
 import LoadingOverlay from '../components/LoadingOverlay';
 import api from '../services/api';
 
@@ -9,7 +9,22 @@ const avatarImages = [
   "/OIP2.webp",
   "/OIP3.png",
   "/OIP4.png",
-  // ... Add more if available
+  "/OIP5.png",
+  "/OIP6.webp",
+  "/OIP7.webp",
+  "/OIP8.webp",
+  "/OIP9.webp",
+  "/OIP10.webp",
+  "/OIP11.webp",
+  "/OIP12.webp",
+  "/OIP13.webp",
+  "/OIP14.webp",
+  "/OIP15.webp",
+  "/OIP16.webp",
+  "/OIP17.webp",
+  "/OIP18.webp",
+  "/OIP19.webp",
+  "/OIP20.webp",
 ];
 
 function Profile() {
@@ -17,66 +32,72 @@ function Profile() {
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [newEmail, setNewEmail] = useState("");
   const [daysSinceJoined, setDaysSinceJoined] = useState(null);
-  const [documentCount, setDocumentCount] = useState(null);
   const [loading, setLoading] = useState(true);
   const [updatingEmail, setUpdatingEmail] = useState(false);
   const [joinedDate, setJoinedDate] = useState("");
-  const [socialMedia, setSocialMedia] = useState({
-    github: "",
-    linkedin: "",
-    facebook: "",
-    instagram: "",
-    twitter: "",
-  });
-  const [editingField, setEditingField] = useState(null);
   const [error, setError] = useState("");
   const [randomAvatar, setRandomAvatar] = useState("");
+  const [userData, setUserData] = useState(null); // The authenticated user's data
+  const [allUsers, setAllUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchUser, setSearchUser] = useState(null); // matched user from search
 
   const userToken = localStorage.getItem("token");
 
-  useEffect(() => {
-    setRandomAvatar(
-      avatarImages[Math.floor(Math.random() * avatarImages.length)],
-    );
+  // Debounce utility
+  const debounce = (func, wait) => {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), wait);
+    };
+  };
 
-    const fetchProfile = async() => {
-      setLoading(true);
-      try {
-        if(!userToken) {
-          setLoading(false);
-          return;
-        }
-        const res = await api.get('/api/users/profile'); // Returns { _id, username, email, createdAt }
-        const user = res.data;
-        setEmail(user.email);
-        // Mock daysSinceJoined and docCount:
+  const fetchAllUsers = useCallback(async() => {
+    try {
+      const res = await api.get('/api/users');
+      setAllUsers(res.data || []);
+    } catch (err) {
+      console.error(err);
+    }
+  },[]);
+
+  const fetchProfile = useCallback(async() => {
+    setLoading(true);
+    try {
+      if(!userToken) {
+        setLoading(false);
+        return;
+      }
+      const res = await api.get('/api/users/profile');
+      const user = res.data;
+      setUserData(user);
+
+      if(user && user.createdAt) {
         const joined = new Date(user.createdAt);
         const now = new Date();
         const diffTime = Math.abs(now - joined);
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
         setDaysSinceJoined(diffDays);
-
-        setDocumentCount(42); // Mocked count
         setJoinedDate(joined.toLocaleDateString());
-
-        // Mock social media
-        setSocialMedia({
-          github: "yourgithub",
-          linkedin: "yourlinkedin",
-          facebook: "",
-          instagram: "",
-          twitter: "",
-        });
-
-      } catch(err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
+      } else {
+        setDaysSinceJoined("N/A");
+        setJoinedDate("N/A");
       }
-    };
 
-    fetchProfile();
+      setEmail(user.email || "N/A");
+    } catch(err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   }, [userToken]);
+
+  useEffect(() => {
+    setRandomAvatar(avatarImages[Math.floor(Math.random() * avatarImages.length)]);
+    fetchProfile();
+    fetchAllUsers();
+  }, [fetchProfile, fetchAllUsers]);
 
   const handleUpdateEmail = async () => {
     setUpdatingEmail(true);
@@ -92,31 +113,30 @@ function Profile() {
     }
   };
 
-  const handleSocialMediaChange = (e) => {
-    const platform = e.target.name;
-    setSocialMedia({
-      ...socialMedia,
-      [platform]: e.target.value,
-    });
-  };
+  const handleSearch = useCallback((term) => {
+    if(!term) {
+      setSearchUser(null);
+      return;
+    }
+    // Filter logic: find user whose username or email includes the search term (case-insensitive)
+    const lowerTerm = term.toLowerCase();
+    const matched = allUsers.find(u =>
+      (u.username && u.username.toLowerCase().includes(lowerTerm)) ||
+      (u.email && u.email.toLowerCase().includes(lowerTerm))
+    );
+    setSearchUser(matched || null);
+  }, [allUsers]);
 
-  const handleUpdateSocialMedia = (platform) => {
-    // Here we could call an API to update social media. Mocking:
-    setEditingField(null);
-  };
+  // Debounced search
+  const debouncedSearch = useCallback(debounce((value) => {
+    handleSearch(value);
+  }, 300), [handleSearch]);
 
-  const formatLink = (platform, username) => {
-    const baseUrls = {
-      github: "https://github.com/",
-      linkedin: "https://linkedin.com/in/",
-      facebook: "https://facebook.com/",
-      instagram: "https://instagram.com/",
-      twitter: "https://twitter.com/",
-    };
-    return username ? baseUrls[platform] + username : "";
+  const onSearchChange = (e) => {
+    const val = e.target.value;
+    setSearchTerm(val);
+    debouncedSearch(val);
   };
-
-  const getUsername = (username) => username || "Not Set";
 
   if(loading) return <LoadingOverlay loading={true} />;
 
@@ -130,18 +150,48 @@ function Profile() {
     );
   }
 
+  // Decide which user data to show: searchUser if available, else authenticated userData
+  const displayUser = searchUser ? searchUser : userData;
+  const displayEmail = displayUser && displayUser.email ? displayUser.email : "N/A";
+
+  let displayDaysSinceJoined = daysSinceJoined;
+  let displayJoinedDate = joinedDate;
+
+  // If we're showing a searched user (not the authenticated one), we don't have joinedDate or daysSinceJoined info.
+  // The prompt only provides `"_id", "username", "email", "createdAt"` for the profile endpoint,
+  // and for all users only `"_id","username","email"`. No `createdAt` for all users was guaranteed.
+  // If it's not the authenticated user, we just show what we can: email, no joined data since not provided.
+  const isSearchedUser = !!searchUser && searchUser._id !== userData?._id;
+  if (isSearchedUser) {
+    // For searched users:
+    displayDaysSinceJoined = "N/A";
+    displayJoinedDate = "N/A";
+  }
+
+  const today = new Date().toLocaleDateString();
+
   return (
     <Box
       sx={{
         display:'flex',
-        justifyContent:'center',
-        alignItems:'flex-start',
-        height:'100%',
+        flexDirection:'column',
+        alignItems:'center',
         backgroundColor:'background.default',
         pt:8,
         pb:20
       }}
     >
+      {/* Search bar */}
+      <Box sx={{ width:'400px', mb:4 }}>
+        <TextField
+          fullWidth
+          variant="outlined"
+          label="Search for a user by username or email"
+          value={searchTerm}
+          onChange={onSearchChange}
+        />
+      </Box>
+
       <Paper
         sx={{
           backgroundColor:'background.paper',
@@ -172,22 +222,30 @@ function Profile() {
         </Box>
 
         <Typography variant="h5" sx={{mb:2, fontWeight:'bold'}}>
-          Welcome, {email.split("@")[0]}!
+          Welcome{displayEmail !== "N/A" ? `, ${displayEmail.split("@")[0]}!` : "!"}
         </Typography>
         <Box sx={{borderBottom:'1px solid #ccc', mb:2}}></Box>
 
         <Typography variant="h5" sx={{mb:2, fontWeight:'bold', fontSize:'20px'}}>
-          Your Profile
+          {isSearchedUser ? `Searched User Profile` : `Your Profile`}
         </Typography>
 
-        <Box sx={{display:'flex', justifyContent:'center', alignItems:'center', mb:1.5}}>
-          <Typography><strong>Email:</strong> {email}</Typography>
-          <IconButton onClick={()=>setIsEditingEmail(true)}>
-            <EditIcon sx={{'&:hover':{color:'#f57c00'}}}/>
-          </IconButton>
-        </Box>
+        {displayEmail !== "N/A" && !isSearchedUser && (
+          <Box sx={{display:'flex', justifyContent:'center', alignItems:'center', mb:1.5}}>
+            <Typography><strong>Email:</strong> {displayEmail}</Typography>
+            <IconButton onClick={()=>setIsEditingEmail(true)}>
+              <EditIcon sx={{'&:hover':{color:'#f57c00'}}}/>
+            </IconButton>
+          </Box>
+        )}
 
-        {isEditingEmail && (
+        {displayEmail !== "N/A" && isSearchedUser && (
+          <Box sx={{display:'flex', justifyContent:'center', alignItems:'center', mb:1.5}}>
+            <Typography><strong>Email:</strong> {displayEmail}</Typography>
+          </Box>
+        )}
+
+        {isEditingEmail && !isSearchedUser && (
           <Box sx={{mb:2}}>
             <TextField
               fullWidth
@@ -212,66 +270,26 @@ function Profile() {
           </Box>
         )}
 
-        <Typography sx={{mb:2.5}}><strong>Days Since Joined:</strong> {daysSinceJoined}</Typography>
-        <Typography sx={{mb:2.5}}><strong>Date Joined:</strong> {joinedDate}</Typography>
-        <Typography sx={{mb:2.5}}><strong>Documents Uploaded So Far:</strong> {documentCount}</Typography>
-        <Typography sx={{mb:1.5}}><strong>Today's Date:</strong> {(new Date()).toLocaleDateString()}</Typography>
-
-        {["github","linkedin","facebook","instagram","twitter"].map((platform)=>(
-          <Box sx={{display:'flex',alignItems:'center',justifyContent:'center',mb:1}} key={platform}>
-            {platform==='github' && <GitHub sx={{mr:1}}/>}
-            {platform==='linkedin' && <LinkedIn sx={{mr:1}}/>}
-            {platform==='facebook' && <Facebook sx={{mr:1}}/>}
-            {platform==='instagram' && <Instagram sx={{mr:1}}/>}
-            {platform==='twitter' && <Twitter sx={{mr:1}}/>}
-
-            {editingField===platform ? (
-              <>
-                <TextField
-                  name={platform}
-                  value={socialMedia[platform]}
-                  label="Enter Username"
-                  onChange={handleSocialMediaChange}
-                  sx={{textAlign:'center',flexGrow:1}}
-                />
-                <IconButton onClick={()=>handleUpdateSocialMedia(platform)}>
-                  <SaveIcon/>
-                </IconButton>
-              </>
-            ) : (
-              <>
-                <Typography sx={{fontWeight:'bold',mr:1}}>
-                  {platform.charAt(0).toUpperCase()+platform.slice(1)}:
-                </Typography>
-                <Button
-                  href={formatLink(platform, socialMedia[platform])}
-                  target="_blank"
-                  sx={{fontWeight:'bold',textTransform:'none'}}
-                >
-                  {getUsername(socialMedia[platform])}
-                </Button>
-                <IconButton onClick={()=>setEditingField(platform)}>
-                  <EditIcon sx={{'&:hover':{color:'#f57c00'}}}/>
-                </IconButton>
-              </>
-            )}
-          </Box>
-        ))}
+        <Typography sx={{mb:2.5}}><strong>Days Since Joined:</strong> {displayDaysSinceJoined}</Typography>
+        <Typography sx={{mb:2.5}}><strong>Date Joined:</strong> {displayJoinedDate}</Typography>
+        <Typography sx={{mb:1.5}}><strong>Today's Date:</strong> {today}</Typography>
 
         <Typography sx={{mt:3,fontWeight:'bold',fontSize:'18px'}}>
           Thank you for exploring Budget Manager today! 🚀
         </Typography>
         <Box sx={{borderBottom:'1px solid #ccc', mt:2, mb:2}}></Box>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={()=>{
-            localStorage.removeItem("token");
-            window.location.href='/login';
-          }}
-        >
-          Logout
-        </Button>
+        {!isSearchedUser && (
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={()=>{
+              localStorage.removeItem("token");
+              window.location.href='/login';
+            }}
+          >
+            Logout
+          </Button>
+        )}
       </Paper>
     </Box>
   );

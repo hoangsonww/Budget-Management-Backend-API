@@ -1,43 +1,84 @@
 import React from 'react';
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+import { Scatter } from 'react-chartjs-2';
+import { useTheme } from '@mui/material/styles';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, Title, Tooltip, Legend);
 
 function ExpenseChart({ expenses, budgetMap }) {
-  // We want a line chart showing expenses over time per budget
-  // Group expenses by date and budget
-  const expensesByBudgetDate = {};
+  const theme = useTheme();
+  const textColor = theme.palette.mode === 'dark' ? '#fff' : '#000';
 
-  expenses.forEach(e => {
-    const date = (new Date(e.createdAt)).toLocaleDateString();
-    if(!expensesByBudgetDate[e.budgetId]) expensesByBudgetDate[e.budgetId] = {};
-    expensesByBudgetDate[e.budgetId][date] = (expensesByBudgetDate[e.budgetId][date]||0)+e.amount;
-  });
+  // Sort expenses by date
+  const sortedExpenses = [...expenses].sort((a,b)=>(new Date(a.createdAt)-new Date(b.createdAt)));
 
-  // Get all dates sorted
-  const allDatesSet = new Set();
-  Object.values(expensesByBudgetDate).forEach(bMap=>{
-    Object.keys(bMap).forEach(d=>allDatesSet.add(d));
-  });
-  const allDates = Array.from(allDatesSet).sort((a,b)=>(new Date(a)-new Date(b)));
+  // Create a numeric index for each expense
+  const dataPoints = sortedExpenses.map((e,i)=>({
+    x: i+1,
+    y: e.amount
+  }));
 
-  // Create dataset for each budget line
-  const datasets = Object.keys(expensesByBudgetDate).map(bid=>{
-    return {
-      label: budgetMap[bid] || 'Unknown Budget',
-      data: allDates.map(d=>expensesByBudgetDate[bid][d]||0),
-      borderColor:`rgba(139,69,19,${Math.random()*0.5+0.5})`,
-      backgroundColor:'rgba(139,69,19,0.3)',
-      tension:0.3
-    }
-  });
-
-  const data = {
-    labels: allDates,
-    datasets
+  const scatterData = {
+    datasets: [{
+      label: 'Expenses over time (Scatter)',
+      data: dataPoints,
+      backgroundColor:'rgba(139,69,19,0.7)'
+    }]
   };
 
-  return <Line data={data} />;
+  const options = {
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display:true,
+        labels: {
+          color: textColor
+        }
+      },
+      title: {
+        display:true,
+        text:'Expenses plotted as points over time',
+        color: textColor
+      },
+      tooltip: {
+        titleColor: textColor,
+        bodyColor: textColor
+      }
+    },
+    scales: {
+      x: {
+        type:'linear',
+        title: {
+          display:true,
+          text:'Expense Index (Chronological)',
+          color: textColor
+        },
+        ticks: {
+          color: textColor
+        }
+      },
+      y: {
+        title: {
+          display:true,
+          text:'Expense Amount',
+          color: textColor
+        },
+        ticks: {
+          color: textColor
+        }
+      }
+    }
+  };
+
+  return <div style={{height:'250px'}}><Scatter data={scatterData} options={options} /></div>;
 }
 
 export default ExpenseChart;

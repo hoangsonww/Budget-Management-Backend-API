@@ -40,6 +40,7 @@
     "url": "https://github.com/hoangsonww/Mongo-Redis-RabbitMQ-ELK-Stack/issues"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.3.0",
     "@grpc/grpc-js": "^1.12.5",
     "@grpc/proto-loader": "^0.7.13",
     "amqplib": "^0.10.4",

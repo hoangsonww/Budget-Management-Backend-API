@@ -4,7 +4,7 @@ const config = require('../config/config');
 // Initialize Elasticsearch client
 const esClient = new Client({
   host: config.elasticSearchUrl, // Elasticsearch server URL
-  log: 'info', // Optional: Logging level (trace, debug, info, warning, error)
+  log: 'info',
 });
 
 /**

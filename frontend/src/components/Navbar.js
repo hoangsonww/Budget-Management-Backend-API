@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppBar, Toolbar, Typography, IconButton, Button, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Box } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -12,64 +12,168 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import GroupIcon from '@mui/icons-material/Group';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-
-const navLinks = [
-  { to: '/', label: 'Home', icon:<HomeIcon/> },
-  { to: '/dashboard', label: 'Dashboard', icon:<DashboardIcon/> },
-  { to: '/login', label: 'Login', icon:<LoginIcon/> },
-  { to: '/register', label: 'Register', icon:<PersonAddIcon/> },
-  { to: '/profile', label: 'Profile', icon:<AccountCircleIcon/> },
-  { to: '/budgets', label: 'Budgets', icon:<AttachMoneyIcon/> },
-  { to: '/expenses', label: 'Expenses', icon:<ReceiptLongIcon/> },
-  { to: '/users', label: 'Users', icon:<GroupIcon/> },
-];
+import LogoutIcon from '@mui/icons-material/Logout';
+import api from '../services/api';
 
 function Navbar({ mode, setMode }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleToggleMode = () => {
     setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setIsLoggedIn(false);
+        return;
+      }
+      try {
+        const res = await api.post('/api/auth/verify-token', { token }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        if (!res.data.valid) {
+          // If not valid, log out
+          localStorage.removeItem("token");
+          setIsLoggedIn(false);
+          navigate('/login');
+        }
+      } catch (err) {
+        // If invalid or any error occurs, log out
+        localStorage.removeItem("token");
+        setIsLoggedIn(false);
+        navigate('/login');
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    navigate('/login');
+  };
+
+  // Define nav links
+  const baseNavLinks = [
+    { to: '/', label: 'Home', icon: <HomeIcon/> },
+    { to: '/dashboard', label: 'Dashboard', icon: <DashboardIcon/> },
+    { to: '/budgets', label: 'Budgets', icon: <AttachMoneyIcon/> },
+    { to: '/expenses', label: 'Expenses', icon: <ReceiptLongIcon/> },
+    { to: '/profile', label: 'Profile', icon: <AccountCircleIcon/> },
+    { to: '/users', label: 'Users', icon: <GroupIcon/> },
+  ];
+
+  let navLinks = [...baseNavLinks];
+  if (isLoggedIn) {
+    navLinks.push({ to: '#', label: 'Logout', icon:<LogoutIcon/>, action: handleLogout });
+  } else {
+    navLinks.push({ to: '/login', label: 'Login', icon:<LoginIcon/> });
+    navLinks.push({ to: '/register', label: 'Register', icon:<PersonAddIcon/> });
+  }
+
+  const activeColor = '#8B4513'; // Brownish color for mobile active link
+
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ zIndex: 10000 }}>
         <Toolbar>
           <IconButton sx={{ mr:2, display:{xs:'block', md:'none'} }} color="inherit" onClick={()=>setDrawerOpen(true)}>
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" sx={{ flexGrow: 1, fontWeight:600, display:{xs:'none', md:'block'} }}>
-            Budget Manager
+            Budget Management System
           </Typography>
           <Typography variant="h6" sx={{ flexGrow: 1, fontWeight:600, display:{xs:'block', md:'none'} }}>
-            BM
+            Budget Management
           </Typography>
+          <Box sx={{ display:{xs:'none', md:'flex'} }}>
+            {navLinks.map((link) => {
+              const isActive = location.pathname === link.to;
+              if (link.action) {
+                // For logout
+                return (
+                  <Button
+                    key={link.label}
+                    color="inherit"
+                    startIcon={link.icon}
+                    onClick={link.action}
+                    sx={{
+                      mr:1,
+                      borderRadius:0,
+                      borderBottom: isActive ? '2px solid white' : 'none',
+                    }}
+                  >
+                    {link.label}
+                  </Button>
+                );
+              } else {
+                return (
+                  <Button
+                    key={link.to}
+                    component={Link}
+                    to={link.to}
+                    color="inherit"
+                    startIcon={link.icon}
+                    sx={{
+                      mr:1,
+                      borderRadius:0,
+                      borderBottom: isActive ? '2px solid white' : 'none',
+                    }}
+                  >
+                    {link.label}
+                  </Button>
+                );
+              }
+            })}
+          </Box>
           <IconButton color="inherit" onClick={handleToggleMode} sx={{ mr:{xs:0, md:2} }}>
             {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
           </IconButton>
-          <Box sx={{ display:{xs:'none', md:'flex'} }}>
-            {navLinks.map((link) => (
-              <Button
-                key={link.to}
-                component={Link}
-                to={link.to}
-                color="inherit"
-                startIcon={link.icon}
-              >
-                {link.label}
-              </Button>
-            ))}
-          </Box>
         </Toolbar>
       </AppBar>
       <Drawer anchor="left" open={drawerOpen} onClose={()=>setDrawerOpen(false)}>
         <List sx={{ width:250 }}>
-          {navLinks.map((link) => (
-            <ListItemButton key={link.to} component={Link} to={link.to} onClick={()=>setDrawerOpen(false)}>
-              <ListItemIcon>{link.icon}</ListItemIcon>
-              <ListItemText primary={link.label} />
-            </ListItemButton>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = location.pathname === link.to;
+            if (link.action) {
+              return (
+                <ListItemButton
+                  key={link.label}
+                  onClick={()=>{setDrawerOpen(false); link.action();}}
+                  sx={{
+                    color: isActive ? activeColor : 'inherit',
+                  }}
+                >
+                  <ListItemIcon sx={{ color: isActive ? activeColor : 'inherit' }}>{link.icon}</ListItemIcon>
+                  <ListItemText primary={link.label} />
+                </ListItemButton>
+              );
+            } else {
+              return (
+                <ListItemButton
+                  key={link.to}
+                  component={Link}
+                  to={link.to}
+                  onClick={()=>setDrawerOpen(false)}
+                  sx={{
+                    color: isActive ? activeColor : 'inherit',
+                  }}
+                >
+                  <ListItemIcon sx={{ color: isActive ? activeColor : 'inherit' }}>{link.icon}</ListItemIcon>
+                  <ListItemText primary={link.label} />
+                </ListItemButton>
+              );
+            }
+          })}
         </List>
       </Drawer>
     </>

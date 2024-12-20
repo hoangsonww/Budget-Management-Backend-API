@@ -22,21 +22,24 @@ function Footer() {
       }}
     >
       {/* Top Section: Budget Manager info */}
-      <Typography variant="h6" sx={{ fontWeight:600, mb:1 }}>Budget Manager</Typography>
-      <Typography variant="body2" sx={{ mb:2 }}>
+      <Typography variant="h5" sx={{ fontWeight:600, mb:1 }}>Budget Manager</Typography>
+      <Typography variant="body1" sx={{ mb:2 }}>
         Manage your budgets and expenses efficiently.
       </Typography>
+
+      {/* Horizontal divider */}
+      <Box sx={{ borderBottom:'1px solid #fff', mb:2 }}></Box>
 
       {/* Links horizontally below */}
       <Stack direction="row" spacing={2} justifyContent="center" sx={{ mb:2, flexWrap:'wrap' }}>
         <FooterLink to="/">Home</FooterLink>
-        <FooterLink to="/login">Login</FooterLink>
-        <FooterLink to="/register">Register</FooterLink>
-        <FooterLink to="/profile">Profile</FooterLink>
+        <FooterLink to="/dashboard">Dashboard</FooterLink>
         <FooterLink to="/budgets">Budgets</FooterLink>
         <FooterLink to="/expenses">Expenses</FooterLink>
         <FooterLink to="/users">Users</FooterLink>
-        <FooterLink to="/dashboard">Dashboard</FooterLink>
+        <FooterLink to="/profile">Profile</FooterLink>
+        <FooterLink to="/login">Login</FooterLink>
+        <FooterLink to="/register">Register</FooterLink>
       </Stack>
 
       {/* Social Icons */}
