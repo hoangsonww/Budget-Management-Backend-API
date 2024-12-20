@@ -585,6 +585,12 @@ Alternatively, it is also deployed live at [https://budget-manage-app.vercel.app
 
 Here are some screenshots of the frontend UI:
 
+**Home:**
+
+<p align="center">
+  <img src="images/home-ui.png" alt="Frontend UI" style="border-radius: 8px;">
+</p>
+
 **Dashboard:**
 
 <p align="center">
@@ -619,6 +625,12 @@ Here are some screenshots of the frontend UI:
 
 <p align="center">
   <img src="images/register.png" alt="Frontend UI" style="border-radius: 8px;">
+</p>
+
+**Forgot Password:**
+
+<p align="center">
+  <img src="images/forgot-password.png" alt="Frontend UI" style="border-radius: 8px;">
 </p>
 
 **Users:**

@@ -28,6 +28,7 @@ const avatarImages = [
 ];
 
 function Profile() {
+  // eslint-disable-next-line no-unused-vars
   const [email, setEmail] = useState("");
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [newEmail, setNewEmail] = useState("");
@@ -128,6 +129,7 @@ function Profile() {
   }, [allUsers]);
 
   // Debounced search
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(debounce((value) => {
     handleSearch(value);
   }, 300), [handleSearch]);
@@ -186,7 +188,7 @@ function Profile() {
         <TextField
           fullWidth
           variant="outlined"
-          label="Search for a user by username or email"
+          label="Search for a User by Username or Email..."
           value={searchTerm}
           onChange={onSearchChange}
         />

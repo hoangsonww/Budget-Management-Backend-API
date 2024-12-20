@@ -25,8 +25,9 @@ function Navbar({ mode, setMode }) {
     setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
+  // Check token validity on location change and on mount
   useEffect(() => {
-    const interval = setInterval(async () => {
+    const checkToken = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
         setIsLoggedIn(false);
@@ -39,22 +40,21 @@ function Navbar({ mode, setMode }) {
             'Content-Type': 'application/json'
           }
         });
-        if (!res.data.valid) {
-          // If not valid, log out
+        if (res.data.valid) {
+          setIsLoggedIn(true);
+        } else {
           localStorage.removeItem("token");
           setIsLoggedIn(false);
           navigate('/login');
         }
       } catch (err) {
-        // If invalid or any error occurs, log out
         localStorage.removeItem("token");
         setIsLoggedIn(false);
         navigate('/login');
       }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [navigate]);
+    };
+    checkToken();
+  }, [navigate, location]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -84,7 +84,7 @@ function Navbar({ mode, setMode }) {
 
   return (
     <>
-      <AppBar position="static" sx={{ zIndex: 10000 }}>
+      <AppBar position="static">
         <Toolbar>
           <IconButton sx={{ mr:2, display:{xs:'block', md:'none'} }} color="inherit" onClick={()=>setDrawerOpen(true)}>
             <MenuIcon />
@@ -98,6 +98,14 @@ function Navbar({ mode, setMode }) {
           <Box sx={{ display:{xs:'none', md:'flex'} }}>
             {navLinks.map((link) => {
               const isActive = location.pathname === link.to;
+              const isLogout = link.label === 'Logout';
+              const buttonStyle = {
+                mr:1,
+                borderRadius:0,
+                borderBottom: isActive ? '2px solid white' : 'none',
+                ...(isLogout && { color: 'red' }) // Apply red color if it's the logout button
+              };
+
               if (link.action) {
                 // For logout
                 return (
@@ -106,11 +114,7 @@ function Navbar({ mode, setMode }) {
                     color="inherit"
                     startIcon={link.icon}
                     onClick={link.action}
-                    sx={{
-                      mr:1,
-                      borderRadius:0,
-                      borderBottom: isActive ? '2px solid white' : 'none',
-                    }}
+                    sx={buttonStyle}
                   >
                     {link.label}
                   </Button>
@@ -123,11 +127,7 @@ function Navbar({ mode, setMode }) {
                     to={link.to}
                     color="inherit"
                     startIcon={link.icon}
-                    sx={{
-                      mr:1,
-                      borderRadius:0,
-                      borderBottom: isActive ? '2px solid white' : 'none',
-                    }}
+                    sx={buttonStyle}
                   >
                     {link.label}
                   </Button>
@@ -144,16 +144,20 @@ function Navbar({ mode, setMode }) {
         <List sx={{ width:250 }}>
           {navLinks.map((link) => {
             const isActive = location.pathname === link.to;
+            const isLogout = link.label === 'Logout';
+            const listItemStyles = {
+              color: isActive ? activeColor : 'inherit',
+              ...(isLogout && { color: 'red' })
+            };
+
             if (link.action) {
               return (
                 <ListItemButton
                   key={link.label}
                   onClick={()=>{setDrawerOpen(false); link.action();}}
-                  sx={{
-                    color: isActive ? activeColor : 'inherit',
-                  }}
+                  sx={listItemStyles}
                 >
-                  <ListItemIcon sx={{ color: isActive ? activeColor : 'inherit' }}>{link.icon}</ListItemIcon>
+                  <ListItemIcon sx={listItemStyles}>{link.icon}</ListItemIcon>
                   <ListItemText primary={link.label} />
                 </ListItemButton>
               );
@@ -164,11 +168,9 @@ function Navbar({ mode, setMode }) {
                   component={Link}
                   to={link.to}
                   onClick={()=>setDrawerOpen(false)}
-                  sx={{
-                    color: isActive ? activeColor : 'inherit',
-                  }}
+                  sx={listItemStyles}
                 >
-                  <ListItemIcon sx={{ color: isActive ? activeColor : 'inherit' }}>{link.icon}</ListItemIcon>
+                  <ListItemIcon sx={listItemStyles}>{link.icon}</ListItemIcon>
                   <ListItemText primary={link.label} />
                 </ListItemButton>
               );

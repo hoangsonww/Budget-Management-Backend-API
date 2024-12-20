@@ -46,7 +46,7 @@ function Users() {
         <Paper sx={{ p:4, overflowX:'auto' }}>
           <Typography variant="h4" mb={2} sx={{ fontWeight:600 }}>Users</Typography>
           <TextField
-            placeholder="Search users"
+            placeholder="Search for a User..."
             sx={{ mb:2 }}
             fullWidth
             value={search}
