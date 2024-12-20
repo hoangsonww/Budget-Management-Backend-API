@@ -1,5 +1,5 @@
 const express = require('express');
-const { sendTask, checkTaskStatus, deleteTask } = require('../controllers/taskController');
+const { sendTask, checkTaskStatus, deleteTask, getAllTasks, updateTaskById } = require('../controllers/taskController');
 const authenticate = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -13,5 +13,11 @@ router.get('/:id', authenticate, checkTaskStatus);
 
 // Delete a task from RabbitMQ
 router.delete('/:id', authenticate, deleteTask);
+
+// Get all tasks from MongoDB and cache them in Redis
+router.get('/', authenticate, getAllTasks);
+
+// Update a task in MongoDB and Redis
+router.put('/:id', authenticate, updateTaskById);
 
 module.exports = router;

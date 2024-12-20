@@ -401,3 +401,63 @@ exports.updateExpenseById = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * @swagger
+ * /api/expenses:
+ *   get:
+ *     summary: Retrieve all expenses across all budgets
+ *     tags: [Expenses]
+ *     responses:
+ *       200:
+ *         description: List of all expenses retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     example: 64c9b5f4e7a7d2b001e76a1b
+ *                   budgetId:
+ *                     type: string
+ *                     example: 64c9f8f2a73c2f001b3c68f4
+ *                   description:
+ *                     type: string
+ *                     example: "Flight tickets"
+ *                   amount:
+ *                     type: number
+ *                     example: 500
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *                     example: "2024-01-01T12:34:56.789Z"
+ *                 source:
+ *                   type: string
+ *                   example: cache
+ *       500:
+ *         description: Server error.
+ */
+exports.getAllExpenses = async (req, res, next) => {
+  try {
+    // Check Redis cache first
+    const cachedExpenses = await redisClient.get('expenses:all');
+    if (cachedExpenses) {
+      return res.status(200).json({ expenses: JSON.parse(cachedExpenses), source: 'cache' });
+    }
+
+    // Fetch from MongoDB if not cached
+    const expenses = await Expense.find();
+    if (!expenses.length) return res.status(404).json({ error: 'No expenses found' });
+
+    // Cache the results in Redis
+    await redisClient.set('expenses:all', JSON.stringify(expenses), { EX: 3600 }); // Cache for 1 hour
+
+    res.status(200).json({ expenses, source: 'database' });
+  } catch (error) {
+    console.error('Error retrieving all expenses:', error);
+    next(error);
+  }
+};

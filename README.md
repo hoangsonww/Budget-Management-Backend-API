@@ -271,6 +271,7 @@ Budget-Management-Backend-API/
 | `/api/transactions/:id`    | GET        | Get a specific transaction.              |
 | `/api/transactions/:id`    | PUT        | Update a transaction.                    |
 | `/api/transactions/:id`    | DELETE     | Delete a transaction.                    |
+| `/api/tasks`               | GET        | Get all tasks.                           |
 | `/api/tasks`               | POST       | Add a new task.                          |
 | `/api/tasks/:id`           | GET        | Get a specific task.                     |
 | `/api/tasks/:id`           | DELETE     | Delete a task.                           |

@@ -201,3 +201,145 @@ exports.deleteTask = async (req, res, next) => {
     });
   }
 };
+
+/**
+ * @swagger
+ * /api/tasks:
+ *   get:
+ *     summary: Retrieve all tasks
+ *     tags: [Tasks]
+ *     responses:
+ *       200:
+ *         description: List of all tasks retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     example: "64c9f8f2a73c2f001b3c68f4"
+ *                   description:
+ *                     type: string
+ *                     example: "Process user analytics"
+ *                   status:
+ *                     type: string
+ *                     example: "completed"
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *                     example: "2024-01-01T12:34:56.789Z"
+ *       500:
+ *         description: Server error.
+ */
+exports.getAllTasks = async (req, res, next) => {
+  try {
+    // Check Redis cache first
+    const cachedTasks = await redisClient.get('tasks:all');
+    if (cachedTasks) {
+      return res.status(200).json({ tasks: JSON.parse(cachedTasks), source: 'cache' });
+    }
+
+    // Fetch from MongoDB if not cached
+    const tasks = await Task.find();
+    if (!tasks.length) return res.status(404).json({ error: 'No tasks found' });
+
+    // Cache the results in Redis
+    await redisClient.set('tasks:all', JSON.stringify(tasks), { EX: 3600 }); // Cache for 1 hour
+
+    res.status(200).json({ tasks, source: 'database' });
+  } catch (error) {
+    console.error('Error retrieving all tasks:', error);
+    res.status(500).json({
+      error: 'An unexpected error occurred',
+      details: error.message,
+    });
+  }
+};
+
+/**
+ * @swagger
+ * /api/tasks/{id}:
+ *   put:
+ *     summary: Update a task by ID
+ *     tags: [Tasks]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the task to update.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               description:
+ *                 type: string
+ *                 description: The updated description of the task.
+ *               status:
+ *                 type: string
+ *                 description: The updated status of the task.
+ *     responses:
+ *       200:
+ *         description: Task updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Task updated successfully
+ *                 task:
+ *                   type: object
+ *       404:
+ *         description: Task not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Task not found
+ *       500:
+ *         description: Server error.
+ */
+exports.updateTaskById = async (req, res, next) => {
+  const { id } = req.params;
+  const { description, status } = req.body;
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'Invalid task ID format' });
+    }
+
+    const updatedTask = await Task.findByIdAndUpdate(
+      id,
+      { description, status },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedTask) {
+      return res.status(404).json({ error: 'Task not found' });
+    }
+
+    // Update the Redis cache
+    const redisKey = `task:${id}:status`;
+    await redisClient.set(redisKey, updatedTask.status);
+
+    res.status(200).json({ message: 'Task updated successfully', task: updatedTask });
+  } catch (error) {
+    console.error('Error updating task:', error);
+    res.status(500).json({
+      error: 'An unexpected error occurred',
+      details: error.message,
+    });
+  }
+};
