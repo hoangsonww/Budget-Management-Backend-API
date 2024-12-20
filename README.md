@@ -53,6 +53,8 @@ You can access the API and test the endpoints directly from the browser. Feel fr
 
 > Note: Be mindful of the rate limits and usage policies when testing the live API. Additionally, because the API is hosted on the free plan of Render, it may take a while (1-2 minutes) to wake up if it has been inactive for some time. Kindly be patient during this process!
 
+> Backup Frontend: https://budget-management-system.netlify.app
+
 ### Deployment and Technology Status
 
 [![API Status](https://img.shields.io/website?label=API%20Status&url=https%3A%2F%2Fbudget-management-backend-api.onrender.com)](https://budget-management-backend-api.onrender.com)
@@ -73,8 +75,9 @@ You can access the API and test the endpoints directly from the browser. Feel fr
 [![Jenkins CI/CD](https://img.shields.io/badge/Jenkins%20CI%2FCD-Configured-blue?logo=jenkins&logoColor=white)](https://www.jenkins.io/)
 [![Prometheus](https://img.shields.io/badge/Prometheus-Configured-blue?logo=prometheus&logoColor=white)](https://prometheus.io/)
 [![Grafana](https://img.shields.io/badge/Grafana-Configured-blue?logo=grafana&logoColor=white)](https://grafana.com/)
-[![Node.js](https://img.shields.io/badge/Node.js-Active-green?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Express.js](https://img.shields.io/badge/Express.js-Active-green?logo=express&logoColor=white)](https://expressjs.com/)
+[![Vercel](https://img.shields.io/badge/Vercel-Deployed-green?logo=vercel&logoColor=white)](https://budget-manage-app.vercel.app)
+[![Render](https://img.shields.io/badge/Render-Deployed-green?logo=render&logoColor=white)](https://budget-management-backend-api.onrender.com)
+[![Netlify](https://img.shields.io/badge/Netlify-Deployed-green?logo=netlify&logoColor=white)](https://budget-management-system.netlify.app)
 
 ## **Technologies Used**
 
