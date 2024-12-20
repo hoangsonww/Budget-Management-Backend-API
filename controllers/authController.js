@@ -334,3 +334,72 @@ exports.resetPassword = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * @swagger
+ * /api/auth/verify-token:
+ *   post:
+ *     summary: Verify if a token is valid
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - token
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: The JWT to verify.
+ *     responses:
+ *       200:
+ *         description: Token is valid.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 valid:
+ *                   type: boolean
+ *                   example: true
+ *       401:
+ *         description: Token is invalid or expired.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Token is invalid or expired
+ */
+exports.verifyToken = async (req, res, next) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({ error: 'Token is required' });
+    }
+
+    // Decode and verify the token
+    jwt.verify(token, JWT_SECRET, async (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ error: 'Token is invalid or expired' });
+      }
+
+      // Check if the token is blacklisted
+      const blacklistKey = `blacklist:${decoded.id}`;
+      const isBlacklisted = await redisClient.get(blacklistKey);
+
+      if (isBlacklisted) {
+        return res.status(401).json({ error: 'Token is invalid or expired' });
+      }
+
+      res.status(200).json({ valid: true });
+    });
+  } catch (error) {
+    next(error);
+  }
+};
