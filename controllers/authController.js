@@ -1,6 +1,8 @@
 const User = require('../models/user');
 const { generateToken } = require('../services/jwtService');
 const redisClient = require('../services/redisService');
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = process.env;
 
 /**
  * @swagger
