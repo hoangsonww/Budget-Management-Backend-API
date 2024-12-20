@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  frontend:
+    build: .
+    image: my-frontend:latest
+    ports:
+      - "3000:80"
+    restart: always
+    # Optional environment variables (if needed for build or runtime)
+    # env_file:
+    #   - .env
+    # environment:
+    #   REACT_APP_API_URL: "http://backend:4000"
+    # If you have a backend linked in docker-compose, you'd reference it by service name.
+
+    # Adjust these depending on how you want your containers to network
+    # By default, a Docker network is created to allow containers to resolve by service names.

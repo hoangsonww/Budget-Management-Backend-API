@@ -18,16 +18,17 @@ Below is a comprehensive guide to setting up, running, and utilizing this API.
 8. [Features and Integrations](#features-and-integrations)
 9. [Environment Variables](#environment-variables)
 10. [CLI Usage](#cli-usage)
-11. [Swagger Documentation](#swagger-documentation)
-12. [GraphQL Integration](#graphql-integration)
-13. [NGINX Configuration](#nginx-configuration)
-14. [gRPC Integration](#grpc-integration)
-15. [Dockerization](#dockerization)
-16. [Kubernetes Deployment](#kubernetes-deployment)
-17. [Continuous Integration and Deployment with Jenkins](#continuous-integration-and-deployment-with-jenkins)
-18. [Testing](#testing)
-19. [Contributing](#contributing)
-20. [Author](#author)
+11. [Demo Frontend UI](#demo-frontend-ui)
+12. [Swagger Documentation](#swagger-documentation)
+13. [GraphQL Integration](#graphql-integration)
+14. [NGINX Configuration](#nginx-configuration)
+15. [gRPC Integration](#grpc-integration)
+16. [Dockerization](#dockerization)
+17. [Kubernetes Deployment](#kubernetes-deployment)
+18. [Continuous Integration and Deployment with Jenkins](#continuous-integration-and-deployment-with-jenkins)
+19. [Testing](#testing)
+20. [Contributing](#contributing)
+21. [Author](#author)
 
 ## **Overview**
 
@@ -583,6 +584,8 @@ To run the frontend UI, follow these steps:
 4. Access the frontend UI at `http://localhost:3001` (or whichever port is specified in the console).
 
 Alternatively, it is also deployed live at [https://budget-manage-app.vercel.app](https://budget-manage-app.vercel.app). Feel free to use the live version for testing and exploration.
+
+For more information, refer to the [Frontend README](frontend/README.md) in the `frontend` directory to learn about the frontend UI components, features, and usage.
 
 ### **UI Images**
 
