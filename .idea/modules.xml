@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/node-mongo-redis-project.iml" filepath="$PROJECT_DIR$/.idea/node-mongo-redis-project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Budget-Management-System-API.iml" filepath="$PROJECT_DIR$/.idea/Budget-Management-System-API.iml" />
     </modules>
   </component>
 </project>
