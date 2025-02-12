@@ -13,11 +13,15 @@ const seedMongoData = require('./services/dataSeeder');
 const startGrpcServer = require('./grpcServer');
 const cors = require('cors');
 const morgan = require('morgan');
+const favicon = require('serve-favicon');
 
 // Environment Variable Configuration
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const app = express();
+
+// Favicon
+app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 
 // CORS
 app.use(cors()); // Enable All CORS Requests
