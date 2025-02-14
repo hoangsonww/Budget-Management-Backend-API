@@ -1,0 +1,42 @@
+{
+  "name": "Budget Management System",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:1": {}
+  },
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash"
+  },
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "humao.rest-client",
+    "streetsidesoftware.code-spell-checker"
+  ],
+  "postCreateCommand": "npm install",
+  "remoteUser": "vscode",
+  "forwardPorts": [3000, 6379, 5432, 9200, 15672],
+  "containerEnv": {
+    "NODE_ENV": "development",
+    "PORT": "3000",
+    "DATABASE_URL": "postgres://user:password@db:5432/budget",
+    "REDIS_URL": "redis://redis:6379",
+    "ELASTICSEARCH_URL": "http://elasticsearch:9200"
+  },
+  "mounts": [
+    "source=/home/vscode/.npm,target=/home/vscode/.npm,type=bind"
+  ],
+  "runArgs": [
+    "--network=host"
+  ],
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.formatOnSave": true
+      }
+    }
+  }
+}
