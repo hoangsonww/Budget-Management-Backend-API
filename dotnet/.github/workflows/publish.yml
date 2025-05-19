@@ -1,0 +1,33 @@
+name: Build & Publish to GitHub Packages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+
+      - name: Restore & Build
+        run: |
+          cd src/BudgetManagement.API
+          dotnet restore
+          dotnet build --configuration Release
+
+      - name: Pack
+        run: |
+          cd src/BudgetManagement.API
+          dotnet pack --configuration Release --no-build --output ../../artifacts
+
+      - name: Push to GitHub Packages
+        run: |
+          dotnet nuget push artifacts/*.nupkg \
+            --source github \
+            --api-key ${{ secrets.GITHUB_TOKEN }}

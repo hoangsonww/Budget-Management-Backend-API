@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>BudgetManagement.API</id>
+    <version>1.0.0</version>
+    <authors>Son Nguyen</authors>
+    <description>Comprehensive .NET 7 Budget Management Backend API</description>
+    <tags>budget management api dotnet ef-core</tags>
+    <repository url="https://github.com/hoangsonww/Budget-Management-Backend-API" />
+    <dependencies>
+      <group targetFramework="net7.0">
+        <dependency id="Microsoft.EntityFrameworkCore.SqlServer" version="7.0.0" exclude="Build,Analyzers" />
+        <dependency id="Swashbuckle.AspNetCore" version="6.4.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <frameworkReferences>
+      <group targetFramework="net7.0">
+        <frameworkReference name="Microsoft.AspNetCore.App" />
+      </group>
+    </frameworkReferences>
+    <contentFiles>
+      <files include="any/net7.0/nuget.config" buildAction="Content" />
+    </contentFiles>
+  </metadata>
+  <files>
+    <file src="/workspace/bin/Release/net7.0/BudgetManagement.API.runtimeconfig.json" target="lib/net7.0/BudgetManagement.API.runtimeconfig.json" />
+    <file src="/workspace/bin/Release/net7.0/BudgetManagement.API.dll" target="lib/net7.0/BudgetManagement.API.dll" />
+    <file src="/workspace/bin/Release/net7.0/BudgetManagement.API.xml" target="lib/net7.0/BudgetManagement.API.xml" />
+    <file src="/workspace/nuget.config" target="content/nuget.config" />
+    <file src="/workspace/nuget.config" target="contentFiles/any/net7.0/nuget.config" />
+  </files>
+</package>

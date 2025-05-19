@@ -25,10 +25,11 @@ Below is a comprehensive guide to setting up, running, and utilizing this API.
 15. [gRPC Integration](#grpc-integration)
 16. [Dockerization](#dockerization)
 17. [Kubernetes Deployment](#kubernetes-deployment)
-18. [Continuous Integration and Deployment with Jenkins](#continuous-integration-and-deployment-with-jenkins)
-19. [Testing](#testing)
-20. [Contributing](#contributing)
-21. [Author](#author)
+18. [Spring Boot Backends with Gradle & Maven](#spring-boot-backends-with-gradle--maven)
+19. [Continuous Integration and Deployment with Jenkins](#continuous-integration-and-deployment-with-jenkins)
+20. [Testing](#testing)
+21. [Contributing](#contributing)
+22. [Author](#author)
 
 ## **Overview**
 
@@ -76,6 +77,9 @@ You can access the API and test the endpoints directly from the browser. Feel fr
 [![Jenkins CI/CD](https://img.shields.io/badge/Jenkins%20CI%2FCD-Configured-blue?logo=jenkins&logoColor=white)](https://www.jenkins.io/)
 [![Prometheus](https://img.shields.io/badge/Prometheus-Configured-blue?logo=prometheus&logoColor=white)](https://prometheus.io/)
 [![Grafana](https://img.shields.io/badge/Grafana-Configured-blue?logo=grafana&logoColor=white)](https://grafana.com/)
+[![Maven Package](https://img.shields.io/badge/Maven%20Package-Available-orange?logo=apachemaven&logoColor=white)](https://maven.apache.org/)
+[![Gradle Package](https://img.shields.io/badge/Gradle%20Package-Available-orange?logo=gradle&logoColor=white)](https://gradle.org/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-Configured-green?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
 [![Vercel](https://img.shields.io/badge/Vercel-Deployed-green?logo=vercel&logoColor=white)](https://budget-manage-app.vercel.app)
 [![Render](https://img.shields.io/badge/Render-Deployed-green?logo=render&logoColor=white)](https://budget-management-backend-api.onrender.com)
 [![Netlify](https://img.shields.io/badge/Netlify-Deployed-green?logo=netlify&logoColor=white)](https://budget-management-system.netlify.app)
@@ -767,6 +771,48 @@ docker-compose up --build
    ```
    
 3. Access the application using the service URL.
+
+## **Spring Boot Backends with Maven and Gradle**
+
+There is also a Spring Boot Java version of the Budget Management API available in the `spring-boot` directory. It is built using Maven and Gradle.
+
+To run the Spring Boot Maven application, follow these steps:
+
+1. Navigate to the `spring-boot` directory:
+   ```bash
+   cd spring
+   ```
+
+2. Build the application using Maven:
+   ```bash
+    mvn clean install
+    ```
+   
+3. Run the application:
+    ```bash
+    mvn spring-boot:run
+    ```
+   
+4. Access the Spring Boot application at `http://localhost:8080`.
+
+To run the Spring Boot Gradle application, follow these steps:
+
+1. Navigate to the `spring-boot` directory:
+   ```bash
+   cd gradle
+   ```
+   
+2. Build the application using Gradle:
+   ```bash
+    ./gradlew build
+    ```
+   
+3. Run the application:
+    ```bash
+    ./gradlew bootRun
+    ```
+   
+4. Access the Spring Boot application at `http://localhost:8080`.
 
 ## **Continuous Integration and Deployment with Jenkins**
 
