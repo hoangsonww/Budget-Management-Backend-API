@@ -25,11 +25,12 @@ Below is a comprehensive guide to setting up, running, and utilizing this API.
 15. [gRPC Integration](#grpc-integration)
 16. [Dockerization](#dockerization)
 17. [Kubernetes Deployment](#kubernetes-deployment)
-18. [Spring Boot Backends with Gradle & Maven](#spring-boot-backends-with-gradle--maven)
-19. [Continuous Integration and Deployment with Jenkins](#continuous-integration-and-deployment-with-jenkins)
-20. [Testing](#testing)
-21. [Contributing](#contributing)
-22. [Author](#author)
+18. [Spring Boot Backends with Gradle & Maven](#spring-boot-backends-with-maven-and-gradle)
+19. [Dotnet Backends with C#](#dotnet-backend-with-c-sharp)
+20. [Continuous Integration and Deployment with Jenkins](#continuous-integration-and-deployment-with-jenkins)
+21. [Testing](#testing)
+22. [Contributing](#contributing)
+23. [Author](#author)
 
 ## **Overview**
 
@@ -55,7 +56,7 @@ You can access the API and test the endpoints directly from the browser. Feel fr
 
 > Note: Be mindful of the rate limits and usage policies when testing the live API. Additionally, because the API is hosted on the free plan of Render, it may take a while (1-2 minutes) to wake up if it has been inactive for some time. Kindly be patient during this process!
 
-> Backup Frontend: https://budget-management-system.netlify.app
+> Backup Frontend: https://budget-management-system.netlify.app.
 
 ### Deployment and Technology Status
 
@@ -80,6 +81,7 @@ You can access the API and test the endpoints directly from the browser. Feel fr
 [![Maven Package](https://img.shields.io/badge/Maven%20Package-Available-orange?logo=apachemaven&logoColor=white)](https://maven.apache.org/)
 [![Gradle Package](https://img.shields.io/badge/Gradle%20Package-Available-orange?logo=gradle&logoColor=white)](https://gradle.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-Configured-green?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Dotnet](https://img.shields.io/badge/.NET-Configured-blue?logo=.net&logoColor=white)](https://dotnet.microsoft.com/)
 [![Vercel](https://img.shields.io/badge/Vercel-Deployed-green?logo=vercel&logoColor=white)](https://budget-manage-app.vercel.app)
 [![Render](https://img.shields.io/badge/Render-Deployed-green?logo=render&logoColor=white)](https://budget-management-backend-api.onrender.com)
 [![Netlify](https://img.shields.io/badge/Netlify-Deployed-green?logo=netlify&logoColor=white)](https://budget-management-system.netlify.app)
@@ -813,6 +815,29 @@ To run the Spring Boot Gradle application, follow these steps:
     ```
    
 4. Access the Spring Boot application at `http://localhost:8080`.
+
+## **Dotnet Backend with C Sharp**
+
+There is also a Dotnet C# version of the Budget Management API available in the `dotnet` directory. It is built using ASP.NET Core.
+
+To run the Dotnet C# application, follow these steps:
+
+1. Navigate to the `dotnet` directory:
+   ```bash
+   cd dotnet
+   ```
+   
+2. Build the application using the .NET CLI:
+   ```bash
+    dotnet build
+    ```
+   
+3. Run the application:
+    ```bash
+    dotnet run
+    ```
+   
+4. Access the Dotnet C# application at `http://localhost:5000`.
 
 ## **Continuous Integration and Deployment with Jenkins**
 

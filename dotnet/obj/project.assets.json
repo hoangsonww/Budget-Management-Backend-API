@@ -600,9 +600,7 @@
             "related": ".pdb"
           }
         },
-        "frameworkReferences": [
-          "Microsoft.AspNetCore.App"
-        ]
+        "frameworkReferences": ["Microsoft.AspNetCore.App"]
       },
       "Swashbuckle.AspNetCore.SwaggerGen/6.4.0": {
         "type": "package",
@@ -632,9 +630,7 @@
             "related": ".pdb"
           }
         },
-        "frameworkReferences": [
-          "Microsoft.AspNetCore.App"
-        ]
+        "frameworkReferences": ["Microsoft.AspNetCore.App"]
       },
       "System.Buffers/4.5.1": {
         "type": "package",
@@ -3138,11 +3134,7 @@
     }
   },
   "projectFileDependencyGroups": {
-    "net7.0": [
-      "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.0",
-      "Microsoft.EntityFrameworkCore.Tools >= 7.0.0",
-      "Swashbuckle.AspNetCore >= 6.4.0"
-    ]
+    "net7.0": ["Microsoft.EntityFrameworkCore.SqlServer >= 7.0.0", "Microsoft.EntityFrameworkCore.Tools >= 7.0.0", "Swashbuckle.AspNetCore >= 6.4.0"]
   },
   "packageFolders": {
     "/root/.nuget/packages/": {}
@@ -3156,13 +3148,8 @@
       "packagesPath": "/root/.nuget/packages/",
       "outputPath": "/workspace/obj/",
       "projectStyle": "PackageReference",
-      "configFilePaths": [
-        "/workspace/nuget.config",
-        "/root/.nuget/NuGet/NuGet.Config"
-      ],
-      "originalTargetFrameworks": [
-        "net7.0"
-      ],
+      "configFilePaths": ["/workspace/nuget.config", "/root/.nuget/NuGet/NuGet.Config"],
+      "originalTargetFrameworks": ["net7.0"],
       "sources": {
         "https://api.nuget.org/v3/index.json": {},
         "https://nuget.pkg.github.com/hoangsonww/index.json": {}
@@ -3174,9 +3161,7 @@
         }
       },
       "warningProperties": {
-        "warnAsError": [
-          "NU1605"
-        ]
+        "warnAsError": ["NU1605"]
       }
     },
     "frameworks": {
@@ -3197,15 +3182,7 @@
             "version": "[6.4.0, )"
           }
         },
-        "imports": [
-          "net461",
-          "net462",
-          "net47",
-          "net471",
-          "net472",
-          "net48",
-          "net481"
-        ],
+        "imports": ["net461", "net462", "net47", "net471", "net472", "net48", "net481"],
         "assetTargetFallback": true,
         "warn": true,
         "frameworkReferences": {

@@ -68,10 +68,3 @@ publishing {
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
-
-// ——— Java toolchain to compile with JDK 17 even if local JDK is older ———
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
