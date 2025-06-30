@@ -47,6 +47,9 @@ The Budget Management API is designed to handle complex budget management requir
 - Advanced search capabilities with Elasticsearch.
 - CLI operations for direct interaction with the system.
 - Compatibility with modern cloud environments like Docker and Kubernetes.
+- Support for both REST and GraphQL APIs for flexible data access.
+- Sample `dotnet` and `spring-boot` backends to demonstrate integration with other technologies.
+- ...and so much more!
 
 The purpose of this API is to demonstrate the capabilities of modern backend technologies and provide a foundation for building scalable, real-time applications. It can be used as a reference for developers looking to implement similar features in their projects. Simply clone the repository, set up the environment, and start building the frontend or additional functionality on top of the existing API! 
 
