@@ -1,7 +1,6 @@
 # **Budget Management Backend API**
 
-Welcome to the **Budget Management API**, a robust backend application designed to manage budgets, expenses, users, orders, notifications, and more. This API integrates cutting-edge technologies and supports advanced features like **gRPC, GraphQL, WebSockets, Elasticsearch, PostgreSQL, MySQL, Redis, RabbitMQ, Kafka, Docker, and more.** 
-Moreover, it also includes a **CLI** tool for interacting with the backend and a comprehensive **Swagger** documentation for testing and exploring the API.
+**Welcome to the Budget Management API**, a robust backend platform for managing budgets, expenses, users, orders, and notifications. Built with **Node.js**, **Express**, and **TypeScript**, it supports advanced features like **GraphQL**, **gRPC**, **WebSockets**, and **REST APIs**. The API integrates with **PostgreSQL**, **MongoDB**, **MySQL**, **Redis**, **RabbitMQ**, **Kafka**, and **Elasticsearch**, and is containerized with **Docker** and orchestrated using **Kubernetes**. It also includes a developer-friendly **CLI** tool and interactive **Swagger/OpenAPI** documentation for exploring and testing endpoints.
 
 <p align="center">
   <a href="https://budget-manage-app.vercel.app" target="_blank">
