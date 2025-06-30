@@ -1,10 +1,15 @@
 # **Budget Management Backend API**
 
-Welcome to the **Budget Management API**, a robust backend application designed to manage budgets, expenses, users, orders, notifications, and more. This API integrates cutting-edge technologies and supports advanced features like gRPC, GraphQL, WebSockets, Elasticsearch, PostgreSQL, MySQL, Redis, RabbitMQ, Kafka, and Docker. 
+Welcome to the **Budget Management API**, a robust backend application designed to manage budgets, expenses, users, orders, notifications, and more. This API integrates cutting-edge technologies and supports advanced features like **gRPC, GraphQL, WebSockets, Elasticsearch, PostgreSQL, MySQL, Redis, RabbitMQ, Kafka, Docker, and more.** 
+Moreover, it also includes a **CLI** tool for interacting with the backend and a comprehensive **Swagger** documentation for testing and exploring the API.
 
-Moreover, it also includes a CLI tool for interacting with the backend and a comprehensive Swagger documentation for testing and exploring the API.
+<p align="center">
+  <a href="https://budget-manage-app.vercel.app" target="_blank">
+    <img src="images/logo.png" alt="Budget Management API Logo" style="border-radius: 8px;" width="35%">
+  </a>
+</p>
 
-Below is a comprehensive guide to setting up, running, and utilizing this API.
+Below is a _very_ comprehensive guide to setting up, running, and utilizing this API.
 
 ## **Table of Contents**
 
@@ -46,11 +51,54 @@ The Budget Management API is designed to handle complex budget management requir
 
 The purpose of this API is to demonstrate the capabilities of modern backend technologies and provide a foundation for building scalable, real-time applications. It can be used as a reference for developers looking to implement similar features in their projects. Simply clone the repository, set up the environment, and start building the frontend or additional functionality on top of the existing API! 
 
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=openjdk&logoColor=white)
+![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![RabbitMQ](https://img.shields.io/badge/RabbitMQ-FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white)
+![Kafka](https://img.shields.io/badge/Kafka-231F20?style=for-the-badge&logo=apachekafka&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
+![Elasticsearch](https://img.shields.io/badge/Elasticsearch-005571?style=for-the-badge&logo=elasticsearch&logoColor=white)
+![REST](https://img.shields.io/badge/REST%20API-FF6F00?style=for-the-badge&logo=apachespark&logoColor=white)
+![GraphQL](https://img.shields.io/badge/GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)
+![gRPC](https://img.shields.io/badge/gRPC-4285F4?style=for-the-badge&logo=grpc&logoColor=white)
+![WebSockets](https://img.shields.io/badge/WebSockets-006699?style=for-the-badge&logo=websocket&logoColor=white)
+![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
+![OpenAPI](https://img.shields.io/badge/OpenAPI-6BA539?style=for-the-badge&logo=openapiinitiative&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)
+![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white)
+![NGINX](https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=nginx&logoColor=white)
+![PM2](https://img.shields.io/badge/PM2-2B037A?style=for-the-badge&logo=pm2&logoColor=white)
+![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=black)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![Netlify](https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)
+![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white)
+![Grafana](https://img.shields.io/badge/Grafana-F46800?style=for-the-badge&logo=grafana&logoColor=white)
+![Maven](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
+![Gradle](https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white)
+![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+![Node CLI](https://img.shields.io/badge/Node%20CLI-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)
+![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=black)
+![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white)
+![Mocha](https://img.shields.io/badge/Mocha-8D6748?style=for-the-badge&logo=mocha&logoColor=white)
+![Chai](https://img.shields.io/badge/Chai-A30701?style=for-the-badge&logo=chai&logoColor=white)
+
 ## **Live Deployment**
 
-The Budget Management API is deployed live at [https://budget-management-backend-api.onrender.com](https://budget-management-backend-api.onrender.com).
+The Budget Management API is deployed live at **[https://budget-management-backend-api.onrender.com](https://budget-management-backend-api.onrender.com).**
 
-Additionally, the frontend UI is also available, hosted at [https://budget-manage-app.vercel.app](https://budget-manage-app.vercel.app).
+Additionally, a mock frontend UI is also available, hosted at **[https://budget-manage-app.vercel.app](https://budget-manage-app.vercel.app).**
 
 You can access the API and test the endpoints directly from the browser. Feel free to use the API for your own projects or applications. Simply add some attribution to the original repository and the creator. Also, be sure that you use your own credentials and tokens, otherwise your data may clash with mine and other users' data!
 
