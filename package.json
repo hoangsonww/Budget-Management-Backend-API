@@ -11,9 +11,9 @@
     "frontend": "cd frontend && npm start",
     "backend": "nodemon index.js",
     "install-deps": "npm install",
-    "test": "jest --runInBand --detectOpenHandles --forceExit",
-    "test:watch": "jest --watchAll",
-    "test:coverage": "jest --coverage",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "coverage": "jest --coverage",
     "format": "prettier --config .prettierrc --write \"**/*.{js,ts,json}\""
   },
   "keywords": [
@@ -73,7 +73,7 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "nodemon": "^3.1.9",
-    "supertest": "^7.0.0"
+    "supertest": "^7.1.1"
   },
   "bin": {
     "budget-manager": "./cli.js"

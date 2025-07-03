@@ -172,7 +172,7 @@ Budget-Management-Backend-API/
 ├── .prettierrc                    # Prettier configuration for code formatting
 ├── LICENSE                        # License information
 ├── README.md                      # Documentation for the project
-├── app.test.js                    # Main test file for application
+├── __tests__/app.test.js          # Main test file for application
 ├── cli.js                         # CLI tool for interacting with the backend
 ├── docker-compose.yml             # Docker Compose configuration
 ├── Dockerfile                     # Dockerfile for containerizing the application
