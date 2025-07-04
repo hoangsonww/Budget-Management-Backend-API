@@ -78,13 +78,16 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install dependencies
+      - name: Install frontend dependencies
+        working-directory: frontend
         run: npm ci
 
       - name: Run Frontend tests
+        working-directory: frontend
         run: npm test
 
       - name: Build Frontend
+        working-directory: frontend
         run: npm run build
 
   coverage:
