@@ -66,7 +66,7 @@ jobs:
         run: npm run test:mocha
 
   frontend:
-    name: 🌐 Frontend Test & Build
+    name: 🌐 Frontend Test, Build & Artifact
     runs-on: ubuntu-latest
     needs: mocha
     steps:
@@ -85,6 +85,12 @@ jobs:
       - name: Build Frontend
         working-directory: frontend
         run: npm run build
+
+      - name: Upload Frontend Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          path: frontend/build
 
   coverage:
     name: 📊 Generate Coverage
