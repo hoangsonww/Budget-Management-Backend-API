@@ -8,6 +8,6 @@ module.exports = {
   verbose: true,
   forceExit: true,
   haste: {
-    ignorePattern: 'frontend'
-  }
+    ignorePattern: 'frontend',
+  },
 };

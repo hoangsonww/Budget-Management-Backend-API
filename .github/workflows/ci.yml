@@ -28,7 +28,7 @@ jobs:
         run: npm run format
 
   test:
-    name: ✅ Run Tests
+    name: ✅ Run Jest Tests
     runs-on: ubuntu-latest
     needs: formatting
     steps:
@@ -46,10 +46,54 @@ jobs:
       - name: Run Jest tests
         run: npm test
 
+  mocha:
+    name: 🧪 Run Mocha & Chai Tests
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Mocha & Chai tests
+        run: npm run test:mocha
+
+  frontend:
+    name: 🌐 Frontend Test & Build
+    runs-on: ubuntu-latest
+    needs: mocha
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Frontend tests
+        run: npm test
+
+      - name: Build Frontend
+        run: npm run build
+
   coverage:
     name: 📊 Generate Coverage
     runs-on: ubuntu-latest
-    needs: test
+    needs:
+      - test
+      - mocha
+      - frontend
     steps:
       - name: Checkout code
         uses: actions/checkout@v3

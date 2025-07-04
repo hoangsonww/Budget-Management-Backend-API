@@ -4,7 +4,7 @@ module.exports = {
     '@babel/preset-env',
     [
       '@babel/preset-react',
-      { runtime: 'automatic' } // lets you skip `import React` everywhere
-    ]
-  ]
+      { runtime: 'automatic' }, // lets you skip `import React` everywhere
+    ],
+  ],
 };

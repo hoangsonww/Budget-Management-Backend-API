@@ -11,7 +11,7 @@ module.exports = {
 
   // transform every .js/.jsx through babel-jest
   transform: {
-    '^.+\\.[jt]sx?$': 'babel-jest'
+    '^.+\\.[jt]sx?$': 'babel-jest',
   },
 
   // extensions to look for

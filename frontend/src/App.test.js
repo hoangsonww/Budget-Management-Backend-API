@@ -15,7 +15,7 @@ describe('<App />', () => {
         <App />
       </MemoryRouter>
     );
-    expect(screen.getByRole('banner')).toBeInTheDocument();  // Navbar has role=banner
+    expect(screen.getByRole('banner')).toBeInTheDocument(); // Navbar has role=banner
     expect(screen.getByRole('contentinfo')).toBeInTheDocument(); // Footer has role=contentinfo
     // Home page heading
     expect(screen.getByText(/welcome to your budget app/i)).toBeInTheDocument();
