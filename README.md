@@ -921,6 +921,24 @@ npm test
 
 The test results will be displayed in the console.
 
+**Watch Mode:** To run tests in watch mode, which automatically re-runs tests on file changes, use:
+
+```bash
+npm test:watch
+```
+
+**Coverage Report:** To generate a code coverage report, use:
+
+```bash
+npm test:coverage
+```
+
+**Mocha and Chai tests:** In addition to the Jest tests, the project also includes Mocha and Chai tests for the application. These tests can be run using:
+
+```bash
+npm run test:mocha
+```
+
 ## **Contributing**
 
 Contributions are welcome! Please fork the repository, create a feature branch, and submit a pull request:
