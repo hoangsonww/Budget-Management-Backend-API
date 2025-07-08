@@ -184,6 +184,12 @@ The Budget Management API is designed with a microservices architecture, allowin
 
 This architecture allows for easy integration of additional services, such as order management, task management, and notification services, without affecting the core functionality of the API.
 
+#### Communication Between Services
+
+Each service communicates with others using RabbitMQ for asynchronous messaging, gRPC for high-performance remote procedure calls, and REST APIs for standard HTTP communication. This ensures that services can operate independently while still being able to interact with each other as needed.
+
+Also, the API is designed to be modular, allowing for easy addition of new services or features without disrupting existing functionality. This modularity is achieved through the use of separate directories for each service, with shared utilities and configurations in a common structure.
+
 > [!TIP]
 > Each service does not live in its own directory, but rather is organized within the main project structure. This allows for easier management and deployment of the entire application as a single unit, while still maintaining the modularity of the microservices architecture.
 
