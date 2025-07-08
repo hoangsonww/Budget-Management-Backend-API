@@ -1,6 +1,6 @@
 # **Budget Management Backend API**
 
-**Welcome to the Budget Management API**, a robust backend platform for managing budgets, expenses, users, orders, and notifications. Built with **Node.js**, **Express**, and **TypeScript**, it supports advanced features like **GraphQL**, **gRPC**, **WebSockets**, and **REST APIs**. The API integrates with **PostgreSQL**, **MongoDB**, **MySQL**, **Redis**, **RabbitMQ**, **Kafka**, and **Elasticsearch**, and is containerized with **Docker** and orchestrated using **Kubernetes**. It also includes a developer-friendly **CLI** tool and interactive **Swagger/OpenAPI** documentation for exploring and testing endpoints.
+**Welcome to the Budget Management API**, a robust, **microservices** backend platform for managing budgets, expenses, users, orders, and notifications. Built with **Node.js**, **Express**, and **TypeScript**, it supports advanced features like **GraphQL**, **gRPC**, **WebSockets**, and **REST APIs**. The API integrates with **PostgreSQL**, **MongoDB**, **MySQL**, **Redis**, **RabbitMQ**, **Kafka**, and **Elasticsearch**, and is containerized with **Docker** and orchestrated using **Kubernetes**. It also includes a developer-friendly **CLI** tool and interactive **Swagger/OpenAPI** documentation for exploring and testing endpoints.
 
 <p align="center">
   <a href="https://budget-manage-app.vercel.app" target="_blank">
@@ -15,6 +15,7 @@ Below is a _very_ comprehensive guide to setting up, running, and utilizing this
 1. [Overview](#overview)
 2. [Live Deployment](#live-deployment)
 3. [Technologies Used](#technologies-used)
+   - [Microservices Architecture](#microservices-architecture)
 4. [Project Structure](#project-structure)
 5. [Setup Instructions](#setup-instructions)
 6. [Available Endpoints](#available-endpoints)
@@ -89,12 +90,14 @@ The purpose of this API is to demonstrate the capabilities of modern backend tec
 ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
 ![Node CLI](https://img.shields.io/badge/Node%20CLI-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)
 ![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=black)
 ![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white)
 ![Mocha](https://img.shields.io/badge/Mocha-8D6748?style=for-the-badge&logo=mocha&logoColor=white)
 ![Chai](https://img.shields.io/badge/Chai-A30701?style=for-the-badge&logo=chai&logoColor=white)
+![Microservices](https://img.shields.io/badge/Microservices-00BFFF?style=for-the-badge&logo=farcaster&logoColor=white)
 
 ## **Live Deployment**
 
@@ -161,6 +164,69 @@ You can access the API and test the endpoints directly from the browser. Feel fr
 | **Prometheus**      | Monitoring and alerting toolkit.                          |
 | **Grafana**         | Observability and visualization platform.                 |
 | **Jenkins**         | CI/CD pipeline for automated testing and deployment.      |
+
+### Microservices Architecture
+
+The Budget Management API is designed with a microservices architecture, allowing for modular development and deployment. Each service can be developed, deployed, and scaled independently, providing flexibility and resilience.
+
+1. **Authentication Service**: Handles user registration, login, and JWT token management.
+2. **Budget Service**: Manages budgets, including creation, updates, and retrieval.
+3. **Expense Service**: Manages expenses associated with budgets, including CRUD operations.
+4. **Customer Service**: Manages customer data, including creation and updates.
+5. **Search Service**: Provides advanced search capabilities using Elasticsearch.
+
+This architecture allows for easy integration of additional services, such as order management, task management, and notification services, without affecting the core functionality of the API.
+
+```plaintext
+                      +-----------------------------+
+                      |      Frontend Clients       |
+                      |  • Web UI                   |
+                      |  • CLI Tool / gRPC Client   |
+                      +--------------+--------------+
+                                     |
+                                     | HTTP/GraphQL/WebSocket/gRPC
+                                     |
+                      +--------------v--------------+
+                      |       API Gateway /         |
+                      |      Express.js Layer       |
+                      +--------------+--------------+
+                                     |
+           +----------+--------------+--------------+-----------+
+           |          |              |              |           |
+           |          |              |              |           |
+  +--------v----+ +---v-------+  +---v-------+  +---v-------+ +--v---------+
+  | Auth        | | Budget    |  | Expense   |  | Order     | | Customer   |
+  | Service     | | Service   |  | Service   |  | Service   | | Service    |
+  +-------------+ +-----------+  +-----------+  +-----------+ +------------+
+           |              |              |              |           |
+           +--------------+--------------+--------------+-----------+
+                                     |
+                      +--------------v--------------+
+                      |   Search Service (Elastic)  |
+                      +--------------+--------------+
+                                     |
+                    +----------------v----------------+
+                    |   Messaging & Event Streaming   |
+                    |  • RabbitMQ (Task Queues)       |
+                    |  • Kafka (Event Bus)            |
+                    +----------------+----------------+
+                                     |
+             +-----------+-----------+-----------+------------+
+             |           |           |           |            |
+      +------v---+ +-----v-----+ +----v-----+ +---v-----+ +---v------+
+      | MongoDB  | | PostgreSQL| | MySQL    | | Redis   | | Elastic  |
+      | (NoSQL)  | | (Logs     | | (Alt RDB)| | (Cache) | | (Search) |
+      +----------+ +-----------+ +----------+ +---------+ +----------+
+
+             +-----------------------------------------------+
+             |  Containerization & Orchestration             |
+             |  • Docker images for each service             |
+             |  • Kubernetes cluster (Deployments, Services) |
+             +-----------------------------------------------+
+```
+
+> [!NOTE]
+> This architecture diagram illustrates the modular nature of the Budget Management API, showcasing how different services interact with each other and external clients. Each service can be independently developed and deployed, allowing for scalability and maintainability.
 
 ## **Project Structure**
 
@@ -256,6 +322,7 @@ Budget-Management-Backend-API/
 │   ├── favicon-32x32.png          # 32x32 favicon
 │   ├── home.html                  # HTML template for homepage
 │   ├── manifest.json              # Web app manifest
+├── and many more files...         # Additional files and directories
 ```
 
 ## **Setup Instructions**
@@ -908,6 +975,23 @@ The Budget Management API includes a Jenkins pipeline for continuous integration
 6. **Webhooks:** Integrate GitHub/GitLab webhooks to trigger builds automatically on code changes.
 
 7. **Notifications:** Add Slack or email notifications in the pipeline to inform team members about build and deployment statuses.
+
+### **GitHub Actions**
+
+The Budget Management API also includes a GitHub Actions workflow for continuous integration and deployment.
+
+1. **Workflow Configuration:** The `.github/workflows/ci.yml` file defines the CI/CD workflow, including steps for checking out code, installing dependencies, running tests, and building the application.
+2. **Job Setup:** The workflow is triggered on push and pull request events to the `main` branch.
+3. **Automated Testing:** The workflow runs `npm test` to ensure all tests pass before proceeding to the build or deployment stages.
+4. **Deployment:** The workflow can be configured to deploy the application to Render or other hosting services using GitHub Actions deployment steps.
+5. **Environment Variables:** Use GitHub Secrets to securely manage sensitive information like API keys and database credentials.
+6. **Notifications:** Configure GitHub Actions to send notifications to Slack or email on build and deployment statuses.
+
+This setup allows for automated testing and deployment, ensuring that the application is always in a deployable state.
+
+<p align="center">
+  <img src="images/github-actions.png" alt="GitHub Actions" style="border-radius: 8px;">
+</p>
 
 ## **Testing**
 
