@@ -1,4 +1,4 @@
-# **Budget Management Backend API**
+# **Budget Management API - A Comprehensive, Microservices-Based API for Managing Budgets, Expenses, Users, and More! 💰**
 
 **Welcome to the Budget Management API**, a robust, **microservices** backend platform for managing budgets, expenses, users, orders, and notifications. Built with **Node.js**, **Express**, and **TypeScript**, it supports advanced features like **GraphQL**, **gRPC**, **WebSockets**, and **REST APIs**. The API integrates with **PostgreSQL**, **MongoDB**, **MySQL**, **Redis**, **RabbitMQ**, **Kafka**, and **Elasticsearch**, and is containerized with **Docker** and orchestrated using **Kubernetes**. It also includes a developer-friendly **CLI** tool and interactive **Swagger/OpenAPI** documentation for exploring and testing endpoints.
 
@@ -8,7 +8,7 @@
   </a>
 </p>
 
-Below is a _very_ comprehensive guide to setting up, running, and utilizing this API.
+Below is a _very_ _comprehensive_ guide to setting up, running, and utilizing this API. 💸🚀
 
 ## **Table of Contents**
 
@@ -16,6 +16,8 @@ Below is a _very_ comprehensive guide to setting up, running, and utilizing this
 2. [Live Deployment](#live-deployment)
 3. [Technologies Used](#technologies-used)
    - [Microservices Architecture](#microservices-architecture)
+   - [Microservices Diagram](#microservices-diagram)
+   - [Full Architecture Diagram](#full-architecture-diagram)
 4. [Project Structure](#project-structure)
 5. [Setup Instructions](#setup-instructions)
 6. [Available Endpoints](#available-endpoints)
@@ -33,6 +35,7 @@ Below is a _very_ comprehensive guide to setting up, running, and utilizing this
 18. [Spring Boot Backends with Gradle & Maven](#spring-boot-backends-with-maven-and-gradle)
 19. [Dotnet Backends with C#](#dotnet-backend-with-c-sharp)
 20. [Continuous Integration and Deployment with Jenkins](#continuous-integration-and-deployment-with-jenkins)
+    - [GitHub Actions](#github-actions)
 21. [Testing](#testing)
 22. [Contributing](#contributing)
 23. [Author](#author)
@@ -169,64 +172,42 @@ You can access the API and test the endpoints directly from the browser. Feel fr
 
 The Budget Management API is designed with a microservices architecture, allowing for modular development and deployment. Each service can be developed, deployed, and scaled independently, providing flexibility and resilience.
 
-1. **Authentication Service**: Handles user registration, login, and JWT token management.
+1. **Authentication/User Service**: Handles user registration, login, and JWT token management (+ profile management as well).
 2. **Budget Service**: Manages budgets, including creation, updates, and retrieval.
 3. **Expense Service**: Manages expenses associated with budgets, including CRUD operations.
 4. **Customer Service**: Manages customer data, including creation and updates.
 5. **Search Service**: Provides advanced search capabilities using Elasticsearch.
+6. **Order Service**: Manages orders, including creation and updates.
+7. **Transaction Service**: Logs transactions for budgets and expenses.
+8. **Notification Service**: Sends real-time notifications to users via WebSockets.
+9. **Task Management Service**: Handles asynchronous tasks using RabbitMQ and Kafka.
 
 This architecture allows for easy integration of additional services, such as order management, task management, and notification services, without affecting the core functionality of the API.
 
-```plaintext
-                      +-----------------------------+
-                      |      Frontend Clients       |
-                      |  • Web UI                   |
-                      |  • CLI Tool / gRPC Client   |
-                      +--------------+--------------+
-                                     |
-                                     | HTTP/GraphQL/WebSocket/gRPC
-                                     |
-                      +--------------v--------------+
-                      |       API Gateway /         |
-                      |      Express.js Layer       |
-                      +--------------+--------------+
-                                     |
-           +----------+--------------+--------------+-----------+
-           |          |              |              |           |
-           |          |              |              |           |
-  +--------v----+ +---v-------+  +---v-------+  +---v-------+ +--v---------+
-  | Auth        | | Budget    |  | Expense   |  | Order     | | Customer   |
-  | Service     | | Service   |  | Service   |  | Service   | | Service    |
-  +-------------+ +-----------+  +-----------+  +-----------+ +------------+
-           |              |              |              |           |
-           +--------------+--------------+--------------+-----------+
-                                     |
-                      +--------------v--------------+
-                      |   Search Service (Elastic)  |
-                      +--------------+--------------+
-                                     |
-                    +----------------v----------------+
-                    |   Messaging & Event Streaming   |
-                    |  • RabbitMQ (Task Queues)       |
-                    |  • Kafka (Event Bus)            |
-                    +----------------+----------------+
-                                     |
-             +-----------+-----------+-----------+------------+
-             |           |           |           |            |
-      +------v---+ +-----v-----+ +----v-----+ +---v-----+ +---v------+
-      | MongoDB  | | PostgreSQL| | MySQL    | | Redis   | | Elastic  |
-      | (NoSQL)  | | (Logs     | | (Alt RDB)| | (Cache) | | (Search) |
-      +----------+ +-----------+ +----------+ +---------+ +----------+
+> [!TIP]
+> Each service does not live in its own directory, but rather is organized within the main project structure. This allows for easier management and deployment of the entire application as a single unit, while still maintaining the modularity of the microservices architecture.
 
-             +-----------------------------------------------+
-             |  Containerization & Orchestration             |
-             |  • Docker images for each service             |
-             |  • Kubernetes cluster (Deployments, Services) |
-             +-----------------------------------------------+
-```
+### Microservices Diagram
+
+<p align="center">
+  <a href="https://www.mermaidchart.com/app/projects/ab86aba4-5205-4ad5-bdfc-85dfba04f62f/diagrams/0ecda876-0581-4897-bac3-b6800daa2a14/version/v0.1/edit" target="_blank">
+   <img src="images/microservices-diagram.png" alt="Microservices Architecture Diagram" style="border-radius: 8px;" width="100%">
+  </a>
+</p>
 
 > [!NOTE]
-> This architecture diagram illustrates the modular nature of the Budget Management API, showcasing how different services interact with each other and external clients. Each service can be independently developed and deployed, allowing for scalability and maintainability.
+> This diagram illustrates the microservices architecture of the Budget Management API, showing how different services interact with each other and external clients. Each service can be independently developed and deployed, allowing for scalability and maintainability.
+
+### Full Architecture Diagram
+
+<p align="center">
+  <a href="https://www.mermaidchart.com/app/projects/ab86aba4-5205-4ad5-bdfc-85dfba04f62f/diagrams/b164e25e-68b3-417e-8753-5b718e23d996/version/v0.1/edit" target="_blank">
+   <img src="images/architecture-diagram.png" alt="Architecture Diagram" style="border-radius: 8px;" width="100%">
+  </a>
+</p>
+
+> [!NOTE]
+> This architecture diagram illustrates the modular nature of the Budget Management API, showcasing how different services interact with each other and external clients. It also highlights the use of various technologies such as Docker, Kubernetes, and Nginx for deployment and scaling.
 
 ## **Project Structure**
 
@@ -1035,11 +1016,18 @@ Contributions are welcome! Please fork the repository, create a feature branch, 
 
 ## **Author**
 
+This project is built with ❤️ by:
+
 - **Son Nguyen** - [hoangsonww](https://github.com/hoangsonww)
+
+For more information about me, you can visit my personal website or connect with me on LinkedIn:
+
 - **Website:** [https://sonnguyenhoang.com](https://sonnguyenhoang.com)
 - **Email:** [hoangson091104@gmail.com](mailto:hoangson091104@gmail.com)
 - **LinkedIn:** [https://www.linkedin.com/in/hoangsonw](https://www.linkedin.com/in/hoangsonw)
-- Feel free to reach out if you have any questions or feedback! 🚀
+- **GitHub:** [@hoangsonww](https://github.com/hoangsonww)
+
+Feel free to reach out if you have any questions or feedback! 🚀
 
 ---
 
@@ -1049,4 +1037,4 @@ Created with ❤️ by [Son Nguyen](https://sonnguyenhoang.com) in 2024. All rig
 
 ---
 
-[⬆️ Back to Top](#budget-management-backend-api)
+[⬆️ Back to Top](#budget-management-api---a-comprehensive-microservices-based-api-for-managing-budgets-expenses-users-and-more-)
