@@ -1,6 +1,8 @@
 # **Budget Management API - A Comprehensive, Microservices-Based API for Managing Budgets, Expenses, Users, and More! 💰**
 
-**Welcome to the Budget Management API**, a robust, **microservices** backend platform for managing budgets, expenses, users, orders, and notifications. Built with **Node.js**, **Express**, and **TypeScript**, it supports advanced features like **GraphQL**, **gRPC**, **WebSockets**, and **REST APIs**. The API integrates with **PostgreSQL**, **MongoDB**, **MySQL**, **Redis**, **RabbitMQ**, **Kafka**, and **Elasticsearch**, and is containerized with **Docker** and orchestrated using **Kubernetes** that fully supports zero-downtime deployment **(**blue/green & canary deployment**)**. It also includes a developer-friendly **CLI** tool and interactive **Swagger/OpenAPI** documentation for exploring and testing endpoints.
+**Welcome to the Budget Management API**, a robust, **microservices** backend platform for managing budgets, expenses, users, orders, and notifications. Built with **Node.js**, **Express**, and **TypeScript**, it supports advanced features like **GraphQL**, **gRPC**, **WebSockets**, and **REST APIs**. 
+
+The API also integrates with **PostgreSQL**, **MongoDB**, **MySQL**, **Redis**, **RabbitMQ**, **Kafka**, and **Elasticsearch**, and is containerized with **Docker** and orchestrated using **Kubernetes** that fully supports _zero-downtime deployment_ **(**blue/green & canary deployment**)**. It also includes a developer-friendly **CLI** tool and interactive **Swagger/OpenAPI** documentation for exploring and testing endpoints.
 
 <p align="center">
   <a href="https://budget-manage-app.vercel.app" target="_blank">
