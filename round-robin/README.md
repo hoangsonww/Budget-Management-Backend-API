@@ -48,12 +48,15 @@ This demo consists of:
 
 ## **Project Structure**
 
-```plaintext
-.
-├── config/
-│   └── config.js            # Configuration for MongoDB, Redis, etc.
-├── server.js                # Main file containing load balancer logic
-└── package.json             # Project dependencies and scripts
+```mermaid
+flowchart TD
+    RR[round-robin/]
+    RR --> ConfigDir[config/]
+    ConfigDir --> ConfigJS[config.js — MongoDB/Redis configuration]
+    RR --> Docker[docker/]
+    RR --> Index[index.js — Round-robin load balancer]
+    RR --> Package[package.json — Dependencies and scripts]
+    RR --> Docs[README.md — Project documentation]
 ```
 
 ## **Setup Instructions**

@@ -1,3 +1,9 @@
+# DEPRECATED: This file is deprecated in favor of strategy-specific services
+# For production use, please use one of the following:
+# - Blue-Green: kubernetes/backend-service-blue-green.yaml
+# - Canary: kubernetes/backend-service-canary.yaml
+# See docs/DEPLOYMENT_GUIDE.md for detailed instructions
+
 apiVersion: v1
 kind: Service
 metadata:
