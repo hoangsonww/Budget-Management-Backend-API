@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  labels:
+    app: backend
+spec:
+  selector:
+    app: backend
+    version: blue  # Switch to 'green' for blue-green deployment
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+    - name: grpc
+      protocol: TCP
+      port: 50051
+      targetPort: 50051
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service-blue
+  labels:
+    app: backend
+    version: blue
+spec:
+  selector:
+    app: backend
+    version: blue
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+    - name: grpc
+      protocol: TCP
+      port: 50051
+      targetPort: 50051
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service-green
+  labels:
+    app: backend
+    version: green
+spec:
+  selector:
+    app: backend
+    version: green
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+    - name: grpc
+      protocol: TCP
+      port: 50051
+      targetPort: 50051
+  type: ClusterIP

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service-canary
+  labels:
+    app: backend
+spec:
+  selector:
+    app: backend
+    # No version selector - routes to both stable and canary based on replica count
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+    - name: grpc
+      protocol: TCP
+      port: 50051
+      targetPort: 50051
+  type: ClusterIP
+  sessionAffinity: None

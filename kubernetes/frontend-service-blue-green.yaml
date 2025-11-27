@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  labels:
+    app: frontend
+spec:
+  selector:
+    app: frontend
+    version: blue  # Switch to 'green' for blue-green deployment
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3001
+      targetPort: 3001
+  type: LoadBalancer
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service-blue
+  labels:
+    app: frontend
+    version: blue
+spec:
+  selector:
+    app: frontend
+    version: blue
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3001
+      targetPort: 3001
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service-green
+  labels:
+    app: frontend
+    version: green
+spec:
+  selector:
+    app: frontend
+    version: green
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3001
+      targetPort: 3001
+  type: ClusterIP

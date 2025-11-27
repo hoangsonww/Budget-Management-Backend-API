@@ -1,3 +1,9 @@
+# DEPRECATED: This file is deprecated in favor of blue-green or canary deployment strategies
+# For production use, please use one of the following:
+# - Blue-Green: kubernetes/backend-deployment-blue.yaml and kubernetes/backend-deployment-green.yaml
+# - Canary: kubernetes/backend-deployment-canary-stable.yaml and kubernetes/backend-deployment-canary.yaml
+# See docs/DEPLOYMENT_GUIDE.md for detailed instructions
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:

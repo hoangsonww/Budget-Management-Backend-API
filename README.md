@@ -1,6 +1,6 @@
 # **Budget Management API - A Comprehensive, Microservices-Based API for Managing Budgets, Expenses, Users, and More! 💰**
 
-**Welcome to the Budget Management API**, a robust, **microservices** backend platform for managing budgets, expenses, users, orders, and notifications. Built with **Node.js**, **Express**, and **TypeScript**, it supports advanced features like **GraphQL**, **gRPC**, **WebSockets**, and **REST APIs**. The API integrates with **PostgreSQL**, **MongoDB**, **MySQL**, **Redis**, **RabbitMQ**, **Kafka**, and **Elasticsearch**, and is containerized with **Docker** and orchestrated using **Kubernetes**. It also includes a developer-friendly **CLI** tool and interactive **Swagger/OpenAPI** documentation for exploring and testing endpoints.
+**Welcome to the Budget Management API**, a robust, **microservices** backend platform for managing budgets, expenses, users, orders, and notifications. Built with **Node.js**, **Express**, and **TypeScript**, it supports advanced features like **GraphQL**, **gRPC**, **WebSockets**, and **REST APIs**. The API integrates with **PostgreSQL**, **MongoDB**, **MySQL**, **Redis**, **RabbitMQ**, **Kafka**, and **Elasticsearch**, and is containerized with **Docker** and orchestrated using **Kubernetes** that fully supports zero-downtime deployment **(**blue/green & canary deployment**)**. It also includes a developer-friendly **CLI** tool and interactive **Swagger/OpenAPI** documentation for exploring and testing endpoints.
 
 <p align="center">
   <a href="https://budget-manage-app.vercel.app" target="_blank">
@@ -217,99 +217,103 @@ Also, the API is designed to be modular, allowing for easy addition of new servi
 
 ## **Project Structure**
 
-```plaintext
-Budget-Management-Backend-API/
-├── .env                           # Environment variables configuration
-├── .env.example                   # Example environment configuration file
-├── .gitignore                     # Git ignore file
-├── .prettierrc                    # Prettier configuration for code formatting
-├── LICENSE                        # License information
-├── README.md                      # Documentation for the project
-├── __tests__/app.test.js          # Main test file for application
-├── cli.js                         # CLI tool for interacting with the backend
-├── docker-compose.yml             # Docker Compose configuration
-├── Dockerfile                     # Dockerfile for containerizing the application
-├── grpcServer.js                  # gRPC server implementation
-├── index.js                       # Main entry point for the application
-├── nodemon.json                   # Nodemon configuration file
-├── openapi.yaml                   # OpenAPI specification for the API
-├── package.json                   # NPM package configuration file
-├── start.sh                       # Script to start the application
-├── prometheus.yml                 # Prometheus configuration for monitoring
-├── redis-mongo-flow/              # Directory for Redis-Mongo integration flow
-│   ├── app.js                     # Express app for Redis-Mongo flow
-│   ├── config.js                  # Configuration for Redis-Mongo flow
-│   ├── package.json               # NPM configuration for this module
-│   ├── README.md                  # Documentation specific to Redis-Mongo flow
-│   ├── seed.js                    # Data seeder for Redis-Mongo flow
-│   ├── test.js                    # Test file for Redis-Mongo flow
-├── round-robin/                   # Directory for round-robin load balancer
-│   ├── config.js                  # Configuration for round-robin implementation
-│   ├── index.js                   # Main entry point for round-robin logic
-│   ├── README.md                  # Documentation for round-robin functionality
-├── proto/                         # Protocol Buffers directory
-│   ├── budget.proto               # gRPC proto file for budgets
-├── nginx/                         # NGINX configuration directory
-│   ├── docker-compose.yml         # Docker Compose for NGINX
-│   ├── Dockerfile                 # Dockerfile for NGINX
-│   ├── nginx.conf                 # NGINX configuration file
-│   ├── start_nginx.sh             # Script to start NGINX
-│   ├── README.md                  # Documentation for NGINX
-├── docs/                          # Documentation directory
-│   ├── swaggerConfig.js           # Swagger configuration for API docs
-├── graphql/                       # GraphQL-related files
-│   ├── schema.js                  # GraphQL schema definition
-├── services/                      # Services and utilities
-│   ├── dataSeeder.js              # Seeder for MongoDB
-│   ├── elasticService.js          # Elasticsearch client and utility functions
-│   ├── jwtService.js              # JSON Web Token (JWT) utilities
-│   ├── postgresService.js         # PostgreSQL client and utilities
-│   ├── rabbitMQService.js         # RabbitMQ client and utilities
-│   ├── redisService.js            # Redis client and utilities
-│   ├── websocketService.js        # WebSocket server and utilities
-├── controllers/                   # Route controllers for the API
-│   ├── authController.js          # Authentication-related endpoints
-│   ├── budgetController.js        # Budget management endpoints
-│   ├── customerController.js      # Customer management endpoints
-│   ├── expenseController.js       # Expense management endpoints
-│   ├── notificationController.js  # Notification management endpoints
-│   ├── orderController.js         # Order management endpoints
-│   ├── searchController.js        # Search-related endpoints
-│   ├── taskController.js          # Task management endpoints
-│   ├── transactionController.js   # Transaction log endpoints
-│   ├── userController.js          # User profile management endpoints
-├── middleware/                    # Middleware utilities
-│   ├── authMiddleware.js          # JWT authentication middleware
-├── models/                        # Mongoose schemas
-│   ├── budget.js                  # Schema for budgets
-│   ├── customer.js                # Schema for customers
-│   ├── expense.js                 # Schema for expenses
-│   ├── order.js                   # Schema for orders
-│   ├── task.js                    # Schema for tasks
-│   ├── user.js                    # Schema for users
-├── routes/                        # Express router files
-│   ├── authRoutes.js              # Routes for authentication
-│   ├── budgetRoutes.js            # Routes for budgets
-│   ├── customerRoutes.js          # Routes for customers
-│   ├── expenseRoutes.js           # Routes for expenses
-│   ├── graphqlRoutes.js           # Routes for GraphQL
-│   ├── index.js                   # Main router entry point
-│   ├── notificationRoutes.js      # Routes for notifications
-│   ├── orderRoutes.js             # Routes for orders
-│   ├── searchRoutes.js            # Routes for Elasticsearch
-│   ├── taskRoutes.js              # Routes for tasks
-│   ├── transactionRoutes.js       # Routes for transactions
-│   ├── userRoutes.js              # Routes for user profiles
-├── views/                         # Static assets and templates
-│   ├── android-chrome-192x192.png # Android Chrome app icon
-│   ├── android-chrome-512x512.png # Android Chrome high-res icon
-│   ├── apple-touch-icon.png       # Apple Touch icon
-│   ├── favicon.ico                # Favicon
-│   ├── favicon-16x16.png          # 16x16 favicon
-│   ├── favicon-32x32.png          # 32x32 favicon
-│   ├── home.html                  # HTML template for homepage
-│   ├── manifest.json              # Web app manifest
-├── and many more files...         # Additional files and directories
+```mermaid
+mindmap
+  root((Budget-Management-Backend-API))
+    Root Files
+      ".env"[.env — Environment variables configuration]
+      ".env.example"[.env.example — Sample environment config]
+      ".gitignore"[.gitignore — Git ignore rules]
+      ".prettierrc"[.prettierrc — Prettier formatting config]
+      LICENSE[LICENSE — Project license]
+      README[README.md — Project documentation]
+      cli.js[cli.js — CLI tool for backend]
+      docker-compose.yml[docker-compose.yml — Docker Compose configuration]
+      Dockerfile[Dockerfile — Backend container image]
+      grpcServer.js[gRPC server implementation]
+      index.js[Main application entry point]
+      nodemon.json[nodemon.json — Dev server reload config]
+      openapi.yaml[openapi.yaml — API specification]
+      package.json[package.json — NPM configuration]
+      prometheus.yml[prometheus.yml — Monitoring configuration]
+      start.sh[start.sh — Startup script]
+    Tests
+      "__tests__/app.test.js"[__tests__/app.test.js — Main test file]
+    Docs
+      "docs/swaggerConfig.js"[swaggerConfig.js — Swagger setup]
+    GraphQL
+      "graphql/schema.js"[schema.js — GraphQL schema definition]
+    Proto
+      "proto/budget.proto"[budget.proto — gRPC proto file]
+    NGINX
+      "nginx/docker-compose.yml"[docker-compose.yml — NGINX stack]
+      "nginx/Dockerfile"[Dockerfile — NGINX image]
+      "nginx/nginx.conf"[nginx.conf — Reverse proxy config]
+      "nginx/start_nginx.sh"[start_nginx.sh — NGINX start script]
+      "nginx/README.md"[README.md — NGINX documentation]
+    Redis-Mongo Flow
+      "redis-mongo-flow/app.js"[app.js — Express app for Redis-Mongo flow]
+      "redis-mongo-flow/config.js"[config.js — Flow configuration]
+      "redis-mongo-flow/package.json"[package.json — Module dependencies]
+      "redis-mongo-flow/README.md"[README.md — Flow documentation]
+      "redis-mongo-flow/seed.js"[seed.js — Data seeder]
+      "redis-mongo-flow/test.js"[test.js — Flow test script]
+    Round-Robin Load Balancer
+      "round-robin/config.js"[config.js — Load balancer configuration]
+      "round-robin/index.js"[index.js — Round-robin logic]
+      "round-robin/README.md"[README.md — Load balancer docs]
+    Services
+      "services/dataSeeder.js"[dataSeeder.js — MongoDB seeder]
+      "services/elasticService.js"[elasticService.js — Elasticsearch utilities]
+      "services/jwtService.js"[jwtService.js — JWT helpers]
+      "services/postgresService.js"[postgresService.js — PostgreSQL utilities]
+      "services/rabbitMQService.js"[rabbitMQService.js — RabbitMQ client]
+      "services/redisService.js"[redisService.js — Redis client]
+      "services/websocketService.js"[websocketService.js — WebSocket server]
+    Controllers
+      "controllers/authController.js"[authController.js — Authentication endpoints]
+      "controllers/budgetController.js"[budgetController.js — Budget endpoints]
+      "controllers/customerController.js"[customerController.js — Customer endpoints]
+      "controllers/expenseController.js"[expenseController.js — Expense endpoints]
+      "controllers/notificationController.js"[notificationController.js — Notification endpoints]
+      "controllers/orderController.js"[orderController.js — Order endpoints]
+      "controllers/searchController.js"[searchController.js — Elasticsearch endpoints]
+      "controllers/taskController.js"[taskController.js — Task endpoints]
+      "controllers/transactionController.js"[transactionController.js — Transaction log endpoints]
+      "controllers/userController.js"[userController.js — User profile endpoints]
+    Middleware
+      "middleware/authMiddleware.js"[authMiddleware.js — JWT authentication middleware]
+    Models
+      "models/budget.js"[budget.js — Budget schema]
+      "models/customer.js"[customer.js — Customer schema]
+      "models/expense.js"[expense.js — Expense schema]
+      "models/order.js"[order.js — Order schema]
+      "models/task.js"[task.js — Task schema]
+      "models/user.js"[user.js — User schema]
+    Routes
+      "routes/authRoutes.js"[authRoutes.js — Auth routes]
+      "routes/budgetRoutes.js"[budgetRoutes.js — Budget routes]
+      "routes/customerRoutes.js"[customerRoutes.js — Customer routes]
+      "routes/expenseRoutes.js"[expenseRoutes.js — Expense routes]
+      "routes/graphqlRoutes.js"[graphqlRoutes.js — GraphQL routes]
+      "routes/index.js"[index.js — Router entry point]
+      "routes/notificationRoutes.js"[notificationRoutes.js — Notification routes]
+      "routes/orderRoutes.js"[orderRoutes.js — Order routes]
+      "routes/searchRoutes.js"[searchRoutes.js — Elasticsearch routes]
+      "routes/taskRoutes.js"[taskRoutes.js — Task routes]
+      "routes/transactionRoutes.js"[transactionRoutes.js — Transaction routes]
+      "routes/userRoutes.js"[userRoutes.js — User profile routes]
+    Views
+      "views/android-chrome-192x192.png"[android-chrome-192x192.png — Icon]
+      "views/android-chrome-512x512.png"[android-chrome-512x512.png — Icon]
+      "views/apple-touch-icon.png"[apple-touch-icon.png — Icon]
+      "views/favicon.ico"[favicon.ico — Favicon]
+      "views/favicon-16x16.png"[favicon-16x16.png — Icon]
+      "views/favicon-32x32.png"[favicon-32x32.png — Icon]
+      "views/home.html"[home.html — Homepage template]
+      "views/manifest.json"[manifest.json — Web app manifest]
+    Other
+      "and many more files..."[Additional supporting files and directories]
 ```
 
 ## **Setup Instructions**
@@ -531,47 +535,35 @@ More endpoints and features are available in the API. Refer to the [Swagger docu
 
 The Budget Management API interacts with various services and databases to provide a comprehensive backend solution. The architecture includes a frontend UI, a CLI tool, an API gateway, a gRPC server, and multiple external services. Here is a high-level overview of the service interaction:
 
-```plaintext
-          +--------------------+               +------------------+
-          |    Frontend UI     |               |                  |
-          |    (not impl.)     |               |  CLI Tool / gRPC |
-          +--------------------+               +------------------+
-                    |                               |
-                    | HTTP/GraphQL Requests         | CLI Commands / gRPC Calls
-                    |                               |
-          +--------------------+                 +------------------+
-          |   API Gateway /    |<--------------->|    gRPC Server   |
-          |    Express.js      |                 +------------------+
-          +--------------------+
-                    |
-                    | RESTful API / WebSocket / GraphQL Responses
-                    |
-          +--------------------+
-          |  Application Core  |
-          |--------------------|
-          |  Controllers /     |
-          |  Services          |
-          +--------------------+
-            |        |         |
-     +------+        |         +-------------+
-     |               |                       |
-+----------+   +-----------+           +----------------+
-| MongoDB  |   | PostgreSQL |          | Elasticsearch  |
-| NoSQL DB |   | Relational |          | Search Engine  |
-+----------+   +-----------+           +----------------+
-     |               |                       |
-     |               |                       |
-+----------+    +-------------+      +----------------+
-|   Redis  |    | RabbitMQ /  |      | Kafka (Event   |
-|   Cache  |    | Kafka Queue |      |   Streaming)   |
-+----------+    +-------------+      +----------------+
-     |              |                        |
-     +--------------|-(Asynchronous Tasks)---+
-                    |
-          +----------------------+
-          |   External Services  |
-          |  (Email, SMS, etc.)  |
-          +----------------------+
+```mermaid
+flowchart LR
+    FE[Frontend UI<br/>]
+    CLI[CLI Tool / gRPC Clients]
+    APIGW[API Gateway / Express.js]
+    GRPC[gRPC Server]
+    CORE[Application Core<br/>Controllers & Services]
+    Mongo[MongoDB]
+    Postgres[PostgreSQL]
+    Elastic[Elasticsearch]
+    Redis[Redis Cache]
+    Queue[RabbitMQ / Kafka Queue]
+    Stream[Kafka Event Streaming]
+    External[External Services<br/>Email, SMS, etc.]
+
+    FE -->|HTTP / GraphQL requests| APIGW
+    CLI -->|CLI commands / gRPC calls| GRPC
+    APIGW <--> GRPC
+    APIGW -->|REST / WebSocket / GraphQL| CORE
+    GRPC --> CORE
+
+    CORE --> Mongo
+    CORE --> Postgres
+    CORE --> Elastic
+    CORE --> Redis
+    CORE --> Queue
+    CORE --> Stream
+    Queue -->|Asynchronous tasks| External
+    Stream -->|Event-driven actions| External
 ```
 
 ## **Environment Variables**
@@ -872,13 +864,85 @@ docker-compose up --build
 
 ## **Kubernetes Deployment**
 
-1. Create Kubernetes manifests for the services.
-2. Deploy to a cluster:
-   ```bash
-   kubectl apply -f kubernetes/
-   ```
-   
-3. Access the application using the service URL.
+The Budget Management API now supports advanced deployment strategies for production-grade deployments:
+
+### **Deployment Strategies**
+
+1. **Blue-Green Deployment**: Zero-downtime deployments with instant rollback capability
+2. **Canary Deployment**: Gradual traffic shifting for risk mitigation
+3. **Rolling Deployment**: Standard Kubernetes rolling updates
+
+### **Quick Start**
+
+#### Blue-Green Deployment
+```bash
+# Deploy blue and green environments
+kubectl apply -f kubernetes/backend-deployment-blue.yaml
+kubectl apply -f kubernetes/backend-deployment-green.yaml
+kubectl apply -f kubernetes/frontend-deployment-blue.yaml
+kubectl apply -f kubernetes/frontend-deployment-green.yaml
+
+# Deploy services
+kubectl apply -f kubernetes/backend-service-blue-green.yaml
+kubectl apply -f kubernetes/frontend-service-blue-green.yaml
+
+# Apply production-ready configurations
+kubectl apply -f kubernetes/hpa.yaml
+kubectl apply -f kubernetes/pdb.yaml
+kubectl apply -f kubernetes/network-policy.yaml
+kubectl apply -f kubernetes/ingress.yaml
+kubectl apply -f kubernetes/servicemonitor.yaml
+
+# Switch traffic (after validation)
+kubectl patch service backend-service -p '{"spec":{"selector":{"version":"green"}}}'
+```
+
+#### Canary Deployment
+```bash
+# Deploy stable version (90% traffic)
+kubectl apply -f kubernetes/backend-deployment-canary-stable.yaml
+kubectl apply -f kubernetes/frontend-deployment-canary-stable.yaml
+
+# Deploy canary version (10% traffic)
+kubectl apply -f kubernetes/backend-deployment-canary.yaml
+kubectl apply -f kubernetes/frontend-deployment-canary.yaml
+
+# Deploy services
+kubectl apply -f kubernetes/backend-service-canary.yaml
+kubectl apply -f kubernetes/frontend-service-canary.yaml
+
+# Apply production-ready configurations
+kubectl apply -f kubernetes/hpa.yaml
+kubectl apply -f kubernetes/pdb.yaml
+kubectl apply -f kubernetes/network-policy.yaml
+```
+
+### **Production-Ready Features**
+
+- **Health Checks**: Liveness, readiness, and startup probes
+- **Auto-scaling**: Horizontal Pod Autoscaler (HPA) based on CPU/Memory
+- **High Availability**: Pod anti-affinity and disruption budgets
+- **Security**: Network policies, non-root containers, dropped capabilities
+- **Monitoring**: Prometheus ServiceMonitor integration
+- **Resource Management**: CPU/Memory requests and limits
+- **Ingress**: SSL/TLS termination, rate limiting, timeouts
+
+### **Documentation**
+
+For detailed deployment procedures and best practices, see:
+- [Deployment Guide](docs/DEPLOYMENT_GUIDE.md) - Comprehensive deployment strategies
+- [Kubernetes Overview](docs/KUBERNETES_OVERVIEW.md) - Architecture and components
+- [Quick Start Guide](docs/DEPLOYMENT_QUICK_START.md) - Step-by-step deployment
+
+### **Monitoring**
+
+Access metrics at:
+- Backend: `http://backend-service:3000/metrics`
+- Frontend: `http://frontend-service:3001/metrics`
+
+View health endpoints:
+- Backend Health: `http://backend-service:3000/health`
+- Backend Readiness: `http://backend-service:3000/ready`
 
 ## **Spring Boot Backends with Maven and Gradle**
 
@@ -947,21 +1011,135 @@ To run the Dotnet C# application, follow these steps:
 
 ## **Continuous Integration and Deployment with Jenkins**
 
-The Budget Management API includes a Jenkins pipeline for continuous integration and deployment.
+The Budget Management API includes an advanced Jenkins pipeline with support for multiple deployment strategies and production-ready features.
 
-1. **Pipeline Configuration:** The `Jenkinsfile` defines the CI/CD pipeline stages, including code checkout, dependency installation, testing, building, and deployment. Add it to the root of the project.
+### **Pipeline Features**
 
-2. **Job Setup:** Create a pipeline job in Jenkins, point it to the repository, and configure it to use the `Jenkinsfile`.
+1. **Multiple Deployment Strategies**:
+   - **Rolling**: Standard rolling updates with zero-downtime
+   - **Blue-Green**: Instant traffic switching with zero-downtime
+   - **Canary**: Gradual traffic shifting with configurable percentage
 
-3. **Automated Testing:** The pipeline runs `npm test` to ensure all tests pass before proceeding to the build or deployment stages.
+2. **Comprehensive Testing**:
+   - Unit tests with coverage reporting
+   - Integration tests
+   - Smoke tests post-deployment
+   - Performance tests
+   - Security audits
 
-4. **Environment Variables:** Use Jenkins environment variables to securely manage secrets like API keys and credentials for services such as MongoDB, Redis, or Render.
+3. **Code Quality Checks**:
+   - ESLint for code linting
+   - npm audit for security vulnerabilities
+   - Dependency checking for outdated packages
 
-5. **Deployment:** The pipeline supports deploying the application using Render or directly to a server using SSH and PM2.
+4. **Docker Integration**:
+   - Automated Docker image building
+   - Multi-stage builds for optimization
+   - Push to Docker registry with versioning
+   - Image tagging based on Git commit SHA
 
-6. **Webhooks:** Integrate GitHub/GitLab webhooks to trigger builds automatically on code changes.
+5. **Kubernetes Deployment**:
+   - Automated deployment to Kubernetes clusters
+   - Health checks and validation
+   - Automatic rollback on failure
+   - Traffic switching for blue-green deployments
+   - Canary analysis and promotion
 
-7. **Notifications:** Add Slack or email notifications in the pipeline to inform team members about build and deployment statuses.
+6. **Monitoring and Notifications**:
+   - Slack notifications for build status
+   - Deployment success/failure alerts
+   - Real-time progress updates
+   - Git tag creation for successful deployments
+
+### **Pipeline Parameters**
+
+Configure the pipeline with these parameters:
+
+- **DEPLOYMENT_STRATEGY**: Choose from `rolling`, `blue-green`, or `canary`
+- **ENVIRONMENT**: Select `staging` or `production`
+- **CANARY_PERCENTAGE**: Set traffic percentage for canary deployments (1-100)
+- **RUN_SMOKE_TESTS**: Enable/disable smoke tests after deployment
+- **AUTO_ROLLBACK**: Enable automatic rollback on deployment failure
+
+### **Pipeline Stages**
+
+1. **Checkout**: Clone repository and extract commit information
+2. **Environment Setup**: Configure Node.js environment
+3. **Install Dependencies**: Install npm packages for backend and frontend
+4. **Code Quality & Security Checks**: Run linting, security audit, and dependency checks in parallel
+5. **Run Tests**: Execute unit and integration tests in parallel
+6. **Build**: Build backend and frontend applications in parallel
+7. **Build Docker Images**: Create and push Docker images to registry
+8. **Deploy**: Execute chosen deployment strategy (rolling, blue-green, or canary)
+9. **Smoke Tests**: Validate deployment with smoke tests
+10. **Health Check**: Verify application health with automatic rollback on failure
+11. **Performance Tests**: Run performance validation
+
+### **Example Usage**
+
+#### Blue-Green Deployment to Production
+```groovy
+DEPLOYMENT_STRATEGY: blue-green
+ENVIRONMENT: production
+RUN_SMOKE_TESTS: true
+AUTO_ROLLBACK: true
+```
+
+#### Canary Deployment with 10% Traffic
+```groovy
+DEPLOYMENT_STRATEGY: canary
+ENVIRONMENT: production
+CANARY_PERCENTAGE: 10
+RUN_SMOKE_TESTS: true
+AUTO_ROLLBACK: true
+```
+
+#### Rolling Deployment to Staging
+```groovy
+DEPLOYMENT_STRATEGY: rolling
+ENVIRONMENT: staging
+RUN_SMOKE_TESTS: true
+AUTO_ROLLBACK: true
+```
+
+### **Setup Instructions**
+
+1. **Configure Credentials in Jenkins**:
+   - `docker-registry-credentials`: Docker registry username/password
+   - `kubeconfig-credentials`: Kubernetes configuration file
+   - `slack-webhook`: Slack webhook URL for notifications
+
+2. **Create Pipeline Job**:
+   - New Item → Pipeline
+   - Configure parameters as described above
+   - Pipeline script from SCM: Point to repository Jenkinsfile
+
+3. **Configure Webhooks**:
+   - Add GitHub/GitLab webhook to trigger builds on push
+   - Webhook URL: `http://jenkins-server/github-webhook/`
+
+### **Advanced Features**
+
+- **Automatic Rollback**: Triggers on health check failures or test failures
+- **Git Tagging**: Successful deployments are tagged with `deploy-{commit-sha}`
+- **Parallel Execution**: Tests and builds run in parallel for faster execution
+- **Coverage Reports**: HTML coverage reports published after tests
+- **Artifact Archiving**: Test results archived for historical tracking
+- **Clean Workspace**: Automatic cleanup after pipeline completion
+
+### **Deployment Functions**
+
+The Jenkinsfile includes sophisticated deployment functions:
+
+- `deployRolling()`: Executes rolling deployment strategy
+- `deployBlueGreen()`: Manages blue-green deployment with traffic switching
+- `deployCanary()`: Handles canary deployment with gradual rollout
+- `validateDeployment()`: Validates new deployment health
+- `validateCanaryHealth()`: Checks canary deployment health
+- `performRollback()`: Automatic rollback to previous version
+- `sendNotification()`: Sends Slack notifications for pipeline events
+
+For detailed deployment procedures, see [Deployment Guide](docs/DEPLOYMENT_GUIDE.md).
 
 ### **GitHub Actions**
 
