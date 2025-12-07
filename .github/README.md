@@ -6,7 +6,7 @@ The API also integrates with **PostgreSQL**, **MongoDB**, **MySQL**, **Redis**, 
 
 <p align="center">
   <a href="https://hoangsonww.github.io/Budget-Management-Backend-API" target="_blank">
-    <img src="images/logo.png" alt="Budget Management API Logo" style="border-radius: 8px;" width="35%">
+    <img src="../images/logo.png" alt="Budget Management API Logo" style="border-radius: 8px;" width="35%">
   </a>
 </p>
 
@@ -199,7 +199,7 @@ Also, the API is designed to be modular, allowing for easy addition of new servi
 
 <p align="center">
   <a href="https://www.mermaidchart.com/app/projects/ab86aba4-5205-4ad5-bdfc-85dfba04f62f/diagrams/0ecda876-0581-4897-bac3-b6800daa2a14/version/v0.1/edit" target="_blank">
-   <img src="images/microservices-diagram.png" alt="Microservices Architecture Diagram" style="border-radius: 8px;" width="100%">
+   <img src="../images/microservices-diagram.png" alt="Microservices Architecture Diagram" style="border-radius: 8px;" width="100%">
   </a>
 </p>
 
@@ -210,7 +210,7 @@ Also, the API is designed to be modular, allowing for easy addition of new servi
 
 <p align="center">
   <a href="https://www.mermaidchart.com/app/projects/ab86aba4-5205-4ad5-bdfc-85dfba04f62f/diagrams/b164e25e-68b3-417e-8753-5b718e23d996/version/v0.1/edit" target="_blank">
-   <img src="images/architecture-diagram.png" alt="Architecture Diagram" style="border-radius: 8px;" width="100%">
+   <img src="../images/architecture-diagram.png" alt="Architecture Diagram" style="border-radius: 8px;" width="100%">
   </a>
 </p>
 
@@ -407,7 +407,7 @@ mindmap
 Additionally, the root `/` endpoint provides a welcome message and information about the API.
 
 <p align="center">
-  <img src="images/home.png" alt="Available Endpoints" style="border-radius: 8px;">
+  <img src="../images/home.png" alt="Available Endpoints" style="border-radius: 8px;">
 </p>
 
 More endpoints and features are available in the API. Refer to the [Swagger documentation](https://budget-management-backend-api.onrender.com/docs) for detailed information.
@@ -703,55 +703,55 @@ Here are some screenshots of the frontend UI:
 **Home:**
 
 <p align="center">
-  <img src="images/home-ui.png" alt="Frontend UI" style="border-radius: 8px;">
+  <img src="../images/home-ui.png" alt="Frontend UI" style="border-radius: 8px;">
 </p>
 
 **Dashboard:**
 
 <p align="center">
-  <img src="images/dashboard.png" alt="Frontend UI" style="border-radius: 8px;">
+  <img src="../images/dashboard.png" alt="Frontend UI" style="border-radius: 8px;">
 </p>
 
 **Budgets:**
 
 <p align="center">
-  <img src="images/budgets.png" alt="Frontend UI" style="border-radius: 8px;">
+  <img src="../images/budgets.png" alt="Frontend UI" style="border-radius: 8px;">
 </p>
 
 **Expenses:**
 
 <p align="center">
-  <img src="images/expenses.png" alt="Frontend UI" style="border-radius: 8px;">
+  <img src="../images/expenses.png" alt="Frontend UI" style="border-radius: 8px;">
 </p>
 
 **Profile:**
 
 <p align="center">
-  <img src="images/profile.png" alt="Frontend UI" style="border-radius: 8px;">
+  <img src="../images/profile.png" alt="Frontend UI" style="border-radius: 8px;">
 </p>
 
 **Login:**
 
 <p align="center">
-  <img src="images/login.png" alt="Frontend UI" style="border-radius: 8px;">
+  <img src="../images/login.png" alt="Frontend UI" style="border-radius: 8px;">
 </p>
 
 **Register:**
 
 <p align="center">
-  <img src="images/register.png" alt="Frontend UI" style="border-radius: 8px;">
+  <img src="../images/register.png" alt="Frontend UI" style="border-radius: 8px;">
 </p>
 
 **Forgot Password:**
 
 <p align="center">
-  <img src="images/forgot-password.png" alt="Frontend UI" style="border-radius: 8px;">
+  <img src="../images/forgot-password.png" alt="Frontend UI" style="border-radius: 8px;">
 </p>
 
 **Users:**
 
 <p align="center">
-  <img src="images/users.png" alt="Frontend UI" style="border-radius: 8px;">
+  <img src="../images/users.png" alt="Frontend UI" style="border-radius: 8px;">
 </p>
 
 ## **Swagger Documentation**
@@ -762,7 +762,7 @@ Here are some screenshots of the frontend UI:
 - The Swagger UI looks like this:
 
 <p align="center">
-  <img src="images/swagger.png" alt="Swagger UI" style="border-radius: 8px;">
+  <img src="../images/swagger.png" alt="Swagger UI" style="border-radius: 8px;">
 </p>
 
 ## **GraphQL Integration**
@@ -773,7 +773,7 @@ Here are some screenshots of the frontend UI:
 - The GraphiQL interface looks like this:
 
 <p align="center">
-  <img src="images/graphiql.png" alt="GraphiQL" style="border-radius: 8px;">
+  <img src="../images/graphiql.png" alt="GraphiQL" style="border-radius: 8px;">
 </p>
 
 - Interact with the API using GraphQL queries and mutations. Examples include:
@@ -806,7 +806,7 @@ query {
 When you run these queries, you will receive a response with the requested data. GraphQL provides a flexible and efficient way to fetch and manipulate data from the backend. Here is an example:
 
 <p align="center">
-  <img src="images/graphql.png" alt="GraphQL" style="border-radius: 8px;">
+  <img src="../images/graphql.png" alt="GraphQL" style="border-radius: 8px;">
 </p>
 
 ## **NGINX Configuration**
@@ -1160,7 +1160,7 @@ The Budget Management API also includes a GitHub Actions workflow for continuous
 This setup allows for automated testing and deployment, ensuring that the application is always in a deployable state.
 
 <p align="center">
-  <img src="images/github-actions.png" alt="GitHub Actions" style="border-radius: 8px;">
+  <img src="../images/github-actions.png" alt="GitHub Actions" style="border-radius: 8px;">
 </p>
 
 ## **Testing**
