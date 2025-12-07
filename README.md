@@ -5,7 +5,7 @@
 The API also integrates with **PostgreSQL**, **MongoDB**, **MySQL**, **Redis**, **RabbitMQ**, **Kafka**, and **Elasticsearch**, and is containerized with **Docker** and orchestrated using **Kubernetes** that fully supports _zero-downtime deployment_ **(**blue/green & canary deployment**)**. It also includes a developer-friendly **CLI** tool and interactive **Swagger/OpenAPI** documentation for exploring and testing endpoints.
 
 <p align="center">
-  <a href="https://budget-manage-app.vercel.app" target="_blank">
+  <a href="https://hoangsonww.github.io/Budget-Management-Backend-API" target="_blank">
     <img src="images/logo.png" alt="Budget Management API Logo" style="border-radius: 8px;" width="35%">
   </a>
 </p>
@@ -692,6 +692,9 @@ To run the frontend UI, follow these steps:
 Alternatively, it is also deployed live at [https://budget-manage-app.vercel.app](https://budget-manage-app.vercel.app). Feel free to use the live version for testing and exploration.
 
 For more information, refer to the [Frontend README](frontend/README.md) in the `frontend` directory to learn about the frontend UI components, features, and usage.
+
+> [!TIP]
+> Info site: [`https://hoangsonww.github.io/Budget-Management-Backend-API/`](https://hoangsonww.github.io/Budget-Management-Backend-API/)
 
 ### **UI Images**
 
