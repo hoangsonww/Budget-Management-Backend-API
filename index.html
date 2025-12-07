@@ -6,11 +6,11 @@
     <title>Budget Management API - Comprehensive Documentation</title>
     <link rel="stylesheet" href="info-site/styles.css">
     <link rel="icon" href="views/favicon.ico" type="image/x-icon">
-    
+
     <!-- Mermaid JS for rendering diagrams -->
     <script type="module">
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ 
+        mermaid.initialize({
             startOnLoad: true,
             theme: 'dark',
             themeVariables: {
@@ -44,10 +44,10 @@
             }
         });
     </script>
-    
+
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -65,7 +65,7 @@
                 <li><a href="#features"><i class="fas fa-star"></i> Features</a></li>
                 <li><a href="#setup"><i class="fas fa-cog"></i> Setup</a></li>
                 <li><a href="#api-docs"><i class="fas fa-book"></i> API Docs</a></li>
-                <li><a href="https://budget-management-backend-api.onrender.com" target="_blank" class="live-demo-btn">
+                <li><a href="https://budget-manage-app.vercel.app" target="_blank" class="live-demo-btn">
                     <i class="fas fa-rocket"></i> Live Demo
                 </a></li>
             </ul>
@@ -87,7 +87,7 @@
             <h1 class="hero-title">Budget Management API</h1>
             <p class="hero-subtitle">A Comprehensive, Production-Ready Backend Platform</p>
             <p class="hero-description">
-                Full-featured microservices API built with Node.js, Express, TypeScript, supporting REST, GraphQL, gRPC, 
+                Full-featured microservices API built with Node.js, Express, TypeScript, supporting REST, GraphQL, gRPC,
                 and WebSockets. Integrated with MongoDB, PostgreSQL, Redis, RabbitMQ, Kafka, and Elasticsearch.
             </p>
             <div class="hero-actions">
@@ -114,7 +114,15 @@
                 <span>REST API</span>
             </div>
             <div class="floating-card delay-1">
-                <i class="fab fa-graphql"></i>
+                <svg viewBox="0 0 400 400" width="32" height="32">
+                    <path fill="#E10098" d="M57.468 302.66l-14.376-8.3 160.15-277.38 14.376 8.3z"/>
+                    <path fill="#E10098" d="M39.8 272.2h320.3v16.6H39.8z"/>
+                    <path fill="#E10098" d="M206.348 374.026l-160.21-92.5 8.3-14.376 160.21 92.5zM345.522 132.947l-160.21-92.5 8.3-14.376 160.21 92.5z"/>
+                    <path fill="#E10098" d="M54.482 132.883l-8.3-14.375 160.21-92.5 8.3 14.376z"/>
+                    <path fill="#E10098" d="M342.568 302.663l-160.15-277.38 14.376-8.3 160.15 277.38zM52.5 107.5h16.6v185H52.5zM330.9 107.5h16.6v185h-16.6z"/>
+                    <path fill="#E10098" d="M203.522 367l-7.25-12.558 139.34-80.45 7.25 12.557z"/>
+                    <path fill="#E10098" d="M369.5 297.9c-9.6 16.7-31 22.4-47.7 12.8-16.7-9.6-22.4-31-12.8-47.7 9.6-16.7 31-22.4 47.7-12.8 16.8 9.7 22.5 31 12.8 47.7M90.9 137c-9.6 16.7-31 22.4-47.7 12.8-16.7-9.6-22.4-31-12.8-47.7 9.6-16.7 31-22.4 47.7-12.8 16.7 9.7 22.4 31 12.8 47.7M30.5 297.9c-9.6-16.7-3.9-38 12.8-47.7 16.7-9.6 38-3.9 47.7 12.8 9.6 16.7 3.9 38-12.8 47.7-16.8 9.6-38.1 3.9-47.7-12.8M309.1 137c-9.6-16.7-3.9-38 12.8-47.7 16.7-9.6 38-3.9 47.7 12.8 9.6 16.7 3.9 38-12.8 47.7-16.7 9.6-38.1 3.9-47.7-12.8M200 395.8c-19.3 0-34.9-15.6-34.9-34.9 0-19.3 15.6-34.9 34.9-34.9 19.3 0 34.9 15.6 34.9 34.9 0 19.2-15.6 34.9-34.9 34.9M200 74c-19.3 0-34.9-15.6-34.9-34.9 0-19.3 15.6-34.9 34.9-34.9 19.3 0 34.9 15.6 34.9 34.9 0 19.3-15.6 34.9-34.9 34.9"/>
+                </svg>
                 <span>GraphQL</span>
             </div>
             <div class="floating-card delay-2">
@@ -130,7 +138,7 @@
 
     <!-- Main Content -->
     <main class="container">
-        
+
         <!-- Quick Stats Section -->
         <section class="stats-section">
             <div class="stat-card">
@@ -165,8 +173,8 @@
                 <div class="content-card">
                     <h3><i class="fas fa-bullseye"></i> Purpose</h3>
                     <p>
-                        The Budget Management API is a <strong>comprehensive backend platform</strong> designed to demonstrate 
-                        modern microservices architecture, showcasing integration of multiple technologies and best practices 
+                        The Budget Management API is a <strong>comprehensive backend platform</strong> designed to demonstrate
+                        modern microservices architecture, showcasing integration of multiple technologies and best practices
                         in building scalable, production-ready applications.
                     </p>
                 </div>
@@ -184,8 +192,8 @@
                 <div class="content-card">
                     <h3><i class="fas fa-trophy"></i> Why This Project?</h3>
                     <p>
-                        Perfect for developers looking to learn or reference modern backend development practices. 
-                        It demonstrates <strong>real-world implementation</strong> of microservices, message queuing, 
+                        Perfect for developers looking to learn or reference modern backend development practices.
+                        It demonstrates <strong>real-world implementation</strong> of microservices, message queuing,
                         caching strategies, container orchestration, and CI/CD pipelines.
                     </p>
                 </div>
@@ -198,11 +206,11 @@
                 <i class="fas fa-sitemap"></i>
                 System Architecture
             </h2>
-            
+
             <div class="architecture-intro">
                 <p>
-                    The Budget Management API follows a <strong>microservices architecture</strong> pattern, allowing 
-                    independent development, deployment, and scaling of services. Each service handles a specific domain 
+                    The Budget Management API follows a <strong>microservices architecture</strong> pattern, allowing
+                    independent development, deployment, and scaling of services. Each service handles a specific domain
                     and communicates through well-defined interfaces.
                 </p>
             </div>
@@ -214,7 +222,7 @@
 graph TB
     Client[Client Applications]
     APIGateway[API Gateway / NGINX]
-    
+
     subgraph Services[Microservices Layer]
         Auth[Authentication Service]
         Budget[Budget Service]
@@ -226,7 +234,7 @@ graph TB
         Notification[Notification Service]
         Task[Task Service]
     end
-    
+
     subgraph Data[Data Layer]
         MongoDB[(MongoDB)]
         PostgreSQL[(PostgreSQL)]
@@ -234,12 +242,12 @@ graph TB
         Redis[(Redis Cache)]
         Elastic[(Elasticsearch)]
     end
-    
+
     subgraph Messaging[Message Queue Layer]
         RabbitMQ[RabbitMQ]
         Kafka[Apache Kafka]
     end
-    
+
     Client --> APIGateway
     APIGateway --> Auth
     APIGateway --> Budget
@@ -249,23 +257,23 @@ graph TB
     APIGateway --> Transaction
     APIGateway --> Search
     APIGateway --> Notification
-    
+
     Auth --> MongoDB
     Budget --> MongoDB
     Expense --> MongoDB
     Customer --> MongoDB
     Order --> MongoDB
-    
+
     Transaction --> PostgreSQL
     Search --> Elastic
-    
+
     Budget --> Redis
     Expense --> Redis
-    
+
     Task --> RabbitMQ
     Notification --> Kafka
     Order --> Kafka
-    
+
     style Client fill:#4CAF50,stroke:#4CAF50,color:#fff
     style APIGateway fill:#2196F3,stroke:#2196F3,color:#fff
     style Auth fill:#FF9800,stroke:#FF9800,color:#fff
@@ -309,14 +317,14 @@ flowchart LR
     APIGW <--> GRPC
     APIGW -->|REST/WebSocket| CORE
     GRPC --> CORE
-    
+
     CORE --> Mongo
     CORE --> Postgres
     CORE --> Elastic
     CORE --> Redis
     CORE --> Queue
     Queue -->|Async Tasks| External
-    
+
     style FE fill:#4CAF50,stroke:#4CAF50,color:#fff
     style CLI fill:#2196F3,stroke:#2196F3,color:#fff
     style APIGW fill:#FF9800,stroke:#FF9800,color:#fff
@@ -395,7 +403,7 @@ flowchart LR
                 <i class="fas fa-star"></i>
                 Core Features & Integrations
             </h2>
-            
+
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
@@ -539,54 +547,54 @@ flowchart LR
                 <i class="fas fa-folder-tree"></i>
                 Project Structure
             </h2>
-            
+
             <div class="diagram-container">
                 <h3><i class="fas fa-sitemap"></i> Directory Organization</h3>
                 <div class="mermaid">
 graph TD
     Root[Budget Management API]
-    
+
     Root --> CoreFiles[Core Files]
     Root --> Services[Services Layer]
     Root --> Controllers[Controllers]
     Root --> Models[Data Models]
     Root --> Infrastructure[Infrastructure]
     Root --> Additional[Additional]
-    
+
     CoreFiles --> EntryPoint[index.js - Entry Point]
     CoreFiles --> CLI[cli.js - CLI Tool]
     CoreFiles --> GRPC[grpcServer.js - gRPC Server]
     CoreFiles --> Docker[docker-compose.yml - Docker Config]
-    
+
     Services --> Auth[Authentication Service]
     Services --> Budget[Budget Management]
     Services --> Expense[Expense Tracking]
     Services --> Search[Search & Analytics]
     Services --> Notif[Notifications]
     Services --> TaskQ[Task Queue]
-    
+
     Controllers --> AuthCtrl[authController]
     Controllers --> BudgetCtrl[budgetController]
     Controllers --> ExpenseCtrl[expenseController]
     Controllers --> SearchCtrl[searchController]
     Controllers --> TaskCtrl[taskController]
-    
+
     Models --> UserModel[User Schema]
     Models --> BudgetModel[Budget Schema]
     Models --> ExpenseModel[Expense Schema]
     Models --> OrderModel[Order Schema]
     Models --> TaskModel[Task Schema]
-    
+
     Infrastructure --> DockerInfra[Docker]
     Infrastructure --> K8s[Kubernetes]
     Infrastructure --> Nginx[NGINX]
     Infrastructure --> Jenkins[Jenkins CI/CD]
-    
+
     Additional --> Spring[Spring Boot Backend]
     Additional --> Dotnet[.NET Core Backend]
     Additional --> Frontend[Frontend Demo]
     Additional --> Tests[Testing Suite]
-    
+
     style Root fill:#4CAF50,stroke:#4CAF50,color:#fff
     style CoreFiles fill:#2196F3,stroke:#2196F3,color:#fff
     style Services fill:#FF9800,stroke:#FF9800,color:#fff
@@ -654,7 +662,7 @@ graph TD
                 <i class="fas fa-rocket"></i>
                 Getting Started
             </h2>
-            
+
             <div class="setup-flow">
                 <div class="setup-step">
                     <div class="step-number">1</div>
@@ -746,10 +754,10 @@ npm start</code></pre>
                 <i class="fas fa-book"></i>
                 API Documentation
             </h2>
-            
+
             <div class="api-intro">
                 <p>
-                    The Budget Management API provides <strong>40+ endpoints</strong> across multiple services. 
+                    The Budget Management API provides <strong>40+ endpoints</strong> across multiple services.
                     Full interactive documentation is available via <a href="https://budget-management-backend-api.onrender.com/docs" target="_blank">Swagger UI</a>.
                 </p>
             </div>
@@ -857,7 +865,7 @@ npm start</code></pre>
 
             <div class="protocol-examples">
                 <h3><i class="fas fa-code"></i> Protocol Examples</h3>
-                
+
                 <div class="example-tabs">
                     <div class="example-card">
                         <h4><i class="fas fa-exchange-alt"></i> REST API</h4>
@@ -903,7 +911,7 @@ ws.onmessage = (event) => {
                 <i class="fas fa-cloud-upload-alt"></i>
                 Deployment Strategies
             </h2>
-            
+
             <div class="deployment-grid">
                 <div class="deployment-card">
                     <div class="deployment-icon">
@@ -917,10 +925,10 @@ graph LR
     LB[Load Balancer]
     Blue[Blue Environment v1.0]
     Green[Green Environment v2.0]
-    
+
     LB -->|100% Traffic| Blue
     LB -.->|0% Traffic| Green
-    
+
     style Blue fill:#2196F3,stroke:#2196F3,color:#fff
     style Green fill:#4CAF50,stroke:#4CAF50,color:#fff
     style LB fill:#FF9800,stroke:#FF9800,color:#fff
@@ -940,10 +948,10 @@ graph LR
     LB[Load Balancer]
     Stable[Stable v1.0]
     Canary[Canary v2.0]
-    
+
     LB -->|90% Traffic| Stable
     LB -->|10% Traffic| Canary
-    
+
     style Stable fill:#2196F3,stroke:#2196F3,color:#fff
     style Canary fill:#FFC107,stroke:#FFC107,color:#000
     style LB fill:#FF9800,stroke:#FF9800,color:#fff
@@ -965,12 +973,12 @@ graph TD
     Update2[Update Instance 2]
     Update3[Update Instance 3]
     Complete[Deployment Complete]
-    
+
     Start --> Update1
     Update1 --> Update2
     Update2 --> Update3
     Update3 --> Complete
-    
+
     style Start fill:#4CAF50,stroke:#4CAF50,color:#fff
     style Update1 fill:#FF9800,stroke:#FF9800,color:#fff
     style Update2 fill:#FF9800,stroke:#FF9800,color:#fff
@@ -988,7 +996,7 @@ graph TD
                 <i class="fas fa-vial"></i>
                 Testing & Quality Assurance
             </h2>
-            
+
             <div class="content-grid">
                 <div class="content-card">
                     <h3><i class="fas fa-check-double"></i> Test Coverage</h3>
@@ -1021,7 +1029,7 @@ npm run lint          # Lint code</code></pre>
                 <i class="fas fa-link"></i>
                 Additional Resources
             </h2>
-            
+
             <div class="resource-grid">
                 <a href="https://budget-management-backend-api.onrender.com/docs" target="_blank" class="resource-card">
                     <i class="fas fa-book-open"></i>
@@ -1067,7 +1075,7 @@ npm run lint          # Lint code</code></pre>
                 <i class="fas fa-user"></i>
                 About the Author
             </h2>
-            
+
             <div class="author-card">
                 <div class="author-info">
                     <h3>Son Nguyen</h3>
