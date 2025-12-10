@@ -1243,6 +1243,10 @@ code {
     transform: translateY(-2px);
 }
 
+.social-links a:hover i {
+    color: var(--text-secondary); /* Keep icon color gray on hover */
+}
+
 .footer-bottom {
     text-align: center;
     padding-top: 2rem;
@@ -1304,17 +1308,33 @@ code {
     }
 }
 
-@media (max-width: 768px) {
-    html {
-        font-size: 14px;
+@media (min-width: 1201px) {
+    .nav-menu {
+        display: flex;
     }
-    
+
+    .mobile-menu-toggle {
+        display: none;
+    }
+}
+
+@media (max-width: 1200px) {
     .nav-menu {
         display: none;
     }
-    
+
     .mobile-menu-toggle {
         display: block;
+    }
+
+    .nav-container {
+        padding: 1rem 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 14px;
     }
     
     .hero {
