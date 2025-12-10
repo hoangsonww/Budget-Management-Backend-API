@@ -417,6 +417,8 @@ img {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
     margin-bottom: 4rem;
+    position: relative;
+    z-index: 10;
 }
 
 .stat-card {
@@ -426,6 +428,8 @@ img {
     text-align: center;
     border: 1px solid var(--border-color);
     transition: var(--transition);
+    position: relative;
+    z-index: 10;
 }
 
 .stat-card:hover {
@@ -467,6 +471,7 @@ img {
     border-radius: 12px;
     border: 1px solid var(--border-color);
     transition: var(--transition);
+    min-width: 0;
 }
 
 .content-card:hover {
@@ -508,6 +513,18 @@ img {
 .feature-list i {
     color: var(--primary-color);
     font-size: 1.125rem;
+}
+
+.testing-grid {
+    grid-template-columns: 1fr;
+    justify-items: stretch;
+    width: 100%;
+}
+
+.testing-grid .content-card {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
 }
 
 /* ==========================================
@@ -737,8 +754,22 @@ pre {
     padding: 1rem;
     border-radius: 8px;
     overflow-x: auto;
+    overflow-y: auto;
+    max-height: 500px;
     margin: 1rem 0;
     border: 1px solid var(--border-color);
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+pre code {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    white-space: pre;
+    overflow-x: auto;
 }
 
 code {
@@ -767,12 +798,15 @@ code {
 .env-example li {
     padding: 0.5rem 0;
     color: var(--text-secondary);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .env-example code {
     background: rgba(76, 175, 80, 0.1);
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
+    word-wrap: break-word;
 }
 
 .setup-alternatives {
@@ -798,13 +832,33 @@ code {
 
 .dir-item {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 1rem;
     padding: 1rem;
     background: var(--bg-secondary);
     border-radius: 8px;
     border: 1px solid var(--border-color);
     transition: var(--transition);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.dir-item-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.dir-item-title {
+    display: block;
+    color: var(--primary-color);
+    word-break: break-word;
+}
+
+.dir-item-desc {
+    margin: 0.15rem 0 0;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    word-break: break-word;
 }
 
 .dir-item:hover {
@@ -815,6 +869,7 @@ code {
 .dir-item i {
     color: var(--primary-color);
     font-size: 1.25rem;
+    flex-shrink: 0;
 }
 
 .dir-item strong {
@@ -842,6 +897,7 @@ code {
 .api-categories {
     display: grid;
     gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .api-category {
@@ -849,6 +905,7 @@ code {
     padding: 2rem;
     border-radius: 12px;
     border: 1px solid var(--border-color);
+    min-width: 0;
 }
 
 .api-category h3 {
@@ -940,7 +997,7 @@ code {
 
 .example-tabs {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 2rem;
 }
 
@@ -949,6 +1006,7 @@ code {
     padding: 2rem;
     border-radius: 12px;
     border: 1px solid var(--border-color);
+    min-width: 0;
 }
 
 .example-card h4 {
@@ -1289,7 +1347,9 @@ code {
     .features-grid,
     .tech-grid,
     .deployment-grid,
-    .resource-grid {
+    .resource-grid,
+    .api-categories,
+    .example-tabs {
         grid-template-columns: 1fr;
     }
     
