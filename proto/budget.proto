@@ -4,9 +4,14 @@ package budget;
 
 service BudgetManager {
   rpc GetBudget(GetBudgetRequest) returns (GetBudgetResponse);
+  rpc ListBudgets(ListBudgetsRequest) returns (ListBudgetsResponse);
   rpc CreateBudget(CreateBudgetRequest) returns (CreateBudgetResponse);
+  rpc UpdateBudget(UpdateBudgetRequest) returns (UpdateBudgetResponse);
+  rpc DeleteBudget(DeleteBudgetRequest) returns (DeleteBudgetResponse);
   rpc AddExpense(AddExpenseRequest) returns (AddExpenseResponse);
   rpc GetExpenses(GetExpensesRequest) returns (GetExpensesResponse);
+  rpc StreamExpenses(StreamExpensesRequest) returns (stream Expense);
+  rpc GetBudgetSummary(GetBudgetSummaryRequest) returns (GetBudgetSummaryResponse);
 }
 
 message GetBudgetRequest {
@@ -29,6 +34,24 @@ message CreateBudgetResponse {
   string budgetId = 1;
 }
 
+message UpdateBudgetRequest {
+  string budgetId = 1;
+  string name = 2;
+  double limit = 3;
+}
+
+message UpdateBudgetResponse {
+  Budget budget = 1;
+}
+
+message DeleteBudgetRequest {
+  string budgetId = 1;
+}
+
+message DeleteBudgetResponse {
+  bool deleted = 1;
+}
+
 message AddExpenseRequest {
   string budgetId = 1;
   string description = 2;
@@ -41,10 +64,57 @@ message AddExpenseResponse {
 
 message GetExpensesRequest {
   string budgetId = 1;
+  int32 limit = 2;
+  int32 offset = 3;
 }
 
 message GetExpensesResponse {
   repeated Expense expenses = 1;
+}
+
+message StreamExpensesRequest {
+  string budgetId = 1;
+  int32 limit = 2;
+}
+
+message ListBudgetsRequest {
+  int32 page = 1;
+  int32 pageSize = 2;
+  string nameContains = 3;
+  double minLimit = 4;
+  double maxLimit = 5;
+}
+
+message ListBudgetsResponse {
+  repeated Budget budgets = 1;
+  int32 page = 2;
+  int32 pageSize = 3;
+  int32 totalCount = 4;
+}
+
+message GetBudgetSummaryRequest {
+  string budgetId = 1;
+}
+
+message GetBudgetSummaryResponse {
+  BudgetSummary summary = 1;
+}
+
+message Budget {
+  string budgetId = 1;
+  string name = 2;
+  double limit = 3;
+  string createdAt = 4;
+}
+
+message BudgetSummary {
+  string budgetId = 1;
+  string name = 2;
+  double limit = 3;
+  double spent = 4;
+  double remaining = 5;
+  int32 expenseCount = 6;
+  string updatedAt = 7;
 }
 
 message Expense {
@@ -52,4 +122,5 @@ message Expense {
   string description = 2;
   double amount = 3;
   string createdAt = 4;
+  string budgetId = 5;
 }

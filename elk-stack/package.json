@@ -1,0 +1,13 @@
+{
+  "name": "elk-log-generator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^9.3.0",
+    "node-fetch": "^3.3.2"
+  }
+}

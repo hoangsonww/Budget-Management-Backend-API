@@ -11,13 +11,22 @@ const { expect } = chai;
 
 describe('Express app (Mocha & Chai)', function() {
   let app;
+  let originalHome = null;
+  let originalStatic = null;
 
   before(function() {
     // 1) Prepare static files
-    fs.mkdirSync(path.join(__dirname, '../views'), { recursive: true });
-    fs.writeFileSync(path.join(__dirname, '../views/home.html'), '<h1>Home Page</h1>');
-    fs.mkdirSync(path.join(__dirname, '../public'), { recursive: true });
-    fs.writeFileSync(path.join(__dirname, '../public/test.txt'), 'Hello, Static!');
+    const viewsDir = path.join(__dirname, '../views');
+    const htmlPath = path.join(viewsDir, 'home.html');
+    fs.mkdirSync(viewsDir, { recursive: true });
+    if (fs.existsSync(htmlPath)) originalHome = fs.readFileSync(htmlPath, 'utf8');
+    fs.writeFileSync(htmlPath, '<h1>Home Page</h1>');
+
+    const publicDir = path.join(__dirname, '../public');
+    const txtPath = path.join(publicDir, 'test.txt');
+    fs.mkdirSync(publicDir, { recursive: true });
+    if (fs.existsSync(txtPath)) originalStatic = fs.readFileSync(txtPath, 'utf8');
+    fs.writeFileSync(txtPath, 'Hello, Static!');
 
     // 2) Stub all external modules exactly as index.js requires them
     const stubs = {
@@ -47,9 +56,17 @@ describe('Express app (Mocha & Chai)', function() {
   after(function() {
     // clean up test files
     const v = path.join(__dirname, '../views/home.html');
-    if (fs.existsSync(v)) fs.unlinkSync(v);
+    if (originalHome !== null) {
+      fs.writeFileSync(v, originalHome);
+    } else if (fs.existsSync(v)) {
+      fs.unlinkSync(v);
+    }
     const p = path.join(__dirname, '../public/test.txt');
-    if (fs.existsSync(p)) fs.unlinkSync(p);
+    if (originalStatic !== null) {
+      fs.writeFileSync(p, originalStatic);
+    } else if (fs.existsSync(p)) {
+      fs.unlinkSync(p);
+    }
   });
 
   it('serves the homepage at GET /', (done) => {

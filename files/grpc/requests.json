@@ -1,0 +1,21 @@
+{
+  "createBudget": {
+    "name": "Travel",
+    "limit": 2500
+  },
+  "updateBudget": {
+    "budgetId": "64c9f8f2a73c2f001b3c68f4",
+    "name": "Travel Plus",
+    "limit": 3200
+  },
+  "addExpense": {
+    "budgetId": "64c9f8f2a73c2f001b3c68f4",
+    "description": "Hotel booking",
+    "amount": 420.5
+  },
+  "getExpenses": {
+    "budgetId": "64c9f8f2a73c2f001b3c68f4",
+    "limit": 25,
+    "offset": 0
+  }
+}

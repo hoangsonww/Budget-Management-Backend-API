@@ -2,87 +2,130 @@ const express = require('express');
 const mongoose = require('mongoose');
 const redis = require('redis');
 const httpProxy = require('http-proxy');
-const http = require('http');
 const config = require('./config');
 
-// MongoDB Connection
+const MODE = process.env.MODE || 'all';
+const LOAD_BALANCER_PORT = Number(process.env.PORT || 3000);
+const BACKEND_PORT = Number(process.env.BACKEND_PORT || 5001);
+
+const redisClient = redis.createClient({ url: config.redisUrl });
+redisClient.on('error', err => console.error('Redis Client Error', err));
+redisClient.connect().catch(err => console.error('Redis Connection Error:', err.message));
+
 mongoose
   .connect(config.mongoURI)
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.error('MongoDB Connection Error:', err));
 
-// Redis Connection
-const redisClient = redis.createClient({
-  url: `redis://${config.redisHost}:${config.redisPort}`,
-});
-redisClient.connect().catch(err => console.error('Redis Connection Error:', err));
-redisClient.on('error', err => console.log('Redis Client Error', err));
+const backendPorts = config.backendPorts.length ? config.backendPorts : [5001, 5002, 5003];
+const backendTargets = (process.env.BACKEND_TARGETS || '')
+  .split(',')
+  .map(target => target.trim())
+  .filter(Boolean);
 
-// Function to start backend servers on specified ports
-function startBackendServer(port) {
+const resolveTargets = () => {
+  if (backendTargets.length) return backendTargets;
+  return backendPorts.map(port => `http://localhost:${port}`);
+};
+
+const startBackendServer = port => {
   const app = express();
+  const stats = { requests: 0, startedAt: new Date().toISOString() };
 
-  app.get('/', (req, res) => {
+  app.get('/health', (_req, res) => {
+    res.json({ status: 'ok', port });
+  });
+
+  app.get('/stats', (_req, res) => {
+    res.json(stats);
+  });
+
+  app.get('/', (_req, res) => {
+    stats.requests += 1;
     res.send(`Hello from backend server running on port ${port}`);
   });
 
   app.listen(port, () => {
     console.log(`Backend server running on http://localhost:${port}`);
   });
-}
+};
 
-// Start backend servers on ports 5001, 5002, 5003
-[5001, 5002, 5003].forEach(port => startBackendServer(port));
+const startLoadBalancer = () => {
+  const loadBalancerApp = express();
+  const proxy = httpProxy.createProxyServer();
+  let currentIndex = 0;
+  let healthyTargets = resolveTargets();
+  const allTargets = resolveTargets();
 
-// Round Robin Load Balancing
-const serverInstances = [{ url: 'http://localhost:5001' }, { url: 'http://localhost:5002' }, { url: 'http://localhost:5003' }];
+  const refreshHealthyTargets = async () => {
+    const results = await Promise.all(
+      allTargets.map(async target => {
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), config.backendTimeoutMs);
+          const response = await fetch(`${target}/health`, { signal: controller.signal });
+          clearTimeout(timeout);
+          return response.ok ? target : null;
+        } catch (error) {
+          return null;
+        }
+      })
+    );
 
-let currentInstanceIndex = 0;
+    healthyTargets = results.filter(Boolean);
+    if (!healthyTargets.length) {
+      healthyTargets = allTargets;
+    }
+  };
 
-function getNextServerInstance() {
-  currentInstanceIndex = (currentInstanceIndex + 1) % serverInstances.length;
-  return serverInstances[currentInstanceIndex];
-}
+  const getNextServerInstance = () => {
+    const targets = healthyTargets.length ? healthyTargets : allTargets;
+    currentIndex = (currentIndex + 1) % targets.length;
+    return targets[currentIndex];
+  };
 
-// Express App Setup for Load Balancer
-const loadBalancerApp = express();
-const proxy = httpProxy.createProxyServer();
+  proxy.on('error', (err, req, res) => {
+    console.error('Proxy error:', err);
+    res.status(502).send('Bad gateway');
+  });
 
-// Error handling for proxy
-proxy.on('error', (err, req, res) => {
-  console.error('Proxy error:', err);
-  res.status(500).send('Internal Server Error');
-});
-
-// Load balancer middleware to route requests
-loadBalancerApp.get('/', (req, res) => {
-  const instance = getNextServerInstance();
-  console.log(`Routing request to: ${instance.url}`);
-  proxy.web(req, res, { target: instance.url });
-});
-
-// Start the load balancer
-const loadBalancerPort = process.env.PORT || 3000;
-loadBalancerApp.listen(loadBalancerPort, () => {
-  console.log(`Load balancer listening on port ${loadBalancerPort}`);
-});
-
-// Load Balancer Test
-setInterval(() => {
-  const instance = getNextServerInstance();
-  console.log(`Sending test request to: ${instance.url}`);
-
-  http
-    .get(instance.url, res => {
-      let data = '';
-      res.on('data', chunk => {
-        data += chunk;
-      });
-      res.on('end', () => {
-        console.log(`Response from ${instance.url}:`, data);
-      });
-    })
-    .on('error', err => {
-      console.error(`Error connecting to ${instance.url}:`, err.message);
+  loadBalancerApp.get('/lb/status', async (_req, res) => {
+    await refreshHealthyTargets();
+    res.json({
+      healthyTargets,
+      allTargets,
+      timestamp: new Date().toISOString(),
     });
-}, 5000); // Send a request every 5 seconds
+  });
+
+  loadBalancerApp.get('/', async (req, res) => {
+    await refreshHealthyTargets();
+    const target = getNextServerInstance();
+
+    if (redisClient.isOpen) {
+      try {
+        await redisClient.hIncrBy('round_robin:requests', target, 1);
+      } catch (error) {
+        console.warn('Redis stats update failed:', error.message);
+      }
+    }
+
+    console.log(`Routing request to: ${target}`);
+    proxy.web(req, res, { target });
+  });
+
+  loadBalancerApp.listen(LOAD_BALANCER_PORT, () => {
+    console.log(`Load balancer listening on port ${LOAD_BALANCER_PORT}`);
+  });
+};
+
+if (MODE === 'all') {
+  backendPorts.forEach(port => startBackendServer(port));
+  startLoadBalancer();
+} else if (MODE === 'backend') {
+  startBackendServer(BACKEND_PORT);
+} else if (MODE === 'balancer') {
+  startLoadBalancer();
+} else {
+  console.error(`Unknown MODE: ${MODE}`);
+}

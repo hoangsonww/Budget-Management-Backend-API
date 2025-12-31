@@ -1,69 +1,65 @@
 version: '3.8'
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: budget_manager_app
-    ports:
-      - "3000:3000"
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    container_name: elk_elasticsearch
     environment:
-      - PORT=3000
-      - MONGO_DB_URI=mongodb://mongo:27017/budget_manager
-      - REDIS_URL=redis://redis:6379
-      - RABBITMQ_URL=amqp://rabbitmq
-      - KAFKA_BROKER=kafka:9092
-    depends_on:
-      - mongo
-      - redis
-      - rabbitmq
-      - kafka
-
-  mongo:
-    image: mongo:6
-    container_name: mongo
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
     ports:
-      - "27017:27017"
+      - "9200:9200"
     volumes:
-      - mongo-data:/data/db
+      - es-data:/usr/share/elasticsearch/data
 
-  redis:
-    image: redis:6
-    container_name: redis
-    ports:
-      - "6379:6379"
-
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672" # Management UI
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.13.4
+    container_name: elk_kibana
     environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-
-  kafka:
-    image: bitnami/kafka:3
-    container_name: kafka
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     ports:
-      - "9092:9092"
-      - "29092:29092" # Internal communication
-    environment:
-      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://0.0.0.0:9092,PLAINTEXT_INTERNAL://0.0.0.0:29092
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_INTERNAL://kafka:29092
-      - ALLOW_PLAINTEXT_LISTENER=yes
+      - "5601:5601"
     depends_on:
-      - zookeeper
+      - elasticsearch
 
-  zookeeper:
-    image: bitnami/zookeeper:3
-    container_name: zookeeper
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.13.4
+    container_name: elk_logstash
     ports:
-      - "2181:2181"
+      - "8080:8080"
+      - "5044:5044"
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+    depends_on:
+      - elasticsearch
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.13.4
+    container_name: elk_filebeat
+    user: root
+    volumes:
+      - ../logs:/usr/share/filebeat/logs
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+    depends_on:
+      - logstash
+
+  log-generator:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: elk_log_generator
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - LOGSTASH_URL=http://logstash:8080
+      - KIBANA_URL=http://kibana:5601
+      - LOG_FILE_PATH=/app/logs/budget-api.log
+      - EVENT_COUNT=50
+      - EVENT_INTERVAL_MS=200
+    volumes:
+      - ../logs:/app/logs
+    depends_on:
+      - logstash
 
 volumes:
-  mongo-data:
+  es-data:

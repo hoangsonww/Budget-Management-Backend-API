@@ -2,6 +2,7 @@ const { sendToQueue } = require('../services/rabbitMQService');
 const redisClient = require('../services/redisService');
 const Task = require('../models/task');
 const mongoose = require('mongoose');
+const { publishEvent } = require('../apache-kafka/kafkaService');
 
 /**
  * @swagger
@@ -63,6 +64,17 @@ exports.sendTask = async (req, res, next) => {
 
     // Send the task to RabbitMQ queue
     sendToQueue('task_queue', JSON.stringify({ taskId: savedTask._id, description }));
+
+    await publishEvent(
+      'task-events',
+      'task.submitted',
+      {
+        taskId: savedTask._id.toString(),
+        description: savedTask.description,
+        status: savedTask.status,
+      },
+      { key: savedTask._id.toString(), source: 'task-controller' }
+    );
 
     res.status(202).json({ message: 'Task submitted successfully', taskId: savedTask._id });
   } catch (error) {
@@ -192,6 +204,17 @@ exports.deleteTask = async (req, res, next) => {
     const redisKey = `task:${id}:status`;
     await redisClient.del(redisKey);
     console.log(`Deleted Redis key: ${redisKey}`);
+
+    await publishEvent(
+      'task-events',
+      'task.deleted',
+      {
+        taskId: id,
+        description: deletedTask.description,
+        status: deletedTask.status,
+      },
+      { key: id, source: 'task-controller' }
+    );
 
     res.status(200).json({ message: 'Task deleted successfully', taskId: id });
   } catch (error) {

@@ -1,0 +1,15 @@
+{
+  "name": "round-robin-demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "http-proxy": "^1.18.1",
+    "mongoose": "^8.4.1",
+    "redis": "^4.6.14"
+  }
+}

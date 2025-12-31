@@ -2,7 +2,7 @@ const amqp = require('amqplib');
 const config = require('./config/config');
 
 /**
- * Publish a message to RabbitMQ
+ * Publish a message to RabbitMQ (THIS IS A DEMO ONLY)
  * @param messageContent {string} - The message content to publish
  * @returns {Promise<void>} - A Promise that resolves when the message is published
  */

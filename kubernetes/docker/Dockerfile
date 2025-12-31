@@ -1,23 +1,6 @@
-# Use the official Node.js image
-FROM node:18
+FROM bitnami/kubectl:1.30
 
-# Set the working directory in the container
-WORKDIR /usr/src/app
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install
-
-# Copy the entire project directory
-COPY . .
-
-# Expose the application port
-EXPOSE 3000
-
-# Set the environment variable for production
-ENV NODE_ENV=production
-
-# Run the application
-CMD ["node", "index.js"]
+ENTRYPOINT ["/entrypoint.sh"]

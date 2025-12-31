@@ -10,6 +10,7 @@ const graphqlRoutes = require('./graphqlRoutes');
 const notificationRoutes = require('./notificationRoutes');
 const searchRoutes = require('./searchRoutes');
 const transactionRoutes = require('./transactionRoutes');
+const healthRoutes = require('./healthRoutes');
 
 const router = express.Router();
 
@@ -24,5 +25,6 @@ router.use('/graphql', graphqlRoutes);
 router.use('/search', searchRoutes);
 router.use('/notifications', notificationRoutes);
 router.use('/transactions', transactionRoutes);
+router.use('/', healthRoutes);
 
 module.exports = router;

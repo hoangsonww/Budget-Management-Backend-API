@@ -1,6 +1,7 @@
 const Budget = require('../models/budget');
 const redisClient = require('../services/redisService');
 const mongoose = require('mongoose');
+const { publishEvent } = require('../apache-kafka/kafkaService');
 
 /**
  * @swagger
@@ -65,6 +66,17 @@ exports.createBudget = async (req, res, next) => {
 
     // Cache the budget in Redis
     await redisClient.set(`budget:${savedBudget._id}`, JSON.stringify(savedBudget));
+
+    await publishEvent(
+      'budget-events',
+      'budget.created',
+      {
+        budgetId: savedBudget._id.toString(),
+        name: savedBudget.name,
+        limit: savedBudget.limit,
+      },
+      { key: savedBudget._id.toString(), source: 'budget-controller' }
+    );
 
     res.status(201).json({ message: 'Budget created', budget: savedBudget });
   } catch (error) {
@@ -231,6 +243,13 @@ exports.deleteBudget = async (req, res, next) => {
     // Remove from Redis cache
     await redisClient.del(`budget:${id}`);
 
+    await publishEvent(
+      'budget-events',
+      'budget.deleted',
+      { budgetId: id, name: deletedBudget.name, limit: deletedBudget.limit },
+      { key: id, source: 'budget-controller' }
+    );
+
     res.status(200).json({ message: 'Budget deleted successfully' });
   } catch (error) {
     next(error);
@@ -326,6 +345,17 @@ exports.updateBudget = async (req, res, next) => {
 
     // Update Redis cache
     await redisClient.set(`budget:${id}`, JSON.stringify(updatedBudget));
+
+    await publishEvent(
+      'budget-events',
+      'budget.updated',
+      {
+        budgetId: updatedBudget._id.toString(),
+        name: updatedBudget.name,
+        limit: updatedBudget.limit,
+      },
+      { key: updatedBudget._id.toString(), source: 'budget-controller' }
+    );
 
     res.status(200).json({ message: 'Budget updated successfully', budget: updatedBudget });
   } catch (error) {

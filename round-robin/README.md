@@ -31,6 +31,12 @@ This demo consists of:
   - Routes requests sequentially across multiple backend servers.
 - **Dynamic Routing**:
   - Middleware to dynamically choose the next backend server.
+- **Health-Aware Routing**:
+  - Periodic health checks keep the pool fresh and avoid unhealthy targets.
+- **Backend Stats**:
+  - `/health` and `/stats` endpoints per backend for quick visibility.
+- **Redis Request Counters**:
+  - Load balancer increments request counts per backend when Redis is connected.
 - **MongoDB Integration**:
   - Demonstrates MongoDB connection and readiness for real-world applications.
 - **Redis Integration**:
@@ -80,33 +86,40 @@ flowchart TD
    npm install
    ```
 
-3. Configure environment variables:
-  - Create a file `config/config.js`:
-    ```javascript
-    module.exports = {
-      mongoURI: 'mongodb://localhost:27017/demoDB',
-      redisHost: '127.0.0.1',
-      redisPort: 6379,
-    };
-    ```
+3. Configure environment variables (optional):
+  - `MONGO_URI` (default: `mongodb://localhost:27017/round_robin`)
+  - `REDIS_URL` (default: `redis://localhost:6379`)
+  - `BACKEND_PORTS` (default: `5001,5002,5003`)
+  - `MODE` (`all`, `backend`, or `balancer`)
+  - `BACKEND_TARGETS` (comma-separated URLs when running only the balancer)
 
 4. Start the application:
    ```bash
-   node server.js
+   node index.js
    ```
+
+### **Run With Docker Compose**
+
+Use the tailored round-robin stack in `round-robin/docker/`:
+
+```bash
+docker compose -f docker/docker-compose.yml up --build
+```
+
+The load balancer listens on `http://localhost:3000` and proxies to three backend containers.
 
 ## **How It Works**
 
 1. **Backend Servers**:
-  - Each backend server runs on a different port (`5001`, `5002`, `5003`).
-  - Responds to incoming requests with a message indicating its port.
+  - Each backend server runs on a different port in local mode.
+  - `/health` reports readiness and `/stats` exposes request counters.
 
 2. **Round-Robin Load Balancer**:
   - Listens on port `3000` (default) and distributes incoming requests to backend servers using a round-robin algorithm.
   - Routes requests to backend servers sequentially to balance the load evenly.
 
 3. **Health Checks**:
-  - Periodically sends test requests to backend servers to ensure they are responsive.
+  - Periodically sends health requests to backend servers to keep a healthy pool.
 
 ## **Testing**
 
@@ -114,7 +127,7 @@ flowchart TD
 
 1. Start the application:
    ```bash
-   node server.js
+   node index.js
    ```
 
 2. Send a request to the load balancer:
