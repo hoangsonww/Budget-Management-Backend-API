@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const redis = require('redis');
 const { MongoClient } = require('mongodb');
 const config = require('./config');
@@ -7,52 +6,117 @@ const config = require('./config');
 const app = express();
 app.use(express.json());
 
-// Establish connections to MongoDB and Redis
 const mongoClient = new MongoClient(config.mongoURI);
-const redisClient = redis.createClient();
+const redisClient = redis.createClient({ url: config.redisUrl });
 
-const dbName = 'myDatabase';
-const collectionName = 'myCollection';
+const stats = {
+  cacheHits: 0,
+  cacheMisses: 0,
+};
+
+const getCollection = () => mongoClient.db(config.dbName).collection(config.collectionName);
+
+const ensureIndexes = async () => {
+  await getCollection().createIndex({ key: 1 }, { unique: true });
+};
+
+redisClient.on('error', err => console.error('Redis Client Error', err));
 
 app.get('/data/:key', async (req, res) => {
   const key = req.params.key;
+  const bypassCache = req.query.refresh === 'true';
 
-  // First try to get data from Redis
-  let data = await redisClient.get(key);
-  if (data) {
-    return res.json({ source: 'redis', data: JSON.parse(data) });
-  }
-
-  // If data not found in Redis, query MongoDB
   try {
-    const mongodb = mongoClient.db(dbName);
-    const collection = mongodb.collection(collectionName);
-
-    data = await collection.findOne({ key });
-
-    // Store data in Redis, even if it's null (to prevent future queries to MongoDB)
-    await redisClient.setEx(key, 3600, JSON.stringify(data || null)); // Cache data for 1 hour (3600 seconds)
-
-    // After successfully querying MongoDB, store data in Redis for future requests and return the data from MongoDB
-    if (data) {
-      return res.json({ source: 'mongodb', data });
+    if (!bypassCache) {
+      const cached = await redisClient.get(key);
+      if (cached) {
+        stats.cacheHits += 1;
+        return res.json({ source: 'redis', data: JSON.parse(cached) });
+      }
     }
-  } catch (error) {
-    console.error('Error querying MongoDB:', error);
-    res.status(500).json({ message: 'Error retrieving data' });
-  }
 
-  // If data not found in MongoDB, return data not found
-  res.status(404).json({ message: 'Data not found' });
+    stats.cacheMisses += 1;
+    const record = await getCollection().findOne({ key });
+    if (!record) {
+      return res.status(404).json({ message: 'Data not found' });
+    }
+
+    await redisClient.setEx(key, config.cacheTtlSeconds, JSON.stringify(record));
+    return res.json({ source: 'mongodb', data: record });
+  } catch (error) {
+    console.error('Error retrieving data:', error);
+    return res.status(500).json({ message: 'Error retrieving data' });
+  }
 });
 
-// Start the server
+app.post('/data', async (req, res) => {
+  const { key, value } = req.body;
+  if (!key || typeof value === 'undefined') {
+    return res.status(400).json({ message: 'Both key and value are required.' });
+  }
+
+  try {
+    const now = new Date();
+    await getCollection().updateOne(
+      { key },
+      {
+        $set: { key, value, updatedAt: now },
+        $setOnInsert: { createdAt: now },
+      },
+      { upsert: true }
+    );
+
+    const record = await getCollection().findOne({ key });
+    await redisClient.setEx(key, config.cacheTtlSeconds, JSON.stringify(record));
+
+    return res.status(201).json({ message: 'Data stored', data: record });
+  } catch (error) {
+    console.error('Error storing data:', error);
+    return res.status(500).json({ message: 'Error storing data' });
+  }
+});
+
+app.delete('/data/:key', async (req, res) => {
+  const key = req.params.key;
+  try {
+    const result = await getCollection().deleteOne({ key });
+    await redisClient.del(key);
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: 'Data not found' });
+    }
+
+    return res.json({ message: 'Data deleted', key });
+  } catch (error) {
+    console.error('Error deleting data:', error);
+    return res.status(500).json({ message: 'Error deleting data' });
+  }
+});
+
+app.get('/stats', async (_req, res) => {
+  try {
+    const totalRecords = await getCollection().countDocuments();
+    res.json({
+      cacheHits: stats.cacheHits,
+      cacheMisses: stats.cacheMisses,
+      totalRecords,
+    });
+  } catch (error) {
+    console.error('Error fetching stats:', error);
+    res.status(500).json({ message: 'Error fetching stats' });
+  }
+});
+
 async function startServer() {
   await mongoClient.connect();
   await redisClient.connect();
+  await ensureIndexes();
+
   app.listen(config.port, () => {
-    console.log(`Server started successfully...`);
+    console.log(`Redis-Mongo Flow listening on port ${config.port}`);
   });
 }
 
-startServer();
+startServer().catch(err => {
+  console.error('Failed to start server:', err.message);
+});

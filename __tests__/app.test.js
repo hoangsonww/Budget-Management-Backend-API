@@ -40,26 +40,41 @@ const fs = require('fs');
 const app = require('../index');
 
 describe('Express app', () => {
+  let originalHome = null;
+  let originalStatic = null;
+
   beforeAll(() => {
     // create views/home.html
     const viewsDir = path.join(__dirname, '../views');
+    const htmlPath = path.join(viewsDir, 'home.html');
     fs.mkdirSync(viewsDir, { recursive: true });
-    fs.writeFileSync(path.join(viewsDir, 'home.html'), '<h1>Home Page</h1>');
+    if (fs.existsSync(htmlPath)) originalHome = fs.readFileSync(htmlPath, 'utf8');
+    fs.writeFileSync(htmlPath, '<h1>Home Page</h1>');
 
     // create public/test.txt for static serving
     const publicDir = path.join(__dirname, '../public');
+    const txtPath = path.join(publicDir, 'test.txt');
     fs.mkdirSync(publicDir, { recursive: true });
-    fs.writeFileSync(path.join(publicDir, 'test.txt'), 'Hello, Static!');
+    if (fs.existsSync(txtPath)) originalStatic = fs.readFileSync(txtPath, 'utf8');
+    fs.writeFileSync(txtPath, 'Hello, Static!');
   });
 
   afterAll(() => {
-    // clean up views/home.html
+    // restore views/home.html
     const htmlPath = path.join(__dirname, '../views/home.html');
-    if (fs.existsSync(htmlPath)) fs.unlinkSync(htmlPath);
+    if (originalHome !== null) {
+      fs.writeFileSync(htmlPath, originalHome);
+    } else if (fs.existsSync(htmlPath)) {
+      fs.unlinkSync(htmlPath);
+    }
 
-    // clean up public/test.txt
+    // restore public/test.txt
     const txtPath = path.join(__dirname, '../public/test.txt');
-    if (fs.existsSync(txtPath)) fs.unlinkSync(txtPath);
+    if (originalStatic !== null) {
+      fs.writeFileSync(txtPath, originalStatic);
+    } else if (fs.existsSync(txtPath)) {
+      fs.unlinkSync(txtPath);
+    }
   });
 
   it('serves the homepage at GET /', async () => {

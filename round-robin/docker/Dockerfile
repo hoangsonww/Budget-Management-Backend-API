@@ -1,23 +1,15 @@
-# Use the official Node.js image
-FROM node:18
+FROM node:18-alpine
 
-# Set the working directory in the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Copy package.json and package-lock.json
 COPY package*.json ./
+RUN npm install --omit=dev
 
-# Install dependencies
-RUN npm install
-
-# Copy the entire project directory
 COPY . .
 
-# Expose the application port
 EXPOSE 3000
+EXPOSE 5001
+EXPOSE 5002
+EXPOSE 5003
 
-# Set the environment variable for production
-ENV NODE_ENV=production
-
-# Run the application
 CMD ["node", "index.js"]

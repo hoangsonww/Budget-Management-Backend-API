@@ -3,6 +3,7 @@ const Budget = require('../models/budget');
 const redisClient = require('../services/redisService');
 const mongoose = require('mongoose');
 const esClient = require('../services/elasticService');
+const { publishEvent } = require('../apache-kafka/kafkaService');
 
 /**
  * @swagger
@@ -151,6 +152,18 @@ exports.addExpense = async (req, res, next) => {
       parsedBudget.expenses.push(savedExpense);
       await redisClient.set(`budget:${budgetId}`, JSON.stringify(parsedBudget));
     }
+
+    await publishEvent(
+      'expense-events',
+      'expense.created',
+      {
+        expenseId: savedExpense._id.toString(),
+        budgetId: savedExpense.budgetId.toString(),
+        description: savedExpense.description,
+        amount: savedExpense.amount,
+      },
+      { key: savedExpense._id.toString(), source: 'expense-controller' }
+    );
 
     res.status(201).json({ message: 'Expense added', expense: savedExpense });
   } catch (error) {
@@ -304,6 +317,18 @@ exports.deleteExpenseById = async (req, res, next) => {
       await redisClient.set(`expenses:${expense.budgetId}`, JSON.stringify(expenses));
     }
 
+    await publishEvent(
+      'expense-events',
+      'expense.deleted',
+      {
+        expenseId: expense._id.toString(),
+        budgetId: expense.budgetId.toString(),
+        description: expense.description,
+        amount: expense.amount,
+      },
+      { key: expense._id.toString(), source: 'expense-controller' }
+    );
+
     res.status(200).json({ message: 'Expense deleted successfully' });
   } catch (error) {
     console.error('Error deleting expense:', error);
@@ -394,6 +419,18 @@ exports.updateExpenseById = async (req, res, next) => {
       const expenses = JSON.parse(cachedBudget).map(exp => (exp._id === id ? updatedExpense : exp));
       await redisClient.set(`expenses:${updatedExpense.budgetId}`, JSON.stringify(expenses));
     }
+
+    await publishEvent(
+      'expense-events',
+      'expense.updated',
+      {
+        expenseId: updatedExpense._id.toString(),
+        budgetId: updatedExpense.budgetId.toString(),
+        description: updatedExpense.description,
+        amount: updatedExpense.amount,
+      },
+      { key: updatedExpense._id.toString(), source: 'expense-controller' }
+    );
 
     res.status(200).json({ message: 'Expense updated successfully', expense: updatedExpense });
   } catch (error) {

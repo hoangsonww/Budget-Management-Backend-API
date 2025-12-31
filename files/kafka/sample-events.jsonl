@@ -1,0 +1,3 @@
+{"topic":"budget-events","eventType":"budget.created","key":"budget-101","payload":{"budgetId":"budget-101","name":"Travel","limit":2500},"correlationId":"corr-001"}
+{"topic":"expense-events","eventType":"expense.created","key":"expense-9001","payload":{"expenseId":"expense-9001","budgetId":"budget-101","description":"Hotel booking","amount":420.5},"correlationId":"corr-002"}
+{"topic":"task-events","eventType":"task.submitted","key":"task-333","payload":{"taskId":"task-333","description":"Run month-end report","status":"pending"},"correlationId":"corr-003"}

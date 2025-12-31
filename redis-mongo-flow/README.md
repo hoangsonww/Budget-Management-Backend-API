@@ -35,7 +35,11 @@ Steps to run the test:
     
     The `app.js` file will establish a simple Express.js server with connections to Redis and MongoDB. 
     
-    It also defines an API endpoint `/data/:key` to fetch the data associated with a specific key.
+    It also defines API endpoints to read, write, and delete cache entries:
+    - `GET /data/:key` fetches a key (with optional `?refresh=true` to bypass cache).
+    - `POST /data` upserts a payload into MongoDB and updates Redis.
+    - `DELETE /data/:key` removes a key from MongoDB and Redis.
+    - `GET /stats` shows cache hits/misses.
     
     It also implements the core logic of the Redis-MongoDB flow mentioned above.
 
@@ -44,6 +48,12 @@ Steps to run the test:
     ```bash
     node test.js
     ```
+
+### **Run With Docker Compose**
+
+```bash
+docker compose -f docker/docker-compose.yml up --build
+```
    
     Expected output:
     ```
