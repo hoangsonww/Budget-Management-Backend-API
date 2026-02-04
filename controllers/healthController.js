@@ -47,25 +47,17 @@ const postgresStatus = async () => {
   }
 };
 
+const getPing = (_req, res) => {
+  res.status(200).json({ pong: true });
+};
+
 const getHealth = async (_req, res) => {
-  const [redis, elastic, postgres, kafka] = await Promise.all([
-    redisStatus(),
-    elasticStatus(),
-    postgresStatus(),
-    healthCheck(),
-  ]);
+  const [redis, elastic, postgres, kafka] = await Promise.all([redisStatus(), elasticStatus(), postgresStatus(), healthCheck()]);
 
   const rabbitStatus = getRabbitMQStatus();
   const mongo = { status: mongoStatus() };
 
-  const serviceStates = [
-    mongo.status,
-    redis.status,
-    elastic.status,
-    postgres.status,
-    kafka.status,
-    rabbitStatus.connected ? 'ok' : 'error',
-  ];
+  const serviceStates = [mongo.status, redis.status, elastic.status, postgres.status, kafka.status, rabbitStatus.connected ? 'ok' : 'error'];
   const overall = serviceStates.includes('error') ? 'degraded' : 'ok';
 
   res.status(overall === 'ok' ? 200 : 207).json({
@@ -118,6 +110,7 @@ const getMetrics = async (_req, res, next) => {
 };
 
 module.exports = {
+  getPing,
   getHealth,
   getMetrics,
 };

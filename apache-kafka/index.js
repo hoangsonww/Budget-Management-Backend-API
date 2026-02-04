@@ -1,24 +1,21 @@
 const fs = require('fs');
 const path = require('path');
-const {
-  connectToKafka,
-  publishEvent,
-  registerConsumer,
-  healthCheck,
-} = require('./kafkaService');
+const { connectToKafka, publishEvent, registerConsumer, healthCheck } = require('./kafkaService');
 
 const samplePath = path.join(__dirname, '..', 'files', 'kafka', 'sample-events.jsonl');
 
 const loadSampleEvents = () => {
   if (!fs.existsSync(samplePath)) return [];
   const lines = fs.readFileSync(samplePath, 'utf8').split('\n').filter(Boolean);
-  return lines.map(line => {
-    try {
-      return JSON.parse(line);
-    } catch (error) {
-      return null;
-    }
-  }).filter(Boolean);
+  return lines
+    .map(line => {
+      try {
+        return JSON.parse(line);
+      } catch (error) {
+        return null;
+      }
+    })
+    .filter(Boolean);
 };
 
 const runDemo = async () => {

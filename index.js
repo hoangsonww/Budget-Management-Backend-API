@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
 const redisClient = require('./services/redisService');
+const postgresPool = require('./services/postgresService');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocs = require('./docs/swaggerConfig');
 const { connectToKafka } = require('./apache-kafka/kafkaService');
@@ -63,6 +64,9 @@ retryConnection(connectToKafka, 'Kafka');
 
 // RabbitMQ Connection
 retryConnection(connectToRabbitMQ, 'RabbitMQ');
+
+// PostgreSQL Schema Initialization
+retryConnection(() => postgresPool.ensureTransactionLogsTable(), 'PostgreSQL schema');
 
 // Seed MongoDB Data
 seedMongoData().catch(err => console.error('Failed to seed MongoDB data:', err.message));

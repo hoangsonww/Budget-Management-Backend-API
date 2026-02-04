@@ -1,14 +1,6 @@
 const config = require('./config');
 
-const requiredEnv = [
-  'MONGO_DB_URI',
-  'REDIS_URL',
-  'RABBITMQ_URL',
-  'KAFKA_BROKER',
-  'JWT_SECRET',
-  'ELASTIC_SEARCH_URL',
-  'POSTGRES_URL',
-];
+const requiredEnv = ['MONGO_DB_URI', 'REDIS_URL', 'RABBITMQ_URL', 'KAFKA_BROKER', 'JWT_SECRET', 'ELASTIC_SEARCH_URL', 'POSTGRES_URL'];
 
 const missing = requiredEnv.filter(key => !process.env[key]);
 const resolved = {

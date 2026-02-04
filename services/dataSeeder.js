@@ -191,6 +191,7 @@ module.exports = async () => {
 
     // -------------------- SEED POSTGRES TRANSACTIONS --------------------
     console.log('Seeding PostgreSQL transactions...');
+    await pool.ensureTransactionLogsTable();
     const result = await pool.query('SELECT COUNT(*) FROM transaction_logs');
     const transactionsCount = parseInt(result.rows[0].count, 10);
 
