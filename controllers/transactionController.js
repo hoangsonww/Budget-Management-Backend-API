@@ -1,5 +1,7 @@
 const pool = require('../services/postgresService');
 
+const ensureTransactionLogsTable = () => (typeof pool.ensureTransactionLogsTable === 'function' ? pool.ensureTransactionLogsTable() : Promise.resolve());
+
 /**
  * @swagger
  * tags:
@@ -57,6 +59,7 @@ exports.addTransactionLog = async (req, res, next) => {
   const { userId, description, amount, budgetId } = req.body;
 
   try {
+    await ensureTransactionLogsTable();
     const query = `
         INSERT INTO transaction_logs (user_id, description, amount, budget_id)
         VALUES ($1, $2, $3, $4) RETURNING *;
@@ -95,6 +98,7 @@ exports.addTransactionLog = async (req, res, next) => {
  */
 exports.getAllTransactionLogs = async (req, res, next) => {
   try {
+    await ensureTransactionLogsTable();
     const result = await pool.query('SELECT * FROM transaction_logs ORDER BY created_at DESC;');
 
     res.status(200).json({ logs: result.rows });
@@ -136,6 +140,7 @@ exports.getTransactionLogsByUser = async (req, res, next) => {
   const { userId } = req.params;
 
   try {
+    await ensureTransactionLogsTable();
     const query = 'SELECT * FROM transaction_logs WHERE user_id = $1 ORDER BY created_at DESC;';
     const result = await pool.query(query, [userId]);
 
@@ -187,6 +192,7 @@ exports.deleteTransactionLog = async (req, res, next) => {
   const { id } = req.params;
 
   try {
+    await ensureTransactionLogsTable();
     const query = 'DELETE FROM transaction_logs WHERE id = $1 RETURNING *;';
     const result = await pool.query(query, [id]);
 
@@ -261,6 +267,7 @@ exports.updateTransactionLog = async (req, res, next) => {
   const { description, amount, budgetId } = req.body;
 
   try {
+    await ensureTransactionLogsTable();
     const query = `
       UPDATE transaction_logs
       SET description = $1, amount = $2, budget_id = $3

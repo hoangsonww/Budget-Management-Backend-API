@@ -10,10 +10,7 @@ const DEFAULT_TOPICS = [
 ];
 
 const normalizeBroker = broker => broker.replace(/^[a-zA-Z]+:\/\//, '').trim();
-const brokerList = (config.kafkaBroker || process.env.KAFKA_BROKER || '')
-  .split(',')
-  .map(normalizeBroker)
-  .filter(Boolean);
+const brokerList = (config.kafkaBroker || process.env.KAFKA_BROKER || '').split(',').map(normalizeBroker).filter(Boolean);
 
 const normalizePem = value => (value ? value.replace(/\\n/g, '\n') : undefined);
 const sslConfig = process.env.KAFKA_SSL_CA

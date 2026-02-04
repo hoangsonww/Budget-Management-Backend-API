@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="0@localhost">
-  <database-model serializer="dbm" dbms="REDIS" family-id="REDIS" format-version="4.53">
+  <database-model serializer="dbm" dbms="REDIS" family-id="REDIS" format-version="4.54">
     <root id="1">
       <ServerVersion>7.2.5</ServerVersion>
     </root>
@@ -22,29 +22,77 @@
     <schema id="15" parent="1" name="7"/>
     <schema id="16" parent="1" name="8"/>
     <schema id="17" parent="1" name="9"/>
-    <hash-table id="18" parent="2" name="user:1"/>
-    <hash-table id="19" parent="2" name="user:2"/>
-    <hash-table id="20" parent="2" name="user:3"/>
-    <hash-table id="21" parent="2" name="user:4"/>
-    <set id="22" parent="2" name="user:1:rooms"/>
-    <set id="23" parent="2" name="user:2:rooms"/>
-    <set id="24" parent="2" name="user:3:rooms"/>
-    <set id="25" parent="2" name="user:4:rooms"/>
-    <sorted-set id="26" parent="2" name="room:0"/>
-    <sorted-set id="27" parent="2" name="room:1:2"/>
-    <sorted-set id="28" parent="2" name="room:1:3"/>
-    <sorted-set id="29" parent="2" name="room:1:4"/>
-    <sorted-set id="30" parent="2" name="room:2:3"/>
-    <sorted-set id="31" parent="2" name="room:2:4"/>
-    <sorted-set id="32" parent="2" name="room:3:4"/>
-    <string id="33" parent="2" name="room:0:name"/>
-    <string id="34" parent="2" name="session:N93mdKdATd1CuDtSG3J8uAZkKyDBYhYC3nj82_CM1gE"/>
-    <string id="35" parent="2" name="session:f0f62b73-e0f6-45e6-bf4f-1b7cddb43654"/>
-    <string id="36" parent="2" name="testKey"/>
-    <string id="37" parent="2" name="total_users"/>
-    <string id="38" parent="2" name="username:Alex"/>
-    <string id="39" parent="2" name="username:Joe"/>
-    <string id="40" parent="2" name="username:Mary"/>
-    <string id="41" parent="2" name="username:Pablo"/>
+    <redis-key id="18" parent="2" name="user:1">
+      <Type>hash-table</Type>
+    </redis-key>
+    <redis-key id="19" parent="2" name="user:2">
+      <Type>hash-table</Type>
+    </redis-key>
+    <redis-key id="20" parent="2" name="user:3">
+      <Type>hash-table</Type>
+    </redis-key>
+    <redis-key id="21" parent="2" name="user:4">
+      <Type>hash-table</Type>
+    </redis-key>
+    <redis-key id="22" parent="2" name="user:1:rooms">
+      <Type>set</Type>
+    </redis-key>
+    <redis-key id="23" parent="2" name="user:2:rooms">
+      <Type>set</Type>
+    </redis-key>
+    <redis-key id="24" parent="2" name="user:3:rooms">
+      <Type>set</Type>
+    </redis-key>
+    <redis-key id="25" parent="2" name="user:4:rooms">
+      <Type>set</Type>
+    </redis-key>
+    <redis-key id="26" parent="2" name="room:0">
+      <Type>sorted-set</Type>
+    </redis-key>
+    <redis-key id="27" parent="2" name="room:1:2">
+      <Type>sorted-set</Type>
+    </redis-key>
+    <redis-key id="28" parent="2" name="room:1:3">
+      <Type>sorted-set</Type>
+    </redis-key>
+    <redis-key id="29" parent="2" name="room:1:4">
+      <Type>sorted-set</Type>
+    </redis-key>
+    <redis-key id="30" parent="2" name="room:2:3">
+      <Type>sorted-set</Type>
+    </redis-key>
+    <redis-key id="31" parent="2" name="room:2:4">
+      <Type>sorted-set</Type>
+    </redis-key>
+    <redis-key id="32" parent="2" name="room:3:4">
+      <Type>sorted-set</Type>
+    </redis-key>
+    <redis-key id="33" parent="2" name="room:0:name">
+      <Type>string</Type>
+    </redis-key>
+    <redis-key id="34" parent="2" name="session:N93mdKdATd1CuDtSG3J8uAZkKyDBYhYC3nj82_CM1gE">
+      <Type>string</Type>
+    </redis-key>
+    <redis-key id="35" parent="2" name="session:f0f62b73-e0f6-45e6-bf4f-1b7cddb43654">
+      <Type>string</Type>
+    </redis-key>
+    <redis-key id="36" parent="2" name="testKey">
+      <Type>string</Type>
+    </redis-key>
+    <redis-key id="37" parent="2" name="total_users">
+      <Type>string</Type>
+    </redis-key>
+    <redis-key id="38" parent="2" name="username:Alex">
+      <Type>string</Type>
+    </redis-key>
+    <redis-key id="39" parent="2" name="username:Joe">
+      <Type>string</Type>
+    </redis-key>
+    <redis-key id="40" parent="2" name="username:Mary">
+      <Type>string</Type>
+    </redis-key>
+    <redis-key id="41" parent="2" name="username:Pablo">
+      <Type>string</Type>
+    </redis-key>
   </database-model>
 </dataSource>

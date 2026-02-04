@@ -147,10 +147,7 @@ const budgetManager = {
       const { budgetId, limit = 100, offset = 0 } = call.request;
       const safeLimit = Math.min(Math.max(limit, 1), 200);
       const safeOffset = Math.max(offset, 0);
-      const expenses = await Expense.find({ budgetId })
-        .sort({ createdAt: -1 })
-        .skip(safeOffset)
-        .limit(safeLimit);
+      const expenses = await Expense.find({ budgetId }).sort({ createdAt: -1 }).skip(safeOffset).limit(safeLimit);
       if (!expenses.length) {
         return callback(new Error('No expenses found for this budget'), null);
       }
@@ -163,7 +160,7 @@ const budgetManager = {
   },
 
   // Stream Expenses for a Budget
-  StreamExpenses: async (call) => {
+  StreamExpenses: async call => {
     try {
       const { budgetId, limit = 0 } = call.request;
       const query = Expense.find({ budgetId }).sort({ createdAt: -1 });

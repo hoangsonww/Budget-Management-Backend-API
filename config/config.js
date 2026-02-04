@@ -7,7 +7,6 @@ module.exports = {
   rabbitMQUrl: process.env.RABBITMQ_URL || 'amqp://localhost',
   kafkaBroker: process.env.KAFKA_BROKER || 'localhost:9092',
   jwtSecret: process.env.JWT_SECRET || 'dev-secret-change-me',
-  elasticSearchUrl:
-    process.env.ELASTIC_SEARCH_URL || process.env.ELASTICSEARCH_URL || 'http://localhost:9200',
+  elasticSearchUrl: process.env.ELASTIC_SEARCH_URL || process.env.ELASTICSEARCH_URL || 'http://localhost:9200',
   postgresUrl: process.env.POSTGRES_URL || 'postgres://postgres:postgres@localhost:5432/budget_manager',
 };

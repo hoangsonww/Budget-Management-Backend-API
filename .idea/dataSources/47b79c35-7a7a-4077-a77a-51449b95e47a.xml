@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="@localhost">
-  <database-model serializer="dbm" dbms="MONGO" family-id="MONGO" format-version="4.53">
+  <database-model serializer="dbm" dbms="MONGO" family-id="MONGO" format-version="4.54">
     <root id="1">
       <ServerVersion>7.0.11</ServerVersion>
     </root>
