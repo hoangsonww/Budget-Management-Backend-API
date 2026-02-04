@@ -1,5 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Button, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Box, Stack } from '@mui/material';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Button,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Box,
+  Stack,
+  useMediaQuery,
+} from '@mui/material';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
@@ -20,6 +34,7 @@ function Navbar({ mode, setMode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
   const navigate = useNavigate();
   const location = useLocation();
+  const isMobileNav = useMediaQuery('(max-width:1350px)');
 
   const handleToggleMode = () => {
     setMode(prev => (prev === 'light' ? 'dark' : 'light'));
@@ -86,7 +101,7 @@ function Navbar({ mode, setMode }) {
     <>
       <AppBar position="sticky" elevation={0}>
         <Toolbar sx={{ py: 1, gap: 2 }}>
-          <IconButton sx={{ display: { xs: 'block', md: 'none' } }} color="inherit" onClick={() => setDrawerOpen(true)}>
+          <IconButton sx={{ display: isMobileNav ? 'block' : 'none' }} color="inherit" onClick={() => setDrawerOpen(true)}>
             <MenuIcon />
           </IconButton>
           <Stack direction="row" spacing={1.5} alignItems="center" sx={{ flexGrow: 1 }}>
@@ -115,7 +130,7 @@ function Navbar({ mode, setMode }) {
             </Box>
           </Stack>
 
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
+          <Box sx={{ display: isMobileNav ? 'none' : 'flex', gap: 1 }}>
             {navLinks.map(link => {
               const isActive = location.pathname === link.to;
               const isLogout = link.label === 'Logout';
