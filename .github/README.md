@@ -10,7 +10,7 @@ The API also integrates with **PostgreSQL**, **MongoDB**, **MySQL**, **Redis**, 
   </a>
 </p>
 
-Below is a _very_ _comprehensive_ guide to setting up, running, and utilizing this API. 💸🚀
+Below is a _very_ _comprehensive_ guide to setting up, running, and utilizing this API! 💸🚀
 
 ## **Table of Contents**
 
