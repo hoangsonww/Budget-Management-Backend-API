@@ -29,7 +29,6 @@ const avatarImages = [
 ];
 
 function Profile() {
-  const [email, setEmail] = useState('');
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [newEmail, setNewEmail] = useState('');
   const [daysSinceJoined, setDaysSinceJoined] = useState(null);
@@ -44,14 +43,6 @@ function Profile() {
   const [searchUser, setSearchUser] = useState(null);
 
   const userToken = localStorage.getItem('token');
-
-  const debounce = (func, wait) => {
-    let timeout;
-    return (...args) => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func(...args), wait);
-    };
-  };
 
   const fetchAllUsers = useCallback(async () => {
     try {
@@ -84,8 +75,6 @@ function Profile() {
         setDaysSinceJoined('N/A');
         setJoinedDate('N/A');
       }
-
-      setEmail(user.email || 'N/A');
     } catch (err) {
       console.error(err);
     } finally {
@@ -104,7 +93,7 @@ function Profile() {
     setError('');
     try {
       await api.put('/api/users/profile', { email: newEmail });
-      setEmail(newEmail);
+      setUserData(prev => (prev ? { ...prev, email: newEmail } : prev));
       setIsEditingEmail(false);
     } catch (err) {
       setError('Failed to update email. Please try again.');
@@ -128,18 +117,17 @@ function Profile() {
     [allUsers]
   );
 
-  const debouncedSearch = useCallback(
-    debounce(value => {
-      handleSearch(value);
-    }, 300),
-    [handleSearch]
-  );
-
   const onSearchChange = e => {
     const val = e.target.value;
     setSearchTerm(val);
-    debouncedSearch(val);
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleSearch(searchTerm);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchTerm, handleSearch]);
 
   if (loading) return <LoadingOverlay loading={true} />;
 
