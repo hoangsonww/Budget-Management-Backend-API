@@ -1,5 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, TextField, Table, TableBody, TableCell, TableHead, TableRow, Paper, Fade, TablePagination } from '@mui/material';
+import {
+  Container,
+  Typography,
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Paper,
+  Fade,
+  TablePagination,
+  TableContainer,
+  Stack,
+  Divider,
+  Chip,
+  InputAdornment,
+} from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 import api from '../services/api';
 import LoadingOverlay from '../components/LoadingOverlay';
 
@@ -8,7 +26,6 @@ function Users() {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Pagination
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -41,40 +58,61 @@ function Users() {
   };
 
   return (
-    <Container sx={{ mt: 4 }}>
+    <Container sx={{ mt: 4, pb: 6 }}>
       <LoadingOverlay loading={loading} />
       <Fade in timeout={500}>
-        <Paper sx={{ p: 4, overflowX: 'auto' }}>
-          <Typography variant="h4" mb={2} sx={{ fontWeight: 600 }}>
-            Users
-          </Typography>
-          <TextField placeholder="Search for a User..." sx={{ mb: 2 }} fullWidth value={search} onChange={e => setSearch(e.target.value)} />
-          <Table sx={{ minWidth: 400 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <Typography sx={{ fontWeight: 600 }}>Username</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography sx={{ fontWeight: 600 }}>Email</Typography>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {displayedUsers.map(u => (
-                <TableRow key={u._id} hover>
-                  <TableCell>{u.username}</TableCell>
-                  <TableCell>{u.email}</TableCell>
+        <Paper sx={{ p: { xs: 3, md: 4 } }}>
+          <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} alignItems={{ md: 'center' }} justifyContent="space-between">
+            <div>
+              <Typography variant="h3" sx={{ fontWeight: 700, mb: 1 }}>
+                Users
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Search and review user records, emails, and platform activity.
+              </Typography>
+            </div>
+            <Chip label={`${filtered.length} users`} color="secondary" />
+          </Stack>
+          <Divider sx={{ my: 3 }} />
+          <TextField
+            placeholder="Search by username or email"
+            fullWidth
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon fontSize="small" />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ mb: 3 }}
+          />
+          <TableContainer>
+            <Table sx={{ minWidth: 400 }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Username</TableCell>
+                  <TableCell>Email</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHead>
+              <TableBody>
+                {displayedUsers.map(u => (
+                  <TableRow key={u._id} hover>
+                    <TableCell>{u.username}</TableCell>
+                    <TableCell>{u.email}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
           <TablePagination
             component="div"
             count={filtered.length}
             page={page}
             onPageChange={handleChangePage}
             rowsPerPage={rowsPerPage}
+            rowsPerPageOptions={[5, 10, 25]}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>

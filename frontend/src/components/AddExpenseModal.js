@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Box, TextField, Button, Typography, Paper } from '@mui/material';
+import { Modal, Box, TextField, Button, Typography, Paper, Stack } from '@mui/material';
 import api from '../services/api';
 
 function AddExpenseModal({ open, onClose, onAdded }) {
@@ -25,19 +25,25 @@ function AddExpenseModal({ open, onClose, onAdded }) {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 300,
+          width: '90%',
+          maxWidth: 460,
         }}
       >
         <Paper sx={{ p: 3 }}>
-          <Typography variant="h6" mb={2} sx={{ fontWeight: 600 }}>
+          <Typography variant="h6" mb={1} sx={{ fontWeight: 700 }}>
             Add Expense
           </Typography>
-          <TextField label="Budget ID" fullWidth sx={{ mb: 2 }} value={budgetId} onChange={e => setBudgetId(e.target.value)} />
-          <TextField label="Description" fullWidth sx={{ mb: 2 }} value={description} onChange={e => setDescription(e.target.value)} />
-          <TextField label="Amount" type="number" fullWidth sx={{ mb: 2 }} value={amount} onChange={e => setAmount(e.target.value)} />
-          <Button variant="contained" fullWidth onClick={handleAdd}>
-            Add Expense
-          </Button>
+          <Typography variant="body2" color="text.secondary" mb={2}>
+            Record a new expense against a budget.
+          </Typography>
+          <Stack spacing={2}>
+            <TextField label="Budget ID" fullWidth value={budgetId} onChange={e => setBudgetId(e.target.value)} />
+            <TextField label="Description" fullWidth value={description} onChange={e => setDescription(e.target.value)} />
+            <TextField label="Amount" type="number" fullWidth value={amount} onChange={e => setAmount(e.target.value)} />
+            <Button variant="contained" fullWidth onClick={handleAdd} size="large">
+              Add Expense
+            </Button>
+          </Stack>
         </Paper>
       </Box>
     </Modal>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Box, TextField, Button, Typography, Paper } from '@mui/material';
+import { Modal, Box, TextField, Button, Typography, Paper, Stack } from '@mui/material';
 import api from '../services/api';
 
 function AddBudgetModal({ open, onClose, onAdded }) {
@@ -24,18 +24,24 @@ function AddBudgetModal({ open, onClose, onAdded }) {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 300,
+          width: '90%',
+          maxWidth: 420,
         }}
       >
         <Paper sx={{ p: 3 }}>
-          <Typography variant="h6" mb={2} sx={{ fontWeight: 600 }}>
+          <Typography variant="h6" mb={1} sx={{ fontWeight: 700 }}>
             Add Budget
           </Typography>
-          <TextField label="Budget Name" fullWidth sx={{ mb: 2 }} value={name} onChange={e => setName(e.target.value)} />
-          <TextField label="Limit" type="number" fullWidth sx={{ mb: 2 }} value={limit} onChange={e => setLimit(e.target.value)} />
-          <Button variant="contained" fullWidth onClick={handleAdd}>
-            Add
-          </Button>
+          <Typography variant="body2" color="text.secondary" mb={2}>
+            Create a new budget with a clear spending limit.
+          </Typography>
+          <Stack spacing={2}>
+            <TextField label="Budget Name" fullWidth value={name} onChange={e => setName(e.target.value)} />
+            <TextField label="Limit" type="number" fullWidth value={limit} onChange={e => setLimit(e.target.value)} />
+            <Button variant="contained" fullWidth onClick={handleAdd} size="large">
+              Add Budget
+            </Button>
+          </Stack>
         </Paper>
       </Box>
     </Modal>

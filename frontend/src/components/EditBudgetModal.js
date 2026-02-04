@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Box, TextField, Button, Typography, Paper } from '@mui/material';
+import { Modal, Box, TextField, Button, Typography, Paper, Stack } from '@mui/material';
 import api from '../services/api';
 
 function EditBudgetModal({ open, onClose, onUpdated, budget }) {
@@ -33,18 +33,24 @@ function EditBudgetModal({ open, onClose, onUpdated, budget }) {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 300,
+          width: '90%',
+          maxWidth: 420,
         }}
       >
         <Paper sx={{ p: 3 }}>
-          <Typography variant="h6" mb={2} sx={{ fontWeight: 600 }}>
+          <Typography variant="h6" mb={1} sx={{ fontWeight: 700 }}>
             Edit Budget
           </Typography>
-          <TextField label="Budget Name" fullWidth sx={{ mb: 2 }} value={name} onChange={e => setName(e.target.value)} />
-          <TextField label="Limit" type="number" fullWidth sx={{ mb: 2 }} value={limit} onChange={e => setLimit(e.target.value)} />
-          <Button variant="contained" fullWidth onClick={handleUpdate}>
-            Update
-          </Button>
+          <Typography variant="body2" color="text.secondary" mb={2}>
+            Update the budget name or adjust the limit.
+          </Typography>
+          <Stack spacing={2}>
+            <TextField label="Budget Name" fullWidth value={name} onChange={e => setName(e.target.value)} />
+            <TextField label="Limit" type="number" fullWidth value={limit} onChange={e => setLimit(e.target.value)} />
+            <Button variant="contained" fullWidth onClick={handleUpdate} size="large">
+              Update Budget
+            </Button>
+          </Stack>
         </Paper>
       </Box>
     </Modal>

@@ -738,12 +738,6 @@ Here are some screenshots of the frontend UI:
   <img src="../images/register.png" alt="Frontend UI" style="border-radius: 8px;">
 </p>
 
-**Forgot Password:**
-
-<p align="center">
-  <img src="../images/forgot-password.png" alt="Frontend UI" style="border-radius: 8px;">
-</p>
-
 **Users:**
 
 <p align="center">

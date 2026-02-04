@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, Paper, Grid, Card, CardContent, Box } from '@mui/material';
+import { Container, Typography, Paper, Grid, Card, CardContent, Box, Stack, Chip, Divider } from '@mui/material';
 import LoadingOverlay from '../components/LoadingOverlay';
 import api from '../services/api';
 import { Link } from 'react-router-dom';
@@ -21,7 +21,6 @@ import {
   Filler,
 } from 'chart.js';
 
-// Register chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, PointElement, LineElement, RadialLinearScale, Title, Tooltip, Legend, Filler);
 
 function Dashboard() {
@@ -61,7 +60,6 @@ function Dashboard() {
     fetchData();
   }, []);
 
-  // Compute various stats
   const totalBudgets = budgets.length;
   const totalExpenses = expenses.length;
   const totalUsers = users.length;
@@ -71,40 +69,33 @@ function Dashboard() {
 
   const totalBudgetLimit = budgets.reduce((sum, b) => sum + b.limit, 0);
 
-  // Map budgets
   const budgetMap = {};
   budgets.forEach(b => {
     budgetMap[b._id] = b.name;
   });
 
-  // Expenses by budget
   const expensesByBudget = {};
   expenses.forEach(e => {
     expensesByBudget[e.budgetId] = (expensesByBudget[e.budgetId] || 0) + e.amount;
   });
 
-  // Orders by Status
   const ordersByStatus = {};
   orders.forEach(o => {
     const s = o.status || 'unknown';
     ordersByStatus[s] = (ordersByStatus[s] || 0) + 1;
   });
 
-  // Tasks by Status
   const tasksByStatus = {};
   tasks.forEach(t => {
     const s = t.status || 'pending';
     tasksByStatus[s] = (tasksByStatus[s] || 0) + 1;
   });
 
-  // Avg expense per user
   const avgExpensePerUser = totalExpenses > 0 && totalUsers > 0 ? (expenses.reduce((sum, e) => sum + e.amount, 0) / totalUsers).toFixed(2) : 0;
 
-  // Task completion ratio
   const completedTasks = tasks.filter(t => t.status === 'completed').length;
   const pendingTasks = tasks.filter(t => t.status === 'pending').length;
 
-  // Monthly distribution for Radar (mock)
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const monthlyExpenses = new Array(12).fill(0);
   expenses.forEach(e => {
@@ -113,9 +104,8 @@ function Dashboard() {
   });
 
   const theme = useTheme();
-  const textColor = theme.palette.mode === 'dark' ? '#fff' : '#000';
+  const textColor = theme.palette.mode === 'dark' ? '#f5f1e7' : '#1b1b1b';
 
-  // Charts Options (to ensure maintainAspectRatio:false for consistent sizing)
   const chartOptions = {
     maintainAspectRatio: false,
     plugins: {
@@ -141,9 +131,6 @@ function Dashboard() {
     },
   };
 
-  // CHARTS DATA:
-
-  // 1. Bar chart: Top 5 budgets by limit
   const topBudgets = [...budgets].sort((a, b) => b.limit - a.limit).slice(0, 5);
   const barData = {
     labels: topBudgets.map(b => b.name),
@@ -151,12 +138,11 @@ function Dashboard() {
       {
         label: 'Budget Limit',
         data: topBudgets.map(b => b.limit),
-        backgroundColor: 'rgba(139,69,19,0.7)',
+        backgroundColor: 'rgba(31, 122, 99, 0.7)',
       },
     ],
   };
 
-  // 2. Pie chart: Expense Distribution by Budget
   const expenseLabels = Object.keys(expensesByBudget).map(id => budgetMap[id] || id);
   const pieData = {
     labels: expenseLabels,
@@ -164,12 +150,11 @@ function Dashboard() {
       {
         label: 'Expenses',
         data: Object.values(expensesByBudget),
-        backgroundColor: ['#D2B48C', '#DEB887', '#F4A460', '#CD853F', '#A0522D', '#8B4513'],
+        backgroundColor: ['#f2b35a', '#e7c085', '#93cbb7', '#5b9a83', '#3c7a64', '#c9a06a'],
       },
     ],
   };
 
-  // 4. Doughnut: Orders by Status
   const orderStatuses = Object.keys(ordersByStatus);
   const doughnutData = {
     labels: orderStatuses,
@@ -177,83 +162,76 @@ function Dashboard() {
       {
         label: 'Orders by Status',
         data: orderStatuses.map(s => ordersByStatus[s]),
-        backgroundColor: ['#8B4513', '#A0522D', '#CD853F', '#F4A460', '#DEB887'],
+        backgroundColor: ['#1f7a63', '#4e9f86', '#7fbfa8', '#f2b35a', '#e19a47'],
       },
     ],
   };
 
-  // 5. Radar: Monthly Expenses
   const radarData = {
     labels: months,
     datasets: [
       {
         label: 'Monthly Expenses',
         data: monthlyExpenses,
-        borderColor: 'rgba(139,69,19,0.9)',
-        backgroundColor: 'rgba(139,69,19,0.2)',
+        borderColor: 'rgba(31, 122, 99, 0.9)',
+        backgroundColor: 'rgba(31, 122, 99, 0.2)',
       },
     ],
   };
 
-  // 6. Polar Area: Tasks by Status
   const taskStatuses = Object.keys(tasksByStatus);
   const polarData = {
     labels: taskStatuses,
     datasets: [
       {
         data: taskStatuses.map(s => tasksByStatus[s]),
-        backgroundColor: ['#8B4513', '#A0522D', '#CD853F', '#DEB887', '#F4A460'],
+        backgroundColor: ['#1f7a63', '#4e9f86', '#7fbfa8', '#f2b35a', '#e19a47'],
       },
     ],
   };
 
-  // 7. Horizontal Bar: Avg expense/user vs total budget limit
   const hBarData = {
     labels: ['Avg Expense/User', 'Total Budget Limit'],
     datasets: [
       {
         label: 'Value',
         data: [parseFloat(avgExpensePerUser), totalBudgetLimit],
-        backgroundColor: ['#8B4513', '#A0522D'],
+        backgroundColor: ['#1f7a63', '#f2b35a'],
       },
     ],
   };
 
-  // 9. Bar: Overall Entities count
   const summaryBarData = {
     labels: ['Users', 'Budgets', 'Expenses', 'Orders', 'Tasks', 'Transactions'],
     datasets: [
       {
         label: 'Count',
         data: [totalUsers, totalBudgets, totalExpenses, totalOrders, totalTasks, totalTransactions],
-        backgroundColor: 'rgba(139,69,19,0.7)',
+        backgroundColor: 'rgba(31, 122, 99, 0.7)',
       },
     ],
   };
 
-  // 10. Doughnut: Completed vs Pending Tasks Ratio
   const tasksRatioDoughnut = {
     labels: ['Completed', 'Pending'],
     datasets: [
       {
         data: [completedTasks, pendingTasks],
-        backgroundColor: ['#4CAF50', '#FF5722'],
+        backgroundColor: ['#2b9b77', '#f05f4e'],
       },
     ],
   };
 
-  // 11. Scatter chart (mock data)
   const scatterData = {
     datasets: [
       {
         label: 'Expenses Amount vs #Days Since Joined (Mock)',
         data: Array.from({ length: 20 }, () => ({ x: Math.random() * 100, y: Math.random() * 1000 })),
-        backgroundColor: 'rgba(139,69,19,0.7)',
+        backgroundColor: 'rgba(31, 122, 99, 0.7)',
       },
     ],
   };
 
-  // 12. Bubble chart (mock data)
   const bubbleData = {
     datasets: [
       {
@@ -263,12 +241,11 @@ function Dashboard() {
           y: Math.floor(Math.random() * 100),
           r: Math.floor(Math.random() * 20) + 5,
         })),
-        backgroundColor: 'rgba(139,69,19,0.5)',
+        backgroundColor: 'rgba(31, 122, 99, 0.5)',
       },
     ],
   };
 
-  // Quick stats
   const stats = [
     { title: 'Total Budgets', value: totalBudgets },
     { title: 'Total Expenses', value: totalExpenses },
@@ -276,11 +253,10 @@ function Dashboard() {
     { title: 'Total Orders', value: totalOrders },
     { title: 'Total Tasks', value: totalTasks },
     { title: 'Total Transactions', value: totalTransactions },
-    { title: 'Sum of All Budget Limits', value: totalBudgetLimit },
+    { title: 'Budget Limit Total', value: totalBudgetLimit },
     { title: 'Avg Expense/User', value: avgExpensePerUser },
   ];
 
-  // Quick Links
   const links = [
     { label: 'Home', to: '/' },
     { label: 'Dashboard', to: '/dashboard' },
@@ -292,12 +268,8 @@ function Dashboard() {
     { label: 'Register', to: '/register' },
   ];
 
-  // Styles for cards
-  const statCardHeight = { height: '120px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' };
   const chartCardHeight = { height: '350px', display: 'flex', flexDirection: 'column' };
-  const linkCardHeight = { height: '120px', display: 'flex', justifyContent: 'center', alignItems: 'center' };
 
-  // Top customers by total order amount
   const ordersByCustomer = {};
   orders.forEach(o => {
     const cname = o.customerId ? o.customerId.name : 'Unknown Customer';
@@ -312,12 +284,11 @@ function Dashboard() {
       {
         label: 'Total Order Amount',
         data: topCustomers.map(c => ordersByCustomer[c]),
-        backgroundColor: 'rgba(139,69,19,0.7)',
+        backgroundColor: 'rgba(31, 122, 99, 0.7)',
       },
     ],
   };
 
-  // Transaction amount distribution by budget
   const transactionsByBudget = {};
   transactions.forEach(tr => {
     const budgetId = tr.budget_id || 'Unknown Budget';
@@ -331,43 +302,59 @@ function Dashboard() {
       {
         label: 'Total Transaction Amount by Budget',
         data: budgetIds.map(b => transactionsByBudget[b]),
-        backgroundColor: ['#8B4513', '#A0522D', '#CD853F', '#F4A460', '#DEB887', '#D2B48C', '#F4A460', '#A0522D', '#8B4513'],
+        backgroundColor: ['#1f7a63', '#4e9f86', '#7fbfa8', '#f2b35a', '#e19a47', '#c9a06a', '#7a9f8c'],
       },
     ],
   };
 
   return (
-    <Container sx={{ mt: 4, pb: 4 }}>
+    <Container sx={{ mt: 4, pb: 6 }}>
       <LoadingOverlay loading={loading} />
-      <Typography variant="h3" mb={4} sx={{ fontWeight: 700 }}>
-        Dashboard
-      </Typography>
+      <Paper sx={{ p: { xs: 3, md: 4 }, mb: 4 }}>
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} alignItems={{ md: 'center' }} justifyContent="space-between">
+          <Box>
+            <Typography variant="h3" sx={{ fontWeight: 700, mb: 1 }}>
+              Executive Dashboard
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              A consolidated overview of budgets, expenses, users, and operational activity.
+            </Typography>
+          </Box>
+          <Stack direction="row" spacing={1} flexWrap="wrap">
+            <Chip label={`${totalUsers} users`} />
+            <Chip label={`${totalBudgets} budgets`} color="secondary" />
+            <Chip label={`${totalTransactions} transactions`} />
+          </Stack>
+        </Stack>
+      </Paper>
 
-      {/* Stats cards */}
       <Grid container spacing={2} mb={4}>
         {stats.map((s, i) => (
           <Grid item xs={6} sm={4} md={3} key={i}>
-            <Card sx={{ textAlign: 'center', ...statCardHeight }}>
+            <Card sx={{ textAlign: 'center', height: '100%' }}>
               <CardContent>
-                <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                <Typography variant="h5" sx={{ fontWeight: 700 }}>
                   {s.value}
                 </Typography>
-                <Typography variant="body1">{s.title}</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {s.title}
+                </Typography>
               </CardContent>
             </Card>
           </Grid>
         ))}
       </Grid>
 
-      <Typography variant="h4" mt={6} mb={2} sx={{ fontWeight: 600 }}>
+      <Typography variant="h4" mt={6} mb={2} sx={{ fontWeight: 700 }}>
         Charts & Insights
       </Typography>
+      <Divider sx={{ mb: 3 }} />
 
-      <Grid container spacing={4} mt={2}>
+      <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2, ...chartCardHeight }}>
+          <Paper sx={{ p: 2.5, ...chartCardHeight }}>
             <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-              Top 5 Budgets by Limit (Bar)
+              Top 5 Budgets by Limit
             </Typography>
             <Box sx={{ flexGrow: 1 }}>
               <Bar data={barData} options={chartOptions} />
@@ -375,9 +362,9 @@ function Dashboard() {
           </Paper>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2, ...chartCardHeight }}>
+          <Paper sx={{ p: 2.5, ...chartCardHeight }}>
             <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-              Expense Distribution by Budget (Pie)
+              Expense Distribution by Budget
             </Typography>
             <Box sx={{ flexGrow: 1 }}>
               <Pie data={pieData} options={chartOptions} />
@@ -386,12 +373,11 @@ function Dashboard() {
         </Grid>
       </Grid>
 
-      {/* Replaced Transactions Over Time chart with Orders chart */}
       <Grid container spacing={4} mt={2}>
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2, ...chartCardHeight }}>
+          <Paper sx={{ p: 2.5, ...chartCardHeight }}>
             <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-              Top Customers by Total Order Amount (Bar)
+              Top Customers by Total Order Amount
             </Typography>
             <Box sx={{ flexGrow: 1 }}>
               <Bar data={ordersBarData} options={chartOptions} />
@@ -400,9 +386,9 @@ function Dashboard() {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2, ...chartCardHeight }}>
+          <Paper sx={{ p: 2.5, ...chartCardHeight }}>
             <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-              Orders by Status (Doughnut)
+              Orders by Status
             </Typography>
             <Box sx={{ flexGrow: 1 }}>
               <Doughnut data={doughnutData} options={chartOptions} />
@@ -413,9 +399,9 @@ function Dashboard() {
 
       <Grid container spacing={4} mt={2}>
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2, ...chartCardHeight }}>
+          <Paper sx={{ p: 2.5, ...chartCardHeight }}>
             <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-              Monthly Expenses (Radar)
+              Monthly Expenses
             </Typography>
             <Box sx={{ flexGrow: 1 }}>
               <Radar data={radarData} options={chartOptions} />
@@ -423,9 +409,9 @@ function Dashboard() {
           </Paper>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2, ...chartCardHeight }}>
+          <Paper sx={{ p: 2.5, ...chartCardHeight }}>
             <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-              Tasks by Status (Polar Area)
+              Tasks by Status
             </Typography>
             <Box sx={{ flexGrow: 1 }}>
               <PolarArea data={polarData} options={chartOptions} />
@@ -436,9 +422,9 @@ function Dashboard() {
 
       <Grid container spacing={4} mt={2}>
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2, ...chartCardHeight }}>
+          <Paper sx={{ p: 2.5, ...chartCardHeight }}>
             <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-              Avg Expense/User vs Total Budget Limit (Horizontal Bar)
+              Avg Expense/User vs Total Budget Limit
             </Typography>
             <Box sx={{ flexGrow: 1 }}>
               <Bar data={hBarData} options={{ ...chartOptions, indexAxis: 'y' }} />
@@ -446,11 +432,10 @@ function Dashboard() {
           </Paper>
         </Grid>
 
-        {/* Replaced Tasks Completed vs Pending Over Time with Transactions-based doughnut */}
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2, ...chartCardHeight }}>
+          <Paper sx={{ p: 2.5, ...chartCardHeight }}>
             <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-              Transaction Amount Distribution by Budget (Doughnut)
+              Transaction Amount Distribution by Budget
             </Typography>
             <Box sx={{ flexGrow: 1 }}>
               <Doughnut data={transactionsDoughnut} options={chartOptions} />
@@ -461,9 +446,9 @@ function Dashboard() {
 
       <Grid container spacing={4} mt={2}>
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2, ...chartCardHeight }}>
+          <Paper sx={{ p: 2.5, ...chartCardHeight }}>
             <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-              Overall Entities Count (Bar)
+              Overall Entities Count
             </Typography>
             <Box sx={{ flexGrow: 1 }}>
               <Bar data={summaryBarData} options={chartOptions} />
@@ -471,9 +456,9 @@ function Dashboard() {
           </Paper>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2, ...chartCardHeight }}>
+          <Paper sx={{ p: 2.5, ...chartCardHeight }}>
             <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-              Completed vs Pending Tasks Ratio (Doughnut)
+              Completed vs Pending Tasks Ratio
             </Typography>
             <Box sx={{ flexGrow: 1 }}>
               <Doughnut data={tasksRatioDoughnut} options={chartOptions} />
@@ -482,10 +467,9 @@ function Dashboard() {
         </Grid>
       </Grid>
 
-      {/* New Charts (scatter, bubble) remain unchanged */}
       <Grid container spacing={4} mt={2}>
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2, ...chartCardHeight }}>
+          <Paper sx={{ p: 2.5, ...chartCardHeight }}>
             <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
               Scatter: Expenses vs Days (Mock)
             </Typography>
@@ -495,7 +479,7 @@ function Dashboard() {
           </Paper>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2, ...chartCardHeight }}>
+          <Paper sx={{ p: 2.5, ...chartCardHeight }}>
             <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
               Bubble: User Activity (Mock)
             </Typography>
@@ -506,14 +490,14 @@ function Dashboard() {
         </Grid>
       </Grid>
 
-      <Typography variant="h4" mt={5} mb={5} sx={{ fontWeight: 600 }}>
+      <Typography variant="h4" mt={6} mb={2} sx={{ fontWeight: 700 }}>
         Quick Links
       </Typography>
       <Grid container spacing={2}>
         {links.map(l => (
           <Grid item xs={6} sm={4} md={3} key={l.label}>
-            <Card sx={{ ...linkCardHeight }}>
-              <CardContent sx={{ textAlign: 'center' }}>
+            <Card sx={{ textAlign: 'center', height: '100%' }}>
+              <CardContent>
                 <Typography variant="h6" sx={{ fontWeight: 600 }}>
                   <Link to={l.to} style={{ textDecoration: 'none', color: 'inherit' }}>
                     {l.label}

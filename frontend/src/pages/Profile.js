@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Box, Button, Typography, TextField, IconButton, Paper } from '@mui/material';
+import { Box, Button, Typography, TextField, IconButton, Paper, Grid, Divider, Chip } from '@mui/material';
 import { Edit as EditIcon } from '@mui/icons-material';
 import LoadingOverlay from '../components/LoadingOverlay';
 import api from '../services/api';
+import { Link } from 'react-router-dom';
 
 const avatarImages = [
   '/OIP.jpg',
@@ -28,7 +29,6 @@ const avatarImages = [
 ];
 
 function Profile() {
-  // eslint-disable-next-line no-unused-vars
   const [email, setEmail] = useState('');
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [newEmail, setNewEmail] = useState('');
@@ -38,14 +38,13 @@ function Profile() {
   const [joinedDate, setJoinedDate] = useState('');
   const [error, setError] = useState('');
   const [randomAvatar, setRandomAvatar] = useState('');
-  const [userData, setUserData] = useState(null); // The authenticated user's data
+  const [userData, setUserData] = useState(null);
   const [allUsers, setAllUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchUser, setSearchUser] = useState(null); // matched user from search
+  const [searchUser, setSearchUser] = useState(null);
 
   const userToken = localStorage.getItem('token');
 
-  // Debounce utility
   const debounce = (func, wait) => {
     let timeout;
     return (...args) => {
@@ -120,7 +119,6 @@ function Profile() {
         setSearchUser(null);
         return;
       }
-      // Filter logic: find user whose username or email includes the search term (case-insensitive)
       const lowerTerm = term.toLowerCase();
       const matched = allUsers.find(
         u => (u.username && u.username.toLowerCase().includes(lowerTerm)) || (u.email && u.email.toLowerCase().includes(lowerTerm))
@@ -130,8 +128,6 @@ function Profile() {
     [allUsers]
   );
 
-  // Debounced search
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(
     debounce(value => {
       handleSearch(value);
@@ -152,29 +148,23 @@ function Profile() {
       <Box display="flex" justifyContent="center" alignItems="center" p={4} height="100vh">
         <Typography variant="h5">
           You are not signed in. Please{' '}
-          <a href="/login" style={{ color: '#f57c00' }}>
+          <Link to="/login" style={{ textDecoration: 'underline' }}>
             log in
-          </a>{' '}
+          </Link>{' '}
           to view your profile.
         </Typography>
       </Box>
     );
   }
 
-  // Decide which user data to show: searchUser if available, else authenticated userData
   const displayUser = searchUser ? searchUser : userData;
   const displayEmail = displayUser && displayUser.email ? displayUser.email : 'N/A';
 
   let displayDaysSinceJoined = daysSinceJoined;
   let displayJoinedDate = joinedDate;
 
-  // If we're showing a searched user (not the authenticated one), we don't have joinedDate or daysSinceJoined info.
-  // The prompt only provides `"_id", "username", "email", "createdAt"` for the profile endpoint,
-  // and for all users only `"_id","username","email"`. No `createdAt` for all users was guaranteed.
-  // If it's not the authenticated user, we just show what we can: email, no joined data since not provided.
   const isSearchedUser = !!searchUser && searchUser._id !== userData?._id;
   if (isSearchedUser) {
-    // For searched users:
     displayDaysSinceJoined = 'N/A';
     displayJoinedDate = 'N/A';
   }
@@ -182,113 +172,118 @@ function Profile() {
   const today = new Date().toLocaleDateString();
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        backgroundColor: 'background.default',
-        pt: 8,
-        pb: 20,
-      }}
-    >
-      {/* Search bar */}
-      <Box sx={{ width: '400px', mb: 4 }}>
-        <TextField fullWidth variant="outlined" label="Search for a User by Username or Email..." value={searchTerm} onChange={onSearchChange} />
-      </Box>
-
-      <Paper
-        sx={{
-          backgroundColor: 'background.paper',
-          color: 'text.primary',
-          p: 4,
-          borderRadius: 2,
-          width: '400px',
-          textAlign: 'center',
-          boxShadow: '0px 4px 10px rgba(0,0,0,0.1)',
-        }}
-      >
-        <Box
-          sx={{
-            width: 150,
-            height: 150,
-            borderRadius: '50%',
-            overflow: 'hidden',
-            mx: 'auto',
-            mb: 2,
-            border: '3px solid #8B4513',
-          }}
-        >
-          <img src={randomAvatar} alt="User Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        </Box>
-
-        <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold' }}>
-          Welcome{displayEmail !== 'N/A' ? `, ${displayEmail.split('@')[0]}!` : '!'}
-        </Typography>
-        <Box sx={{ borderBottom: '1px solid #ccc', mb: 2 }}></Box>
-
-        <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold', fontSize: '20px' }}>
-          {isSearchedUser ? `Searched User Profile` : `Your Profile`}
-        </Typography>
-
-        {displayEmail !== 'N/A' && !isSearchedUser && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 1.5 }}>
-            <Typography>
-              <strong>Email:</strong> {displayEmail}
+    <Box sx={{ py: { xs: 4, md: 7 } }}>
+      <Grid container spacing={4} justifyContent="center">
+        <Grid item xs={12} md={4}>
+          <Paper sx={{ p: 3, textAlign: 'center' }}>
+            <Box
+              sx={{
+                width: 140,
+                height: 140,
+                borderRadius: '50%',
+                overflow: 'hidden',
+                mx: 'auto',
+                mb: 2,
+                border: '3px solid',
+                borderColor: 'primary.main',
+              }}
+            >
+              <img src={randomAvatar} alt="User Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </Box>
+            <Typography variant="h5" sx={{ mb: 1, fontWeight: 700 }}>
+              {displayEmail !== 'N/A' ? `Welcome, ${displayEmail.split('@')[0]}` : 'Welcome'}
             </Typography>
-            <IconButton onClick={() => setIsEditingEmail(true)}>
-              <EditIcon sx={{ '&:hover': { color: '#f57c00' } }} />
-            </IconButton>
-          </Box>
-        )}
-
-        {displayEmail !== 'N/A' && isSearchedUser && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 1.5 }}>
-            <Typography>
-              <strong>Email:</strong> {displayEmail}
+            <Typography variant="body2" color="text.secondary">
+              {isSearchedUser ? 'Viewing search results' : 'Account overview'}
             </Typography>
-          </Box>
-        )}
-
-        {isEditingEmail && !isSearchedUser && (
-          <Box sx={{ mb: 2 }}>
-            <TextField fullWidth label="New Email" variant="outlined" value={newEmail} onChange={e => setNewEmail(e.target.value)} sx={{ mb: 2 }} />
-            <Button onClick={handleUpdateEmail} variant="contained" color="primary" fullWidth disabled={updatingEmail}>
-              {updatingEmail ? 'Updating...' : 'Update Email'}
-            </Button>
-            {error && (
-              <Typography color="error" sx={{ mt: 1 }}>
-                {error}
-              </Typography>
+            <Divider sx={{ my: 2 }} />
+            <StackedMeta label="Member since" value={displayJoinedDate} />
+            <StackedMeta label="Days active" value={displayDaysSinceJoined} />
+            <StackedMeta label="Today" value={today} />
+            {!isSearchedUser && (
+              <Button
+                variant="outlined"
+                color="primary"
+                sx={{ mt: 3 }}
+                onClick={() => {
+                  localStorage.removeItem('token');
+                  window.location.href = '/login';
+                }}
+              >
+                Logout
+              </Button>
             )}
-          </Box>
-        )}
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Paper sx={{ p: 3 }}>
+            <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+              Profile details
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+              Manage account information and search for other users.
+            </Typography>
 
-        <Typography sx={{ mb: 2.5 }}>
-          <strong>Days Since Joined:</strong> {displayDaysSinceJoined}
-        </Typography>
-        <Typography sx={{ mb: 2.5 }}>
-          <strong>Date Joined:</strong> {displayJoinedDate}
-        </Typography>
-        <Typography sx={{ mb: 1.5 }}>
-          <strong>Today's Date:</strong> {today}
-        </Typography>
+            <TextField
+              fullWidth
+              variant="outlined"
+              label="Search for a user by username or email"
+              value={searchTerm}
+              onChange={onSearchChange}
+              sx={{ mb: 3 }}
+            />
 
-        <Typography sx={{ mt: 3, fontWeight: 'bold', fontSize: '18px' }}>Thank you for exploring Budget Manager today! 🚀</Typography>
-        <Box sx={{ borderBottom: '1px solid #ccc', mt: 2, mb: 2 }}></Box>
-        {!isSearchedUser && (
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => {
-              localStorage.removeItem('token');
-              window.location.href = '/login';
-            }}
-          >
-            Logout
-          </Button>
-        )}
-      </Paper>
+            <Paper variant="outlined" sx={{ p: 2.5, mb: 3 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                  {isSearchedUser ? 'User record' : 'Your account'}
+                </Typography>
+                <Chip label={isSearchedUser ? 'Search result' : 'Active'} color={isSearchedUser ? 'secondary' : 'success'} size="small" />
+              </Box>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                Email: {displayEmail}
+              </Typography>
+              {!isSearchedUser && (
+                <IconButton onClick={() => setIsEditingEmail(true)}>
+                  <EditIcon />
+                </IconButton>
+              )}
+            </Paper>
+
+            {isEditingEmail && !isSearchedUser && (
+              <Box sx={{ mb: 2 }}>
+                <TextField fullWidth label="New Email" variant="outlined" value={newEmail} onChange={e => setNewEmail(e.target.value)} sx={{ mb: 2 }} />
+                <Button onClick={handleUpdateEmail} variant="contained" fullWidth disabled={updatingEmail}>
+                  {updatingEmail ? 'Updating...' : 'Update Email'}
+                </Button>
+                {error && (
+                  <Typography color="error" sx={{ mt: 1 }}>
+                    {error}
+                  </Typography>
+                )}
+              </Box>
+            )}
+
+            <Divider sx={{ my: 2 }} />
+            <Typography variant="body2" color="text.secondary">
+              Keep your profile accurate to receive notifications and access secure features.
+            </Typography>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+function StackedMeta({ label, value }) {
+  return (
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+      <Typography variant="body2" color="text.secondary">
+        {label}
+      </Typography>
+      <Typography variant="body2" sx={{ fontWeight: 600 }}>
+        {value}
+      </Typography>
     </Box>
   );
 }

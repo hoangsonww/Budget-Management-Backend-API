@@ -1,7 +1,11 @@
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background-color: #f9f9f9;
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
 }
 
 a {
