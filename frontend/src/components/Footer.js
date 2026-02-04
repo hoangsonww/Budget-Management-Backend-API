@@ -50,12 +50,25 @@ function Footer() {
             <Typography variant="body2" color="text.secondary">
               Manage budgets, track expenses, and monitor transactions with clean UX and enterprise-ready data flows.
             </Typography>
-            <Stack direction="row" spacing={1} flexWrap="wrap">
-              <Chip label="MongoDB" size="small" />
-              <Chip label="PostgreSQL" size="small" />
-              <Chip label="Redis" size="small" />
-              <Chip label="Elasticsearch" size="small" />
-            </Stack>
+            <Box
+              sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: 1,
+              }}
+            >
+              {['MongoDB', 'PostgreSQL', 'Redis', 'Elasticsearch'].map(label => (
+                <Chip
+                  key={label}
+                  label={label}
+                  size="small"
+                  sx={{
+                    borderRadius: 999,
+                    height: 26,
+                  }}
+                />
+              ))}
+            </Box>
           </Stack>
         </Grid>
         <Grid item xs={12} md={5}>
@@ -80,16 +93,16 @@ function Footer() {
         </Grid>
         <Grid item xs={12} md={3}>
           <FooterGroup title="Connect">
-            <MuiLink href="https://github.com/yourgithub" target="_blank" rel="noopener" sx={linkStyle}>
+            <MuiLink href="https://github.com/hoangsonww" target="_blank" rel="noopener" sx={linkStyle}>
               <GitHubIcon fontSize="small" /> GitHub
             </MuiLink>
-            <MuiLink href="https://yourwebsite.com" target="_blank" rel="noopener" sx={linkStyle}>
+            <MuiLink href="https://sonnguyenhoang.com" target="_blank" rel="noopener" sx={linkStyle}>
               <LanguageIcon fontSize="small" /> Website
             </MuiLink>
-            <MuiLink href="https://linkedin.com/in/yourlinkedin" target="_blank" rel="noopener" sx={linkStyle}>
+            <MuiLink href="https://www.linkedin.com/in/hoangsonw/" target="_blank" rel="noopener" sx={linkStyle}>
               <LinkedInIcon fontSize="small" /> LinkedIn
             </MuiLink>
-            <MuiLink href="mailto:youremail@example.com" sx={linkStyle}>
+            <MuiLink href="mailto:hoangson091104@gmail.com" sx={linkStyle}>
               <EmailIcon fontSize="small" /> Email
             </MuiLink>
           </FooterGroup>

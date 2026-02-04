@@ -101,7 +101,14 @@ function Navbar({ mode, setMode }) {
     <>
       <AppBar position="sticky" elevation={0}>
         <Toolbar sx={{ py: 1, gap: 2 }}>
-          <IconButton sx={{ display: isMobileNav ? 'block' : 'none' }} color="inherit" onClick={() => setDrawerOpen(true)}>
+          <IconButton
+            sx={{
+              display: isMobileNav ? 'block' : 'none',
+              '&:hover': { backgroundColor: 'transparent' },
+            }}
+            color="inherit"
+            onClick={() => setDrawerOpen(true)}
+          >
             <MenuIcon />
           </IconButton>
           <Stack direction="row" spacing={1.5} alignItems="center" sx={{ flexGrow: 1 }}>

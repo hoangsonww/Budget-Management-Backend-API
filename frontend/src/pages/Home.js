@@ -153,97 +153,110 @@ function Home() {
       <Box
         sx={{
           pt: { xs: 6, md: 8 },
-          pb: { xs: 6, md: 10 },
+          pb: { xs: 10, md: 10 },
           minHeight: { xs: 'calc(100vh - 64px)', md: 'calc(100vh - 72px)' },
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
+          justifyContent: 'center',
           background: 'linear-gradient(135deg, rgba(31, 122, 99, 0.08), rgba(242, 179, 90, 0.18))',
           position: 'relative',
         }}
       >
-        <Container>
-          <Grid container spacing={4} alignItems="center">
-            <Grid item xs={12} md={6}>
-              <Reveal immediate>
-                <Stack spacing={3}>
-                  <Chip label="Budget Management System" sx={{ alignSelf: 'flex-start', fontWeight: 600 }} />
-                  <Typography variant="h2">Operate budgets with clarity, scale, and precision.</Typography>
-                  <Typography variant="body1" color="text.secondary" sx={{ fontSize: '1.05rem' }}>
-                    A production-ready finance platform that connects budgets, expenses, transactions, and task automation. Monitor everything from a single
-                    dashboard with searchable history and real-time operational insight.
-                  </Typography>
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                    <Button variant="contained" size="large" component={Link} to="/dashboard" startIcon={<RocketLaunchIcon />}>
-                      Launch Dashboard
-                    </Button>
-                    <Button variant="outlined" size="large" component={Link} to="/budgets">
-                      Explore Budgets
-                    </Button>
+        <Box sx={{ width: '100%', flex: 1, display: 'flex', alignItems: 'center' }}>
+          <Container>
+            <Grid container spacing={4} alignItems="center">
+              <Grid item xs={12} md={6}>
+                <Reveal immediate>
+                  <Stack spacing={3}>
+                    <Chip label="Budget Management System" sx={{ alignSelf: 'flex-start', fontWeight: 600 }} />
+                    <Typography variant="h2">Operate budgets with clarity, scale, and precision.</Typography>
+                    <Typography variant="body1" color="text.secondary" sx={{ fontSize: '1.05rem' }}>
+                      A production-ready finance platform that connects budgets, expenses, transactions, and task automation. Monitor everything from a single
+                      dashboard with searchable history and real-time operational insight.
+                    </Typography>
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                      <Button variant="contained" size="large" component={Link} to="/dashboard" startIcon={<RocketLaunchIcon />}>
+                        Launch Dashboard
+                      </Button>
+                      <Button variant="outlined" size="large" component={Link} to="/budgets">
+                        Explore Budgets
+                      </Button>
+                    </Stack>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: 1,
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Chip label="JWT auth" size="small" />
+                      <Chip label="PostgreSQL ledger" size="small" />
+                      <Chip label="Elasticsearch search" size="small" />
+                      <Chip label="Kafka + RabbitMQ" size="small" />
+                    </Box>
                   </Stack>
-                  <Stack direction="row" spacing={2} flexWrap="wrap">
-                    <Chip label="JWT auth" size="small" />
-                    <Chip label="PostgreSQL ledger" size="small" />
-                    <Chip label="Elasticsearch search" size="small" />
-                    <Chip label="Kafka + RabbitMQ" size="small" />
-                  </Stack>
-                </Stack>
-              </Reveal>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Grid container spacing={2}>
-                {stats.map((stat, index) => (
-                  <Grid item xs={6} key={stat.label}>
-                    <Reveal delay={index * 20} immediate>
+                </Reveal>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Grid container spacing={2}>
+                  {stats.map((stat, index) => (
+                    <Grid item xs={6} key={stat.label}>
+                      <Reveal delay={index * 20} immediate>
+                        <Card sx={{ height: '100%' }}>
+                          <CardContent>
+                            <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                              {counts[index]}
+                              {stat.suffix || ''}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              {stat.label}
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                      </Reveal>
+                    </Grid>
+                  ))}
+                  <Grid item xs={12}>
+                    <Reveal delay={40} immediate>
                       <Card sx={{ height: '100%' }}>
                         <CardContent>
-                          <Typography variant="h4" sx={{ fontWeight: 700 }}>
-                            {counts[index]}
-                            {stat.suffix || ''}
+                          <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                            System snapshot
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
-                            {stat.label}
+                            Track budgets in MongoDB, transaction logs in PostgreSQL, cached status in Redis, and searchable expenses in Elasticsearch. The
+                            platform is wired for growth and operational readiness.
                           </Typography>
+                          <Divider sx={{ my: 2 }} />
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                            <Chip label="MongoDB" />
+                            <Chip label="PostgreSQL" />
+                            <Chip label="Redis" />
+                            <Chip label="Elasticsearch" />
+                            <Chip label="Kafka" />
+                            <Chip label="RabbitMQ" />
+                          </Box>
                         </CardContent>
                       </Card>
                     </Reveal>
                   </Grid>
-                ))}
-                <Grid item xs={12}>
-                  <Reveal delay={40} immediate>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
-                          System snapshot
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Track budgets in MongoDB, transaction logs in PostgreSQL, cached status in Redis, and searchable expenses in Elasticsearch. The
-                          platform is wired for growth and operational readiness.
-                        </Typography>
-                        <Divider sx={{ my: 2 }} />
-                        <Stack direction="row" spacing={1} flexWrap="wrap">
-                          <Chip label="MongoDB" />
-                          <Chip label="PostgreSQL" />
-                          <Chip label="Redis" />
-                          <Chip label="Elasticsearch" />
-                          <Chip label="Kafka" />
-                          <Chip label="RabbitMQ" />
-                        </Stack>
-                      </CardContent>
-                    </Card>
-                  </Reveal>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Container>
+          </Container>
+        </Box>
         <Box
           sx={{
-            position: 'absolute',
+            position: { xs: 'static', md: 'absolute' },
             left: 0,
             right: 0,
-            bottom: { xs: 20, md: 26 },
+            bottom: { md: 26 },
             display: 'flex',
             justifyContent: 'center',
+            mt: { xs: 3, md: 0 },
+            pb: { xs: 2, md: 0 },
           }}
         >
           <Button
