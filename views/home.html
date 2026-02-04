@@ -15,13 +15,16 @@
       :root {
         color-scheme: light;
         --ink: #1b1b1b;
+        --ink-soft: #3b3b3b;
         --muted: #5e5e5e;
-        --paper: #f6f4f0;
-        --mist: #ece8e1;
+        --paper: #f7f4ef;
+        --mist: #ebe6dd;
         --accent: #2a8f76;
         --accent-strong: #1c6a56;
+        --accent-soft: #d8efe8;
         --highlight: #f2b347;
-        --shadow: rgba(27, 27, 27, 0.15);
+        --midnight: #13201c;
+        --shadow: rgba(27, 27, 27, 0.14);
       }
 
       * {
@@ -32,7 +35,7 @@
         margin: 0;
         font-family: "Space Grotesk", "Segoe UI", sans-serif;
         color: var(--ink);
-        background: radial-gradient(circle at top left, #fff6e5 0%, #f8f0e1 40%, #efe8db 100%);
+        background: radial-gradient(circle at top left, #fff1d8 0%, #f6efdf 35%, #e9e2d5 100%);
       }
 
       a {
@@ -84,14 +87,14 @@
       .hero {
         padding: 40px 6vw 24px;
         display: grid;
-        gap: 24px;
+        gap: 28px;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         align-items: center;
       }
 
       .hero h1 {
         font-family: "Fraunces", "Times New Roman", serif;
-        font-size: clamp(2.4rem, 3vw, 3.2rem);
+        font-size: clamp(2.4rem, 3vw, 3.3rem);
         margin: 0 0 12px;
       }
 
@@ -99,6 +102,15 @@
         margin: 0 0 20px;
         color: var(--muted);
         line-height: 1.6;
+      }
+
+      .kicker {
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        font-size: 12px;
+        color: var(--accent-strong);
+        font-weight: 600;
+        margin-bottom: 10px;
       }
 
       .cta-row {
@@ -141,6 +153,11 @@
         box-shadow: 0 12px 22px var(--shadow);
       }
 
+      .hero-grid {
+        display: grid;
+        gap: 18px;
+      }
+
       .card {
         background: #fff;
         border-radius: 22px;
@@ -148,14 +165,42 @@
         box-shadow: 0 20px 40px rgba(27, 27, 27, 0.12);
       }
 
-      .card h3 {
+      .panel {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f5ef 100%);
+      }
+
+      .panel h3 {
         margin-top: 0;
         margin-bottom: 12px;
       }
 
+      .metric {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--mist);
+        gap: 12px;
+      }
+
+      .metric:last-child {
+        border-bottom: none;
+      }
+
+      .tag {
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba(242, 179, 71, 0.2);
+        color: #8c5a0a;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
       .pill-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
         gap: 10px;
       }
 
@@ -174,26 +219,80 @@
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       }
 
-      .metric {
-        display: flex;
-        justify-content: space-between;
+      .section-title {
+        font-size: 16px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--accent-strong);
+        margin: 0 0 10px;
+      }
+
+      .endpoint-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .endpoint {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 8px 14px;
         align-items: center;
-        font-size: 14px;
-        padding: 12px 0;
-        border-bottom: 1px solid var(--mist);
+        padding: 12px 14px;
+        border-radius: 16px;
+        border: 1px solid var(--mist);
+        background: #fff;
       }
 
-      .metric:last-child {
-        border-bottom: none;
-      }
-
-      .tag {
-        padding: 4px 10px;
-        border-radius: 999px;
-        background: rgba(242, 179, 71, 0.2);
-        color: #8c5a0a;
+      .method {
         font-size: 12px;
+        font-weight: 700;
+        color: var(--accent-strong);
+        letter-spacing: 0.08em;
+      }
+
+      .path {
+        font-family: "Space Grotesk", sans-serif;
         font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      .desc {
+        grid-column: 1 / -1;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .code-block {
+        background: #0f1b17;
+        color: #d7f4ea;
+        border-radius: 16px;
+        padding: 14px;
+        font-size: 12px;
+        overflow-x: auto;
+      }
+
+      .note {
+        background: var(--accent-soft);
+        border-radius: 16px;
+        padding: 12px 14px;
+        font-size: 13px;
+        color: #1a4b3d;
+      }
+
+      .stack {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 10px;
+        font-size: 14px;
+      }
+
+      .stack li {
+        padding: 10px 12px;
+        border-radius: 14px;
+        background: #fff;
+        border: 1px solid var(--mist);
       }
 
       footer {
@@ -248,83 +347,261 @@
           <a href="/docs">Swagger Docs</a>
           <a href="/api/health">Health</a>
           <a href="/api/metrics">Metrics</a>
+          <a href="/api/graphql">GraphQL</a>
           <a href="https://budget-manage-app.vercel.app" target="_blank" rel="noreferrer">Frontend Demo</a>
         </nav>
       </header>
 
       <section class="hero">
         <div class="fade-in">
-          <h1>Real-time finance operations with observability built in.</h1>
+          <div class="kicker">Finance Platform Gateway</div>
+          <h1>Operate budgets, expenses, tasks, and transactions with observability built in.</h1>
           <p>
-            Budget Management API powers multi-channel budgeting, expense tracking, and task processing with Redis,
-            MongoDB, Kafka, RabbitMQ, and Elasticsearch. This gateway is ready for REST, gRPC, GraphQL, and WebSocket
-            clients.
+            Budget Management API coordinates REST, GraphQL, and gRPC workflows across MongoDB, PostgreSQL, Redis,
+            Elasticsearch, Kafka, and RabbitMQ. Use it for multi-tenant budgeting, expense search, async task
+            processing, and real-time reporting.
           </p>
           <div class="cta-row">
             <a class="button primary" href="/docs">Explore the API</a>
             <a class="button secondary" href="/api/ping">Ping the service</a>
-            <a class="button ghost" href="/api/search">Search expenses</a>
+            <a class="button ghost" href="/api/health">Health report</a>
           </div>
         </div>
-        <div class="card fade-in delay-1">
-          <h3>Live stack snapshot</h3>
-          <div class="metric">
-            <span>MongoDB budgets and tasks</span>
-            <span class="tag">Indexed</span>
+
+        <div class="hero-grid fade-in delay-1">
+          <div class="card panel">
+            <h3>Runtime snapshot</h3>
+            <div class="metric">
+              <span>REST gateway + CORS</span>
+              <span class="tag">Enabled</span>
+            </div>
+            <div class="metric">
+              <span>MongoDB domain models</span>
+              <span class="tag">Budgets, expenses, tasks</span>
+            </div>
+            <div class="metric">
+              <span>PostgreSQL ledger</span>
+              <span class="tag">transaction_logs</span>
+            </div>
+            <div class="metric">
+              <span>Search + analytics</span>
+              <span class="tag">Elasticsearch</span>
+            </div>
           </div>
-          <div class="metric">
-            <span>Redis cache and token blacklist</span>
-            <span class="tag">Hot</span>
-          </div>
-          <div class="metric">
-            <span>Kafka event streams</span>
-            <span class="tag">Streaming</span>
-          </div>
-          <div class="metric">
-            <span>ELK observability pipeline</span>
-            <span class="tag">Active</span>
+          <div class="card panel">
+            <h3>Capabilities at a glance</h3>
+            <div class="pill-grid">
+              <span class="pill">Budget CRUD</span>
+              <span class="pill">Expense indexing</span>
+              <span class="pill">Task queue</span>
+              <span class="pill">Transaction logs</span>
+              <span class="pill">GraphQL</span>
+              <span class="pill">gRPC service</span>
+            </div>
           </div>
         </div>
       </section>
 
       <section class="section fade-in delay-2">
         <div class="card">
-          <h3>What you can do</h3>
-          <p>Craft budgets, sync expenses to Elasticsearch, and schedule async tasks through RabbitMQ.</p>
-          <div class="pill-grid">
-            <span class="pill">Budget CRUD</span>
-            <span class="pill">Expense search</span>
-            <span class="pill">Redis caching</span>
-            <span class="pill">Kafka events</span>
-            <span class="pill">gRPC service</span>
-            <span class="pill">WebSocket</span>
+          <div class="section-title">Public endpoints</div>
+          <div class="endpoint-list">
+            <a class="endpoint" href="/api/ping">
+              <span class="method">GET</span>
+              <span class="path">/api/ping</span>
+              <span class="desc">Liveness probe for load balancers and uptime monitors.</span>
+            </a>
+            <a class="endpoint" href="/api/health">
+              <span class="method">GET</span>
+              <span class="path">/api/health</span>
+              <span class="desc">Service health with Mongo, Redis, Postgres, Kafka, RabbitMQ, and Elasticsearch checks.</span>
+            </a>
+            <a class="endpoint" href="/api/metrics">
+              <span class="method">GET</span>
+              <span class="path">/api/metrics</span>
+              <span class="desc">Counts for budgets, expenses, tasks, customers, orders, and process stats.</span>
+            </a>
+            <a class="endpoint" href="/docs">
+              <span class="method">GET</span>
+              <span class="path">/docs</span>
+              <span class="desc">OpenAPI explorer for REST endpoints.</span>
+            </a>
+            <a class="endpoint" href="/api/graphql">
+              <span class="method">GET</span>
+              <span class="path">/api/graphql</span>
+              <span class="desc">GraphiQL playground for the GraphQL schema.</span>
+            </a>
           </div>
         </div>
+
         <div class="card">
-          <h3>Guided entry points</h3>
-          <p>Use these key endpoints to start exploring the platform in minutes.</p>
-          <div class="metric">
-            <span>REST budgets</span>
-            <a href="/api/budgets">/api/budgets</a>
+          <div class="section-title">Authenticated REST resources</div>
+          <p>Most CRUD endpoints require a Bearer token from the auth service.</p>
+          <div class="endpoint-list">
+            <div class="endpoint">
+              <span class="method">GET</span>
+              <span class="path">/api/budgets</span>
+              <span class="desc">Budgets collection.</span>
+            </div>
+            <div class="endpoint">
+              <span class="method">GET</span>
+              <span class="path">/api/expenses</span>
+              <span class="desc">Expenses across budgets.</span>
+            </div>
+            <div class="endpoint">
+              <span class="method">GET</span>
+              <span class="path">/api/tasks</span>
+              <span class="desc">Task queue state + history.</span>
+            </div>
+            <div class="endpoint">
+              <span class="method">GET</span>
+              <span class="path">/api/orders</span>
+              <span class="desc">Customer order records.</span>
+            </div>
+            <div class="endpoint">
+              <span class="method">GET</span>
+              <span class="path">/api/customers</span>
+              <span class="desc">Customer profiles.</span>
+            </div>
+            <div class="endpoint">
+              <span class="method">GET</span>
+              <span class="path">/api/users</span>
+              <span class="desc">User administration data.</span>
+            </div>
+            <div class="endpoint">
+              <span class="method">GET</span>
+              <span class="path">/api/transactions</span>
+              <span class="desc">PostgreSQL-backed transaction logs.</span>
+            </div>
           </div>
-          <div class="metric">
-            <span>REST expenses</span>
-            <a href="/api/expenses">/api/expenses</a>
+          <div class="note" style="margin-top: 14px;">
+            Tip: use <strong>POST</strong> <code>/api/auth/login</code> to obtain a JWT, then send it via
+            <code>Authorization: Bearer &lt;token&gt;</code>.
           </div>
-          <div class="metric">
-            <span>Swagger docs</span>
-            <a href="/docs">/docs</a>
+        </div>
+
+        <div class="card">
+          <div class="section-title">Auth workflow</div>
+          <p>Use these endpoints to register users, sign in, and verify sessions.</p>
+          <div class="endpoint-list">
+            <div class="endpoint">
+              <span class="method">POST</span>
+              <span class="path">/api/auth/register</span>
+              <span class="desc">Create an account.</span>
+            </div>
+            <div class="endpoint">
+              <span class="method">POST</span>
+              <span class="path">/api/auth/login</span>
+              <span class="desc">Authenticate and receive a JWT.</span>
+            </div>
+            <div class="endpoint">
+              <span class="method">POST</span>
+              <span class="path">/api/auth/verify-token</span>
+              <span class="desc">Validate a token for API calls.</span>
+            </div>
+            <div class="endpoint">
+              <span class="method">POST</span>
+              <span class="path">/api/auth/logout</span>
+              <span class="desc">Invalidate a session token.</span>
+            </div>
           </div>
-          <div class="metric">
-            <span>gRPC</span>
-            <span>0.0.0.0:50051</span>
+          <pre class="code-block"><code>curl -X POST /api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"user@example.com","password":"password"}'</code></pre>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="card">
+          <div class="section-title">Search and notifications</div>
+          <p>Expense search is powered by Elasticsearch. Notifications broadcast through the notification controller.</p>
+          <div class="endpoint-list">
+            <div class="endpoint">
+              <span class="method">POST</span>
+              <span class="path">/api/search</span>
+              <span class="desc">Search expenses (auth required).</span>
+            </div>
+            <div class="endpoint">
+              <span class="method">POST</span>
+              <span class="path">/api/notifications/send</span>
+              <span class="desc">Send a notification payload.</span>
+            </div>
           </div>
+          <pre class="code-block"><code>curl -X POST /api/search \
+  -H "Authorization: Bearer &lt;token&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"query":"utilities"}'</code></pre>
+        </div>
+
+        <div class="card">
+          <div class="section-title">GraphQL and gRPC</div>
+          <p>GraphQL is available for flexible queries, while gRPC powers high-throughput budget workflows.</p>
+          <div class="endpoint-list">
+            <a class="endpoint" href="/api/graphql">
+              <span class="method">GET</span>
+              <span class="path">/api/graphql</span>
+              <span class="desc">GraphiQL interface with live schema introspection.</span>
+            </a>
+            <div class="endpoint">
+              <span class="method">gRPC</span>
+              <span class="path">0.0.0.0:50051</span>
+              <span class="desc">BudgetManager service (override with <code>GRPC_PORT</code>).</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">Data stores and pipelines</div>
+          <ul class="stack">
+            <li>MongoDB: budgets, expenses, tasks, customers, orders, users.</li>
+            <li>PostgreSQL: <code>transaction_logs</code> ledger for transactions.</li>
+            <li>Redis: cached task status and API-level caching.</li>
+            <li>Elasticsearch: expense search index.</li>
+            <li>Kafka: task event streaming.</li>
+            <li>RabbitMQ: task queue ingestion.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="card">
+          <div class="section-title">Operational checks</div>
+          <p>Use these for monitoring and sanity checks in deployments.</p>
+          <div class="endpoint-list">
+            <a class="endpoint" href="/api/ping">
+              <span class="method">GET</span>
+              <span class="path">/api/ping</span>
+              <span class="desc">Confirms routing and runtime availability.</span>
+            </a>
+            <a class="endpoint" href="/api/health">
+              <span class="method">GET</span>
+              <span class="path">/api/health</span>
+              <span class="desc">Service dependency health for deployments.</span>
+            </a>
+            <a class="endpoint" href="/api/metrics">
+              <span class="method">GET</span>
+              <span class="path">/api/metrics</span>
+              <span class="desc">Counts and process telemetry for dashboards.</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">Environment hints</div>
+          <p>Configuration lives in <code>.env</code>. Update data source URLs before starting the server.</p>
+          <ul class="stack">
+            <li><code>MONGO_DB_URI</code> for primary document storage.</li>
+            <li><code>POSTGRES_URL</code> for transaction logs.</li>
+            <li><code>REDIS_URL</code> for cache and task status.</li>
+            <li><code>ELASTIC_SEARCH_URL</code> for expense search.</li>
+            <li><code>RABBITMQ_URL</code> and <code>KAFKA_BROKER</code> for async workflows.</li>
+          </ul>
         </div>
       </section>
 
       <footer>
-        Built for local demos, container stacks, and Kubernetes rollouts. Configure integrations in `.env` and keep
-        observability flowing through the ELK and Kafka pipelines.
+        Built for local demos, container stacks, and Kubernetes rollouts. Use the Swagger docs to explore full REST
+        coverage and the GraphQL playground for rapid prototyping.
       </footer>
     </div>
   </body>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Button, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton, Button, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Box, Stack } from '@mui/material';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
@@ -25,7 +25,6 @@ function Navbar({ mode, setMode }) {
     setMode(prev => (prev === 'light' ? 'dark' : 'light'));
   };
 
-  // Check token validity on location change and on mount
   useEffect(() => {
     const checkToken = async () => {
       const token = localStorage.getItem('token');
@@ -66,7 +65,6 @@ function Navbar({ mode, setMode }) {
     navigate('/login');
   };
 
-  // Define nav links
   const baseNavLinks = [
     { to: '/', label: 'Home', icon: <HomeIcon /> },
     { to: '/dashboard', label: 'Dashboard', icon: <DashboardIcon /> },
@@ -84,87 +82,114 @@ function Navbar({ mode, setMode }) {
     navLinks.push({ to: '/register', label: 'Register', icon: <PersonAddIcon /> });
   }
 
-  const activeColor = '#8B4513'; // Brownish color for mobile active link
-
   return (
     <>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton sx={{ mr: 2, display: { xs: 'block', md: 'none' } }} color="inherit" onClick={() => setDrawerOpen(true)}>
+      <AppBar position="sticky" elevation={0}>
+        <Toolbar sx={{ py: 1, gap: 2 }}>
+          <IconButton sx={{ display: { xs: 'block', md: 'none' } }} color="inherit" onClick={() => setDrawerOpen(true)}>
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 600, display: { xs: 'none', md: 'block' } }}>
-            Budget Management System
-          </Typography>
-          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 600, display: { xs: 'block', md: 'none' } }}>
-            Budget Management
-          </Typography>
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Stack direction="row" spacing={1.5} alignItems="center" sx={{ flexGrow: 1 }}>
+            <Box
+              sx={{
+                width: 42,
+                height: 42,
+                borderRadius: 2.5,
+                display: 'grid',
+                placeItems: 'center',
+                bgcolor: 'primary.main',
+                color: 'primary.contrastText',
+                fontWeight: 700,
+                boxShadow: '0 10px 18px rgba(25, 90, 72, 0.35)',
+              }}
+            >
+              BM
+            </Box>
+            <Box>
+              <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.1 }}>
+                Budget Management
+              </Typography>
+              <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
+                Multi-store finance ops
+              </Typography>
+            </Box>
+          </Stack>
+
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
             {navLinks.map(link => {
               const isActive = location.pathname === link.to;
               const isLogout = link.label === 'Logout';
               const buttonStyle = {
-                mr: 1,
-                borderRadius: 0,
-                borderBottom: isActive ? '2px solid white' : 'none',
-                ...(isLogout && { color: 'red' }), // Apply red color if it's the logout button
+                px: 2,
+                borderRadius: 999,
+                bgcolor: isActive ? 'rgba(31, 122, 99, 0.14)' : 'transparent',
+                color: isLogout ? 'error.main' : 'text.primary',
+                border: isActive ? '1px solid rgba(31, 122, 99, 0.3)' : '1px solid transparent',
+                '&:hover': {
+                  bgcolor: isLogout ? 'rgba(216, 74, 74, 0.1)' : 'rgba(31, 122, 99, 0.12)',
+                },
               };
 
               if (link.action) {
-                // For logout
                 return (
                   <Button key={link.label} color="inherit" startIcon={link.icon} onClick={link.action} sx={buttonStyle}>
                     {link.label}
                   </Button>
                 );
-              } else {
-                return (
-                  <Button key={link.to} component={Link} to={link.to} color="inherit" startIcon={link.icon} sx={buttonStyle}>
-                    {link.label}
-                  </Button>
-                );
               }
+              return (
+                <Button key={link.to} component={Link} to={link.to} color="inherit" startIcon={link.icon} sx={buttonStyle}>
+                  {link.label}
+                </Button>
+              );
             })}
           </Box>
-          <IconButton color="inherit" onClick={handleToggleMode} sx={{ mr: { xs: 0, md: 2 } }}>
+
+          <IconButton color="inherit" onClick={handleToggleMode} sx={{ ml: 1 }}>
             {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
           </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer anchor="left" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-        <List sx={{ width: 250 }}>
-          {navLinks.map(link => {
-            const isActive = location.pathname === link.to;
-            const isLogout = link.label === 'Logout';
-            const listItemStyles = {
-              color: isActive ? activeColor : 'inherit',
-              ...(isLogout && { color: 'red' }),
-            };
+        <Box sx={{ width: 270, p: 2 }}>
+          <Typography variant="h6" sx={{ mb: 1.5, fontWeight: 700 }}>
+            Navigation
+          </Typography>
+          <List sx={{ width: '100%' }}>
+            {navLinks.map(link => {
+              const isActive = location.pathname === link.to;
+              const isLogout = link.label === 'Logout';
+              const listItemStyles = {
+                borderRadius: 2,
+                mb: 0.5,
+                bgcolor: isActive ? 'rgba(31, 122, 99, 0.14)' : 'transparent',
+                color: isLogout ? 'error.main' : 'text.primary',
+              };
 
-            if (link.action) {
-              return (
-                <ListItemButton
-                  key={link.label}
-                  onClick={() => {
-                    setDrawerOpen(false);
-                    link.action();
-                  }}
-                  sx={listItemStyles}
-                >
-                  <ListItemIcon sx={listItemStyles}>{link.icon}</ListItemIcon>
-                  <ListItemText primary={link.label} />
-                </ListItemButton>
-              );
-            } else {
+              if (link.action) {
+                return (
+                  <ListItemButton
+                    key={link.label}
+                    onClick={() => {
+                      setDrawerOpen(false);
+                      link.action();
+                    }}
+                    sx={listItemStyles}
+                  >
+                    <ListItemIcon sx={{ color: 'inherit' }}>{link.icon}</ListItemIcon>
+                    <ListItemText primary={link.label} />
+                  </ListItemButton>
+                );
+              }
               return (
                 <ListItemButton key={link.to} component={Link} to={link.to} onClick={() => setDrawerOpen(false)} sx={listItemStyles}>
-                  <ListItemIcon sx={listItemStyles}>{link.icon}</ListItemIcon>
+                  <ListItemIcon sx={{ color: 'inherit' }}>{link.icon}</ListItemIcon>
                   <ListItemText primary={link.label} />
                 </ListItemButton>
               );
-            }
-          })}
-        </List>
+            })}
+          </List>
+        </Box>
       </Drawer>
     </>
   );

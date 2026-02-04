@@ -1,15 +1,13 @@
 import React from 'react';
-import { Container, Typography, Button, Box } from '@mui/material';
+import { Container, Typography, Button, Box, Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-// Simple keyframe animation using Material-UI styled components or inline style
-// Here we'll just show an inline style example for a wobble animation of the "404" text
 const wobbleAnimation = {
   '@keyframes wobble': {
     '0%': { transform: 'translateX(0%)' },
-    '25%': { transform: 'translateX(-5%)' },
-    '50%': { transform: 'translateX(5%)' },
-    '75%': { transform: 'translateX(-5%)' },
+    '25%': { transform: 'translateX(-4%)' },
+    '50%': { transform: 'translateX(4%)' },
+    '75%': { transform: 'translateX(-4%)' },
     '100%': { transform: 'translateX(0%)' },
   },
 };
@@ -18,7 +16,7 @@ function NotFound() {
   return (
     <Container
       sx={{
-        mt: 4,
+        mt: 6,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -38,15 +36,20 @@ function NotFound() {
       >
         404
       </Box>
-      <Typography variant="h4" sx={{ fontWeight: 600, mb: 2 }}>
-        Oops! Page Not Found
+      <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+        Page Not Found
       </Typography>
-      <Typography variant="body1" sx={{ mb: 3 }}>
-        The page you're looking for doesn't exist or has been moved.
+      <Typography variant="body1" sx={{ mb: 3 }} color="text.secondary">
+        The page you are trying to reach does not exist. Return to the main workspace or head back to the dashboard.
       </Typography>
-      <Button variant="contained" component={Link} to="/" sx={{ textTransform: 'none' }}>
-        Go Back Home
-      </Button>
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+        <Button variant="contained" component={Link} to="/" sx={{ textTransform: 'none' }}>
+          Go Back Home
+        </Button>
+        <Button variant="outlined" component={Link} to="/dashboard" sx={{ textTransform: 'none' }}>
+          Go to Dashboard
+        </Button>
+      </Stack>
     </Container>
   );
 }
