@@ -1,2 +1,4 @@
 node_modules
 .env
+/.idea/dataSources/data_sources_history.xml
+/.idea/db-forest-config.xml
