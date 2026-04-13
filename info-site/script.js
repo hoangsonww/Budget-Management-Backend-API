@@ -253,6 +253,7 @@
 
     externalLinks.forEach(link => {
       if (link.closest('.social-links')) return;
+      if (link.classList.contains('live-demo-btn') || link.classList.contains('no-external-icon')) return;
 
       if (!link.hostname.includes(window.location.hostname)) {
         link.setAttribute('rel', 'noopener noreferrer');
@@ -501,19 +502,7 @@
                 color: #4CAF50;
             }
             
-            @media (max-width: 768px) {
-                .nav-menu.active {
-                    display: flex;
-                    flex-direction: column;
-                    position: absolute;
-                    top: 100%;
-                    left: 0;
-                    right: 0;
-                    background: rgba(26, 26, 26, 0.98);
-                    padding: 2rem;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
-                }
-                
+            @media (max-width: 768px) {                
                 .copy-btn span {
                     display: none;
                 }
