@@ -88,8 +88,10 @@ img {
     left: 0;
     height: 3px;
     background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
-    width: 0%;
-    transition: width 0.1s ease-out;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
+    will-change: transform;
     box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
     z-index: 1001;
 }
@@ -130,24 +132,65 @@ img {
     gap: 0.5rem;
     color: var(--text-secondary);
     font-weight: 500;
-    transition: var(--transition);
+    position: relative;
+    padding: 0.35rem 0;
+    transition: color 0.35s ease, transform 0.35s ease, text-shadow 0.35s ease;
 }
 
-.nav-menu a:hover {
+.nav-menu a:not(.live-demo-btn)::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.25rem;
+    width: 100%;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    opacity: 0;
+    transform: scaleX(0.35);
+    transform-origin: left center;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+}
+
+.nav-menu a:not(.live-demo-btn):hover {
     color: var(--primary-color);
+    transform: translateY(-1px);
+    text-shadow: 0 0 10px rgba(76, 175, 80, 0.25);
+}
+
+.nav-menu a:not(.live-demo-btn):hover::after,
+.nav-menu a:not(.live-demo-btn).active::after {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+.nav-menu a:not(.live-demo-btn).active {
+    color: var(--primary-color);
+    text-shadow: 0 0 14px rgba(76, 175, 80, 0.35);
 }
 
 .live-demo-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    padding: 0.5rem 1.5rem;
-    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    border-radius: 999px;
     color: white !important;
     font-weight: 600;
+    line-height: 1.1;
+    white-space: nowrap;
+    min-width: max-content;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 18px rgba(33, 150, 243, 0.28);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
 }
 
 .live-demo-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 12px 24px rgba(33, 150, 243, 0.35);
+    filter: saturate(1.1);
 }
 
 .mobile-menu-toggle {
@@ -285,10 +328,33 @@ img {
     box-shadow: var(--shadow-lg);
 }
 
-.status-badges {
+.status-marquee-wrapper {
+    position: relative;
+    width: min(100%, 820px);
+    overflow: hidden;
+    border-radius: 999px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+
+.status-marquee {
     display: flex;
+    width: max-content;
+    animation: statusMarquee 42s linear infinite;
+    will-change: transform;
+}
+
+.status-track {
+    display: flex;
+    align-items: center;
     gap: 1rem;
-    flex-wrap: wrap;
+    flex-shrink: 0;
+    padding-right: 1rem;
+}
+
+.status-chip {
+    white-space: nowrap;
+    backdrop-filter: blur(2px);
 }
 
 .badge {
@@ -323,6 +389,15 @@ img {
     background: rgba(244, 67, 54, 0.2);
     color: var(--danger-color);
     border: 1px solid var(--danger-color);
+}
+
+@keyframes statusMarquee {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 .hero-visual {
@@ -417,6 +492,7 @@ img {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
     margin-bottom: 4rem;
+    padding-top: 3rem;
     position: relative;
     z-index: 10;
 }
@@ -750,14 +826,15 @@ img {
 }
 
 pre {
-    background: var(--bg-secondary);
+    background: #1a1a2e;
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: 0 0 10px 10px;
     overflow-x: auto;
     overflow-y: auto;
     max-height: 500px;
     margin: 1rem 0;
-    border: 1px solid var(--border-color);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: none;
     position: relative;
     width: 100%;
     max-width: 100%;
@@ -1237,6 +1314,11 @@ code {
     transition: var(--transition);
 }
 
+.social-links a i {
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
 .social-links a:hover {
     background: var(--primary-color);
     border-color: var(--primary-color);
@@ -1244,7 +1326,7 @@ code {
 }
 
 .social-links a:hover i {
-    color: var(--text-secondary); /* Keep icon color gray on hover */
+    color: #ffffff;
 }
 
 .footer-bottom {
@@ -1252,6 +1334,17 @@ code {
     padding-top: 2rem;
     border-top: 1px solid var(--border-color);
     color: var(--text-muted);
+}
+
+.footer-bottom a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.footer-bottom a:hover {
+    color: var(--primary-color);
+    text-shadow: 0 0 10px rgba(76, 175, 80, 0.25);
 }
 
 /* ==========================================
@@ -1303,8 +1396,9 @@ code {
         justify-content: center;
     }
     
-    .status-badges {
-        justify-content: center;
+    .status-marquee-wrapper {
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
@@ -1320,7 +1414,46 @@ code {
 
 @media (max-width: 1200px) {
     .nav-menu {
-        display: none;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        max-height: 0;
+        padding: 0 2rem;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(-10px) scale(0.98);
+        transform-origin: top center;
+        background: rgba(20, 20, 20, 0.98);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+        transition: max-height 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s ease,
+            transform 0.35s ease, padding 0.35s ease, visibility 0s linear 0.35s;
+    }
+
+    .nav-menu.active {
+        max-height: 420px;
+        padding: 1rem 2rem 1.5rem;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0) scale(1);
+        transition: max-height 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease,
+            transform 0.35s ease, padding 0.35s ease, visibility 0s;
+    }
+
+    .nav-menu li {
+        width: 100%;
+    }
+
+    .nav-menu li a {
+        width: 100%;
     }
 
     .mobile-menu-toggle {
@@ -1352,6 +1485,10 @@ code {
     
     .hero-actions {
         flex-direction: column;
+    }
+
+    .status-marquee {
+        animation-duration: 34s;
     }
     
     .btn {

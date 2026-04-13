@@ -101,11 +101,45 @@
                     <i class="fas fa-desktop"></i> Frontend Demo
                 </a>
             </div>
-            <div class="status-badges">
-                <span class="badge badge-success"><i class="fas fa-check-circle"></i> API Online</span>
-                <span class="badge badge-info"><i class="fas fa-database"></i> MongoDB Connected</span>
-                <span class="badge badge-warning"><i class="fas fa-memory"></i> Redis Active</span>
-                <span class="badge badge-danger"><i class="fas fa-stream"></i> Kafka Running</span>
+            <div class="status-marquee-wrapper" aria-label="Platform status highlights">
+                <div class="status-marquee">
+                    <div class="status-track">
+                        <span class="badge badge-success status-chip"><i class="fas fa-check-circle"></i> API Online</span>
+                        <span class="badge badge-info status-chip"><i class="fas fa-database"></i> MongoDB Connected</span>
+                        <span class="badge badge-warning status-chip"><i class="fas fa-memory"></i> Redis Active</span>
+                        <span class="badge badge-danger status-chip"><i class="fas fa-stream"></i> Kafka Running</span>
+                        <span class="badge badge-success status-chip"><i class="fas fa-envelope-open-text"></i> RabbitMQ Ready</span>
+                        <span class="badge badge-info status-chip"><i class="fas fa-project-diagram"></i> GraphQL Enabled</span>
+                        <span class="badge badge-warning status-chip"><i class="fas fa-bolt"></i> gRPC Gateway</span>
+                        <span class="badge badge-danger status-chip"><i class="fas fa-wifi"></i> WebSocket Live</span>
+                        <span class="badge badge-success status-chip"><i class="fas fa-shield-alt"></i> JWT Auth Secured</span>
+                        <span class="badge badge-info status-chip"><i class="fab fa-docker"></i> Dockerized Services</span>
+                        <span class="badge badge-warning status-chip"><i class="fas fa-cubes"></i> Kubernetes Ready</span>
+                        <span class="badge badge-danger status-chip"><i class="fas fa-rocket"></i> CI/CD Automated</span>
+                        <span class="badge badge-success status-chip"><i class="fas fa-search"></i> Elasticsearch Indexed</span>
+                        <span class="badge badge-info status-chip"><i class="fas fa-tachometer-alt"></i> Rate Limiting On</span>
+                        <span class="badge badge-warning status-chip"><i class="fas fa-layer-group"></i> Caching Layer Warm</span>
+                        <span class="badge badge-danger status-chip"><i class="fas fa-heartbeat"></i> Health Checks Passing</span>
+                    </div>
+                    <div class="status-track" aria-hidden="true">
+                        <span class="badge badge-success status-chip"><i class="fas fa-check-circle"></i> API Online</span>
+                        <span class="badge badge-info status-chip"><i class="fas fa-database"></i> MongoDB Connected</span>
+                        <span class="badge badge-warning status-chip"><i class="fas fa-memory"></i> Redis Active</span>
+                        <span class="badge badge-danger status-chip"><i class="fas fa-stream"></i> Kafka Running</span>
+                        <span class="badge badge-success status-chip"><i class="fas fa-envelope-open-text"></i> RabbitMQ Ready</span>
+                        <span class="badge badge-info status-chip"><i class="fas fa-project-diagram"></i> GraphQL Enabled</span>
+                        <span class="badge badge-warning status-chip"><i class="fas fa-bolt"></i> gRPC Gateway</span>
+                        <span class="badge badge-danger status-chip"><i class="fas fa-wifi"></i> WebSocket Live</span>
+                        <span class="badge badge-success status-chip"><i class="fas fa-shield-alt"></i> JWT Auth Secured</span>
+                        <span class="badge badge-info status-chip"><i class="fab fa-docker"></i> Dockerized Services</span>
+                        <span class="badge badge-warning status-chip"><i class="fas fa-cubes"></i> Kubernetes Ready</span>
+                        <span class="badge badge-danger status-chip"><i class="fas fa-rocket"></i> CI/CD Automated</span>
+                        <span class="badge badge-success status-chip"><i class="fas fa-search"></i> Elasticsearch Indexed</span>
+                        <span class="badge badge-info status-chip"><i class="fas fa-tachometer-alt"></i> Rate Limiting On</span>
+                        <span class="badge badge-warning status-chip"><i class="fas fa-layer-group"></i> Caching Layer Warm</span>
+                        <span class="badge badge-danger status-chip"><i class="fas fa-heartbeat"></i> Health Checks Passing</span>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="hero-visual">
@@ -536,6 +570,48 @@ flowchart LR
                         <li>Blue-green deployment</li>
                         <li>Canary releases</li>
                         <li>Rollback support</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3>Monitoring & Observability</h3>
+                    <p>Production-grade monitoring with Prometheus metrics collection and Grafana dashboards for real-time insights.</p>
+                    <ul>
+                        <li>Prometheus metrics</li>
+                        <li>Grafana dashboards</li>
+                        <li>Health check endpoints</li>
+                        <li>ELK stack logging</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>NGINX Load Balancing</h3>
+                    <p>Reverse proxy and load balancing with NGINX, including round-robin distribution and SSL termination.</p>
+                    <ul>
+                        <li>Reverse proxy</li>
+                        <li>Round-robin routing</li>
+                        <li>SSL termination</li>
+                        <li>Static file serving</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3>Multi-Language Backends</h3>
+                    <p>Alternative backend implementations in Spring Boot (Java) and .NET Core (C#) for cross-platform versatility.</p>
+                    <ul>
+                        <li>Spring Boot (Java)</li>
+                        <li>.NET Core (C#)</li>
+                        <li>Gradle build system</li>
+                        <li>Shared API contracts</li>
                     </ul>
                 </div>
             </div>
@@ -1161,6 +1237,7 @@ npm run lint          # Lint code</code></pre>
             <div class="footer-section">
                 <h4>Connect</h4>
                 <div class="social-links">
+                    <a href="https://sonnguyenhoang.com" target="_blank" rel="noopener noreferrer"><i class="fas fa-globe"></i></a>
                     <a href="https://github.com/hoangsonww" target="_blank"><i class="fab fa-github"></i></a>
                     <a href="https://www.linkedin.com/in/hoangsonw" target="_blank"><i class="fab fa-linkedin"></i></a>
                     <a href="mailto:hoangson091104@gmail.com"><i class="fas fa-envelope"></i></a>
@@ -1168,7 +1245,7 @@ npm run lint          # Lint code</code></pre>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 Son Nguyen. All rights reserved. | Built with ❤️ using modern web technologies</p>
+            <p>&copy; 2026 <a href="https://sonnguyenhoang.com" target="_blank" rel="noopener noreferrer" class="no-external-icon">Son Nguyen</a>. All rights reserved. | Built with ❤️ using modern web technologies</p>
         </div>
     </footer>
 

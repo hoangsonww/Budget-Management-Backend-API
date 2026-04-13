@@ -108,16 +108,23 @@
 
     if (!progressBar) return;
 
-    window.addEventListener('scroll', function () {
+    let ticking = false;
+
+    function updateProgressBar() {
       const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (window.pageYOffset / windowHeight) * 100;
-      progressBar.style.width = scrolled + '%';
+      const scrolled = windowHeight > 0 ? window.pageYOffset / windowHeight : 0;
+      progressBar.style.transform = `scaleX(${scrolled})`;
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        requestAnimationFrame(updateProgressBar);
+        ticking = true;
+      }
     });
 
-    // Trigger once to set initial state
-    const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrolled = (window.pageYOffset / windowHeight) * 100;
-    progressBar.style.width = scrolled + '%';
+    updateProgressBar();
   }
 
   // ==========================================
@@ -130,43 +137,45 @@
       const pre = block.parentElement;
 
       if (!pre.parentElement.classList.contains('code-block-wrapper')) {
-        // Detect language
         const lang = block.className.match(/language-(\w+)/) ? block.className.match(/language-(\w+)/)[1] : 'code';
 
-        // Create wrapper
         const wrapper = document.createElement('div');
         wrapper.className = 'code-block-wrapper';
 
-        // Create header
         const header = document.createElement('div');
         header.className = 'code-header';
 
-        // Language label
+        // macOS traffic light dots
+        const dots = document.createElement('div');
+        dots.className = 'macos-dots';
+        dots.innerHTML = '<span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>';
+
         const langLabel = document.createElement('span');
         langLabel.className = 'code-lang';
         langLabel.textContent = lang;
 
-        // Copy button
         const button = document.createElement('button');
         button.className = 'copy-btn';
-        button.innerHTML = '<i class="fas fa-copy"></i> Copy';
+        button.innerHTML = '<i class="fas fa-copy"></i><span>Copy</span>';
         button.title = 'Copy code';
 
         button.addEventListener('click', function () {
           const code = block.textContent;
           navigator.clipboard.writeText(code).then(() => {
-            button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            button.innerHTML = '<i class="fas fa-check"></i><span>Copied!</span>';
+            button.classList.add('copied');
 
             setTimeout(() => {
-              button.innerHTML = '<i class="fas fa-copy"></i> Copy';
+              button.innerHTML = '<i class="fas fa-copy"></i><span>Copy</span>';
+              button.classList.remove('copied');
             }, 2000);
           });
         });
 
+        header.appendChild(dots);
         header.appendChild(langLabel);
         header.appendChild(button);
 
-        // Wrap the pre element
         pre.parentNode.insertBefore(wrapper, pre);
         wrapper.appendChild(header);
         wrapper.appendChild(pre);
@@ -243,6 +252,9 @@
     const externalLinks = document.querySelectorAll('a[href^="http"]');
 
     externalLinks.forEach(link => {
+      if (link.closest('.social-links')) return;
+      if (link.classList.contains('live-demo-btn') || link.classList.contains('no-external-icon')) return;
+
       if (!link.hostname.includes(window.location.hostname)) {
         link.setAttribute('rel', 'noopener noreferrer');
 
@@ -368,45 +380,95 @@
     const style = document.createElement('style');
     style.textContent = `
             .code-block-wrapper {
-                background: var(--bg-secondary);
-                border-radius: 8px;
-                border: 1px solid var(--border-color);
+                background: #1a1a2e;
+                border-radius: 10px;
+                border: 1px solid rgba(255, 255, 255, 0.08);
                 margin: 1rem 0;
                 overflow: hidden;
                 width: 100%;
                 max-width: 100%;
                 box-sizing: border-box;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             }
             
             .code-header {
                 display: flex;
-                justify-content: space-between;
                 align-items: center;
-                padding: 0.75rem 1rem;
-                background: rgba(0, 0, 0, 0.3);
-                border-bottom: 1px solid var(--border-color);
+                padding: 0.7rem 1rem;
+                background: linear-gradient(180deg, #2d2d3f 0%, #252538 100%);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+                gap: 1rem;
+            }
+            
+            .macos-dots {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                flex-shrink: 0;
+            }
+            
+            .macos-dots .dot {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                display: inline-block;
+            }
+            
+            .macos-dots .dot-red {
+                background: #ff5f57;
+                box-shadow: 0 0 4px rgba(255, 95, 87, 0.4);
+            }
+            
+            .macos-dots .dot-yellow {
+                background: #febc2e;
+                box-shadow: 0 0 4px rgba(254, 188, 46, 0.4);
+            }
+            
+            .macos-dots .dot-green {
+                background: #28c840;
+                box-shadow: 0 0 4px rgba(40, 200, 64, 0.4);
             }
             
             .code-lang {
-                color: var(--text-secondary);
-                font-size: 0.875rem;
-                font-weight: 600;
+                color: rgba(255, 255, 255, 0.4);
+                font-size: 0.8rem;
+                font-weight: 500;
                 text-transform: uppercase;
+                letter-spacing: 0.5px;
+                flex: 1;
+                text-align: center;
             }
             
             .copy-btn {
-                background: rgba(76, 175, 80, 0.2);
-                border: 1px solid rgba(76, 175, 80, 0.3);
-                color: #4CAF50;
-                padding: 0.4rem 0.75rem;
-                border-radius: 4px;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                background: rgba(255, 255, 255, 0.06);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                color: rgba(255, 255, 255, 0.5);
+                padding: 0.35rem 0.85rem;
+                border-radius: 6px;
                 cursor: pointer;
-                transition: background 0.3s ease;
-                font-size: 0.875rem;
+                transition: all 0.25s ease;
+                font-size: 0.8rem;
+                font-family: inherit;
+                flex-shrink: 0;
             }
             
             .copy-btn:hover {
-                background: rgba(76, 175, 80, 0.3);
+                background: rgba(76, 175, 80, 0.15);
+                border-color: rgba(76, 175, 80, 0.4);
+                color: #4CAF50;
+            }
+            
+            .copy-btn.copied {
+                background: rgba(76, 175, 80, 0.2);
+                border-color: rgba(76, 175, 80, 0.5);
+                color: #4CAF50;
+            }
+            
+            .copy-btn i {
+                font-size: 0.75rem;
             }
             
             .code-block-wrapper pre {
@@ -419,6 +481,8 @@
                 overflow-y: auto;
                 overflow-x: auto;
                 box-sizing: border-box;
+                background: #1a1a2e;
+                border-top: none;
             }
             
             .code-block-wrapper pre code {
@@ -434,32 +498,13 @@
                 overflow-wrap: break-word;
             }
             
-            .nav-menu a.active {
+            .nav-menu a:not(.live-demo-btn).active {
                 color: #4CAF50;
-                position: relative;
             }
             
-            .nav-menu a.active::after {
-                content: '';
-                position: absolute;
-                bottom: -5px;
-                left: 0;
-                right: 0;
-                height: 2px;
-                background: #4CAF50;
-            }
-            
-            @media (max-width: 768px) {
-                .nav-menu.active {
-                    display: flex;
-                    flex-direction: column;
-                    position: absolute;
-                    top: 100%;
-                    left: 0;
-                    right: 0;
-                    background: rgba(26, 26, 26, 0.98);
-                    padding: 2rem;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+            @media (max-width: 768px) {                
+                .copy-btn span {
+                    display: none;
                 }
             }
         `;
@@ -471,13 +516,20 @@
   // ==========================================
   function initParallax() {
     const hero = document.querySelector('.hero');
+    const heroContent = document.querySelector('.hero-content');
+    const heroVisual = document.querySelector('.hero-visual');
 
     if (!hero) return;
 
     window.addEventListener('scroll', function () {
       const scrolled = window.pageYOffset;
-      const parallaxSpeed = 0.5;
-      hero.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
+      const heroHeight = hero.offsetHeight;
+      if (scrolled < heroHeight) {
+        const opacity = 1 - (scrolled / heroHeight) * 0.6;
+        if (heroContent) heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
+        if (heroContent) heroContent.style.opacity = opacity;
+        if (heroVisual) heroVisual.style.transform = `translateY(${scrolled * 0.15}px)`;
+      }
     });
   }
 
