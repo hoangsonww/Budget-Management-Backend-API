@@ -3,3 +3,5 @@
 /workspace.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+/dataSources/data_sources_history.xml
+/db-forest-config.xml
