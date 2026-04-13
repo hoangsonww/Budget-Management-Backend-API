@@ -502,7 +502,7 @@
                 color: #4CAF50;
             }
             
-            @media (max-width: 768px) {                
+            @media (max-width: 1150px) {                
                 .copy-btn span {
                     display: none;
                 }
