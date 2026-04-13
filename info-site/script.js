@@ -497,19 +497,8 @@
                 overflow-wrap: break-word;
             }
             
-            .nav-menu a.active {
+            .nav-menu a:not(.live-demo-btn).active {
                 color: #4CAF50;
-                position: relative;
-            }
-            
-            .nav-menu a.active::after {
-                content: '';
-                position: absolute;
-                bottom: -5px;
-                left: 0;
-                right: 0;
-                height: 2px;
-                background: #4CAF50;
             }
             
             @media (max-width: 768px) {
