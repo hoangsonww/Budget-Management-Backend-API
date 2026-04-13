@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="0@localhost">
-  <database-model serializer="dbm" dbms="REDIS" family-id="REDIS" format-version="4.54">
+  <database-model serializer="dbm" dbms="REDIS" family-id="REDIS" format-version="4.55">
     <root id="1">
       <ServerVersion>7.2.5</ServerVersion>
     </root>
