@@ -11,6 +11,7 @@ import Expenses from './pages/Expenses';
 import Users from './pages/Users';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import GuestRoute from './components/GuestRoute';
 import ForgotPassword from './pages/ForgotPassword';
 import NotFound from './pages/NotFound';
 import { ThemeProvider, CssBaseline, Box } from '@mui/material';
@@ -43,8 +44,22 @@ function App() {
         <Box component="main" sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route
+              path="/login"
+              element={
+                <GuestRoute>
+                  <Login />
+                </GuestRoute>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <GuestRoute>
+                  <Register />
+                </GuestRoute>
+              }
+            />
             <Route
               path="/profile"
               element={
@@ -85,7 +100,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route
+              path="/forgot-password"
+              element={
+                <GuestRoute>
+                  <ForgotPassword />
+                </GuestRoute>
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Box>
