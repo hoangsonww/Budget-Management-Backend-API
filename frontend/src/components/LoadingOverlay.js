@@ -95,7 +95,10 @@ function LoadingOverlay({ loading, longLoadMs = LONG_LOAD_MS, coldStartMs = COLD
             enterTouchDelay={0}
             leaveTouchDelay={6000}
             title={FREE_TIER_INFO}
-            componentsProps={{
+            slotProps={{
+              popper: {
+                sx: { zIndex: 10000 },
+              },
               tooltip: {
                 sx: { fontSize: 12, maxWidth: 320, lineHeight: 1.5, p: 1.25 },
               },
