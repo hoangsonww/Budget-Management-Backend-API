@@ -1,0 +1,21 @@
+# Budget Management API
+
+## Summary
+This site documents the Budget Management API, a production-ready microservices backend built with Node.js, Express, and TypeScript. It supports REST, GraphQL, gRPC, and WebSockets with MongoDB, PostgreSQL, Redis, RabbitMQ, Kafka, and Elasticsearch.
+
+## Primary URL
+- https://hoangsonww.github.io/Budget-Management-Backend-API/
+
+## Owner
+- Son Nguyen
+- https://sonnguyenhoang.com
+- https://github.com/hoangsonww
+- https://www.linkedin.com/in/hoangsonw
+
+## Contact
+- mailto:hoangson091104@gmail.com
+
+## Sources
+- https://github.com/hoangsonww/Budget-Management-Backend-API
+- https://budget-management-backend-api.onrender.com/docs
+- https://budget-manage-app.vercel.app
