@@ -27,11 +27,11 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import GroupIcon from '@mui/icons-material/Group';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LogoutIcon from '@mui/icons-material/Logout';
-import api from '../services/api';
+import { isLoggedIn as checkLoggedIn, getTokenExpiry, logout, onAuthChange } from '../services/auth';
 
 function Navbar({ mode, setMode }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
+  const [isLoggedIn, setIsLoggedIn] = useState(() => checkLoggedIn());
   const navigate = useNavigate();
   const location = useLocation();
   const isMobileNav = useMediaQuery('(max-width:1350px)');
@@ -40,43 +40,31 @@ function Navbar({ mode, setMode }) {
     setMode(prev => (prev === 'light' ? 'dark' : 'light'));
   };
 
+  // Auth state is event-driven: we listen for login/logout in this tab,
+  // storage changes from other tabs, and a single timer that fires exactly
+  // when the JWT's exp claim is reached. No per-navigation network calls,
+  // no polling — the server's 401 response (handled in api.js) is the
+  // source of truth for server-side revocation.
   useEffect(() => {
-    const checkToken = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setIsLoggedIn(false);
-        return;
-      }
-      try {
-        const res = await api.post(
-          '/api/auth/verify-token',
-          { token },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-        if (res.data.valid) {
-          setIsLoggedIn(true);
-        } else {
-          localStorage.removeItem('token');
-          setIsLoggedIn(false);
-          navigate('/login');
-        }
-      } catch (err) {
-        localStorage.removeItem('token');
-        setIsLoggedIn(false);
-        navigate('/login');
-      }
+    const sync = () => setIsLoggedIn(checkLoggedIn());
+
+    const unsubscribe = onAuthChange(sync);
+
+    let expiryTimer;
+    const expiryMs = getTokenExpiry();
+    if (expiryMs) {
+      const delay = Math.max(0, expiryMs - Date.now());
+      expiryTimer = setTimeout(sync, delay + 250);
+    }
+
+    return () => {
+      unsubscribe();
+      if (expiryTimer) clearTimeout(expiryTimer);
     };
-    checkToken();
-  }, [navigate, location]);
+  }, [isLoggedIn]);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    setIsLoggedIn(false);
+    logout();
     navigate('/login');
   };
 
