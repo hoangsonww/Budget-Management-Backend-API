@@ -5,7 +5,8 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 // Render free-tier specs — surface a friendly note when a request hangs long
 // enough that the user might think the app is broken. Numbers come from
 // Render's published free-instance limits (see README "Live API" section).
-const FREE_TIER_INFO = "We're on Render's free tier (0.1 CPU / 512 MB RAM). When the service has been idle, the first request triggers a cold start that usually takes 30–60 seconds. Subsequent requests are fast.";
+const FREE_TIER_INFO =
+  "We're on Render's free tier (0.1 CPU / 512 MB RAM). When the service has been idle, the first request triggers a cold start that usually takes 30–60 seconds. Subsequent requests are fast.";
 
 const LONG_LOAD_MS = 4000;
 const COLD_START_MS = 10000;
@@ -35,12 +36,7 @@ function LoadingOverlay({ loading, longLoadMs = LONG_LOAD_MS, coldStartMs = COLD
 
   if (!loading) return null;
 
-  const message =
-    stage === 'cold'
-      ? 'Still waking up the server…'
-      : stage === 'slow'
-        ? 'Render is taking a while to load up…'
-        : 'Loading data…';
+  const message = stage === 'cold' ? 'Still waking up the server…' : stage === 'slow' ? 'Render is taking a while to load up…' : 'Loading data…';
 
   return (
     <Box
@@ -86,9 +82,7 @@ function LoadingOverlay({ loading, longLoadMs = LONG_LOAD_MS, coldStartMs = COLD
           }}
         >
           <Typography variant="caption" sx={{ color: '#f7f6f2', lineHeight: 1.4 }}>
-            {stage === 'cold'
-              ? `Hang tight — the backend may be cold-starting (${elapsed}s elapsed).`
-              : 'First request after idle can be slow.'}
+            {stage === 'cold' ? `Hang tight — the backend may be cold-starting (${elapsed}s elapsed).` : 'First request after idle can be slow.'}
           </Typography>
           <Tooltip
             arrow
@@ -104,11 +98,7 @@ function LoadingOverlay({ loading, longLoadMs = LONG_LOAD_MS, coldStartMs = COLD
               },
             }}
           >
-            <InfoOutlinedIcon
-              fontSize="small"
-              aria-label="Why is this slow?"
-              sx={{ color: '#f7f6f2', cursor: 'help', flexShrink: 0 }}
-            />
+            <InfoOutlinedIcon fontSize="small" aria-label="Why is this slow?" sx={{ color: '#f7f6f2', cursor: 'help', flexShrink: 0 }} />
           </Tooltip>
         </Stack>
       </Fade>
