@@ -1,4 +1,6 @@
-# **Budget Management API - A Comprehensive, Microservices-Based API for Managing Budgets, Expenses, Users, and More! 💰**
+# **Budget Management API** 💰
+
+**_A Comprehensive, Microservices-Based API for Managing Budgets, Expenses, Users, and So Much More!_**
 
 **Welcome to the Budget Management API**, a robust, **microservices** backend platform for managing budgets, expenses, users, orders, and notifications. Built with **Node.js**, **Express**, and **TypeScript**, it supports advanced features like **GraphQL**, **gRPC**, **WebSockets**, and **REST APIs**. 
 
