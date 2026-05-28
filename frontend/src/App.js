@@ -10,6 +10,7 @@ import Budgets from './pages/Budgets';
 import Expenses from './pages/Expenses';
 import Users from './pages/Users';
 import Dashboard from './pages/Dashboard';
+import Passkeys from './pages/Passkeys';
 import ProtectedRoute from './components/ProtectedRoute';
 import GuestRoute from './components/GuestRoute';
 import ForgotPassword from './pages/ForgotPassword';
@@ -97,6 +98,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/passkeys"
+              element={
+                <ProtectedRoute>
+                  <Passkeys />
                 </ProtectedRoute>
               }
             />

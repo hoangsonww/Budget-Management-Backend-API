@@ -3,6 +3,9 @@ import { Container, TextField, Button, Typography, Paper, Box, Grid, Divider } f
 import api from '../services/api';
 import { useNavigate, Link } from 'react-router-dom';
 import LoadingOverlay from '../components/LoadingOverlay';
+import { setToken } from '../services/auth';
+import { isPasskeySupported } from '../services/passkeys';
+import PasskeyPromptModal from '../components/PasskeyPromptModal';
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -12,6 +15,7 @@ function Register() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showPasskeyModal, setShowPasskeyModal] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = async () => {
@@ -22,12 +26,23 @@ function Register() {
     }
     setLoading(true);
     try {
-      await api.post('/api/auth/register', { username, email, password });
+      const res = await api.post('/api/auth/register', { username, email, password });
       setSuccess(true);
       setError(null);
-      setTimeout(() => {
-        navigate('/login');
-      }, 1500);
+
+      // The API auto-logs-in on registration. If we have a session and the
+      // browser supports passkeys, invite the user to enrol one right away;
+      // otherwise head straight into the app.
+      if (res.data?.token) {
+        setToken(res.data.token);
+        if (isPasskeySupported()) {
+          setShowPasskeyModal(true);
+        } else {
+          setTimeout(() => navigate('/budgets'), 1200);
+        }
+      } else {
+        setTimeout(() => navigate('/login'), 1500);
+      }
     } catch (err) {
       console.error(err);
       setError('Registration failed. Maybe email is already in use, or an error has occurred.');
@@ -36,9 +51,16 @@ function Register() {
     }
   };
 
+  const handlePasskeyModalClose = created => {
+    setShowPasskeyModal(false);
+    navigate(created ? '/passkeys' : '/budgets');
+  };
+
   return (
     <Box sx={{ py: { xs: 4, md: 8 } }}>
       <LoadingOverlay loading={loading} />
+      <PasskeyPromptModal open={showPasskeyModal} onClose={handlePasskeyModalClose} />
+
       <Container>
         <Grid container spacing={4} alignItems="center" justifyContent="center">
           <Grid item xs={12} md={6}>
@@ -56,7 +78,7 @@ function Register() {
               )}
               {success && (
                 <Typography color="primary" mb={2}>
-                  Registration successful. Redirecting...
+                  Account created successfully.
                 </Typography>
               )}
               <TextField

@@ -45,6 +45,7 @@
     "@faker-js/faker": "^9.3.0",
     "@grpc/grpc-js": "^1.12.5",
     "@grpc/proto-loader": "^0.7.13",
+    "@simplewebauthn/server": "^13.3.1",
     "amqplib": "^0.10.4",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
