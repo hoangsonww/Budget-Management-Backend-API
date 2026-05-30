@@ -49,7 +49,7 @@ Below is a _very_ _comprehensive_ guide to setting up, running, and utilizing th
 The Budget Management API is designed to handle complex budget management requirements, including:
 
 - Budget and expense tracking.
-- User management and authentication.
+- User management and authentication (JWT/password **and** passwordless passkeys via WebAuthn).
 - Real-time notifications via WebSockets.
 - Asynchronous task handling using RabbitMQ and Kafka.
 - Advanced search capabilities with Elasticsearch.
@@ -86,6 +86,9 @@ The purpose of this API is to demonstrate the capabilities of modern backend tec
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)
 ![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white)
 ![NGINX](https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=nginx&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+![WebAuthn](https://img.shields.io/badge/WebAuthn-4A90E2?style=for-the-badge&logo=webauthn&logoColor=white)
+![Passkeys](https://img.shields.io/badge/Passkeys-4A90E2?style=for-the-badge&logo=webauthn&logoColor=white)
 ![PM2](https://img.shields.io/badge/PM2-2B037A?style=for-the-badge&logo=pm2&logoColor=white)
 ![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=black)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
@@ -164,6 +167,7 @@ You can access the API and test the endpoints directly from the browser. Feel fr
 | **gRPC**            | High-performance remote procedure call framework.         |
 | **GraphQL**         | Query language for fetching and manipulating data.        |
 | **WebSocket**       | Real-time communication for notifications.                |
+| **WebAuthn/Passkeys** | Passwordless, phishing-resistant authentication (`@simplewebauthn`). |
 | **Swagger/OpenAPI** | API documentation and testing.                            |
 | **Docker**          | Containerization for easy deployment.                     |
 | **Kubernetes**      | Orchestrating containerized applications at scale.        |
@@ -362,11 +366,18 @@ mindmap
 
 | **Endpoint**               | **Method** | **Description**                          |
 |----------------------------|------------|------------------------------------------|
-| `/api/auth/register`       | POST       | Register a new user.                     |
+| `/api/auth/register`       | POST       | Register a new user (auto-logs in and returns a JWT). |
 | `/api/auth/login`          | POST       | Login and receive a JWT token.           |
 | `/api/auth/logout`         | POST       | Logout and invalidate the token.         |
 | `/api/auth/verify-email`   | POST       | Verify the user's email address.         |
 | `/api/auth/reset-password` | POST       | Reset the user's password.               |
+| `/api/passkeys/login/options`    | POST | Begin passwordless passkey login (returns options + a one-time `flowId`). |
+| `/api/passkeys/login/verify`     | POST | Complete passkey login and receive a JWT token. |
+| `/api/passkeys/register/options` | POST | Begin passkey registration for the authenticated user. *(auth)* |
+| `/api/passkeys/register/verify`  | POST | Complete passkey registration and store the credential. *(auth)* |
+| `/api/passkeys`            | GET        | List the authenticated user's passkeys. *(auth)* |
+| `/api/passkeys/:id`        | PATCH      | Rename one of the user's passkeys. *(auth)* |
+| `/api/passkeys/:id`        | DELETE     | Delete one of the user's passkeys. *(auth)* |
 | `/api/users/profile`       | GET        | Get the authenticated user's profile.    |
 | `/api/budgets`             | GET        | Get all budgets.                         |
 | `/api/budgets`             | POST       | Create a new budget.                     |
@@ -401,6 +412,8 @@ mindmap
 | `/api/graphql`             | POST       | Perform a GraphQL query.                 |
 | `/api/notifications`       | POST       | Send a real-time notification.           |
 | `/api/search`              | POST       | Search for expenses using Elasticsearch. |
+
+Endpoints marked *(auth)* require a valid JWT in the `Authorization: Bearer <token>` header. The two passkey **login** endpoints are public (they form the passwordless sign-in flow), while passkey registration and management require an existing session so a logged-in user can enroll and manage their own credentials.
 
 Additionally, the root `/` endpoint provides a welcome message and information about the API.
 
@@ -458,6 +471,21 @@ More endpoints and features are available in the API. Refer to the [Swagger docu
 | `status`      | String   | Task status.                 |
 | `createdAt`   | Date     | Task creation date.          |
 
+### **Passkey**
+
+A single WebAuthn credential. A user may own many passkeys. Security-critical fields (`credentialID`, `publicKey`, `counter`) never leave the server; only the metadata below is exposed to the management UI.
+
+| **Field**     | **Type** | **Description**              |
+|---------------|----------|------------------------------|
+| `user`        | ObjectId | Owning user (reference).     |
+| `name`        | String   | User-friendly label (e.g. "MacBook Touch ID"). |
+| `deviceType`  | String   | `singleDevice` or `multiDevice` (synced). |
+| `backedUp`    | Boolean  | Whether the credential is synced/backed up (e.g. iCloud Keychain). |
+| `transports`  | [String] | Authenticator transports (e.g. `internal`, `hybrid`, `usb`). |
+| `aaguid`      | String   | Authenticator model identifier (used to suggest a name). |
+| `createdAt`   | Date     | When the passkey was registered. |
+| `lastUsedAt`  | Date     | When the passkey was last used to sign in. |
+
 ## **Features and Integrations**
 
 ### **gRPC**
@@ -499,6 +527,16 @@ More endpoints and features are available in the API. Refer to the [Swagger docu
 - In-memory caching for improved performance.
 - Redis URL: `redis://localhost:6379`.
 - Caching is used for user sessions and other data.
+- Also stores short-lived (5 min), single-use WebAuthn challenges for the passkey ceremonies.
+
+### **Passkeys (WebAuthn)**
+- Passwordless, phishing-resistant authentication built on the [WebAuthn](https://www.w3.org/TR/webauthn-2/) standard, implemented with [`@simplewebauthn`](https://simplewebauthn.dev/) on both the server and the browser.
+- **Passwordless login** uses discoverable credentials, so users can sign in without typing an email — the browser offers any passkey registered for the site. A successful ceremony returns a standard JWT, identical to password login.
+- **Registration & management** are protected: a logged-in user can enroll multiple passkeys and list/rename/delete them. Registration via `/api/auth/register` auto-logs-in (returns a JWT) so new users can immediately enroll a passkey.
+- **Two-step ceremonies**: the client first requests `options` from the server, hands them to the authenticator, then posts the result back to `verify`. Challenges are kept in Redis with a short TTL and consumed on use.
+- **Relying-Party (RP) resolution** is per-request: the `rpID`/`origin` are derived from the request's `Origin` header (great for local dev where the frontend runs on `http://localhost:3000`). In production set `WEBAUTHN_ORIGINS` (and optionally `RP_ID`/`RP_NAME`) to lock ceremonies to an allowlist of trusted origins.
+- **Friendly names** are auto-derived from the authenticator's AAGUID/transports (e.g. "iCloud Keychain", "Windows Hello", "YubiKey 5 Series", "This device").
+- Endpoints live under `/api/passkeys` — see the [Available Endpoints](#available-endpoints) table.
 
 ### **PostgreSQL**
 - Relational database for transaction logs.
@@ -593,6 +631,18 @@ KAFKA_BROKER=
 
 # JWT Secret Key
 JWT_SECRET=
+
+# WebAuthn / Passkey Configuration
+# RP_ID: the registrable domain passkeys are bound to (e.g. example.com).
+#   Leave blank to derive it from the request origin (good for local dev,
+#   where the frontend on http://localhost:3000 resolves to rpID "localhost").
+RP_ID=
+# RP_NAME: human-readable relying-party name shown in the OS passkey prompt.
+RP_NAME=
+# WEBAUTHN_ORIGINS: comma-separated allowlist of frontend origins permitted to
+#   perform passkey ceremonies (e.g. https://app.example.com,http://localhost:3000).
+#   Leave blank to trust the request origin (local dev convenience).
+WEBAUTHN_ORIGINS=
 
 # Elasticsearch Configuration
 ELASTIC_SEARCH_URL=
@@ -726,6 +776,12 @@ Here are some screenshots of the frontend UI:
 
 <p align="center">
   <img src="../images/profile.png" alt="Frontend UI" style="border-radius: 8px;">
+</p>
+
+**Passkeys:** 
+
+<p align="center">
+  <img src="../images/passkeys.png" alt="Frontend UI" style="border-radius: 8px;">
 </p>
 
 **Login:**
