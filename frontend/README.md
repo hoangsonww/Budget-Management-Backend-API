@@ -1,6 +1,6 @@
 # Budget Management System Frontend
 
-This README provides a comprehensive overview of the Budget Management System's frontend application. The UI is built with React, Material-UI (MUI) as the component library, React Router for navigation, and Chart.js for data visualization. It interacts with a backend API to manage budgets, expenses, user authentication, and more.
+This README provides a comprehensive overview of the Budget Management System's frontend application. The UI is built with React, Material-UI (MUI) as the component library, React Router for navigation, and Chart.js for data visualization. It interacts with a backend API to manage budgets, expenses, user authentication (including passwordless **passkeys** via WebAuthn), and more.
 
 ## Table of Contents
 - [Overview](#overview)
@@ -9,6 +9,7 @@ This README provides a comprehensive overview of the Budget Management System's 
 - [Getting Started](#getting-started)
 - [Running the Application](#running-the-application)
 - [Authentication Flow](#authentication-flow)
+- [Passkeys (Passwordless Auth)](#passkeys-passwordless-auth)
 - [Pages and Components](#pages-and-components)
 - [Charts and Visualization](#charts-and-visualization)
 - [Theme and Styles](#theme-and-styles)
@@ -23,13 +24,15 @@ The frontend of this Budget Management System provides a user-friendly interface
 - Tracking expenses
 - Viewing dashboards and charts for financial insights
 - Managing user profiles and viewing other users
-- Registering and logging in securely
+- Registering and logging in securely (password **or** passwordless passkey)
+- Enrolling and managing passkeys (WebAuthn) for passwordless sign-in
 
 The UI dynamically adapts to user authentication states, displays charts with adjustable styles depending on light/dark mode, and integrates a responsive navbar and footer layout.
 
 ## Key Features
 - **Light/Dark Mode**: Toggle between light and dark themes.
-- **Protected Routes**: Some pages (e.g., profile, budgets, expenses) are protected and require authentication.
+- **Protected Routes**: Some pages (e.g., profile, budgets, expenses, passkeys) are protected and require authentication.
+- **Passkeys (Passwordless Auth)**: Sign in with a passkey from the login page, and add/rename/delete passkeys from a dedicated management page. Built on WebAuthn via `@simplewebauthn/browser`.
 - **Dynamic Navbar**: The navbar updates based on the user's login state and shows/hides certain links. Active links are highlighted (with a bottom border on desktop and a color change on mobile).
 - **Responsive Design**: The UI is fully responsive, adapting navigation elements and layouts for mobile and desktop.
 - **Charts**: Budget and expense data are visualized using Chart.js with MUI styling and dynamic text colors in dark mode.
@@ -57,10 +60,12 @@ frontend/
     ├── services/ 
     │   ├── api.js              // Axios instance setup and API service helper
     │   ├── auth.js             // Token utilities, auth-related helpers
+    │   ├── passkeys.js         // WebAuthn ceremonies (register/login) + error normalization
     ├── components/
-    │   ├── Navbar.js           // Responsive navbar with dynamic links, token validation
+    │   ├── Navbar.js           // Responsive navbar with Account dropdown (Passkeys + Log Out)
     │   ├── Footer.js           // Footer that stays at bottom of viewport
     │   ├── ProtectedRoute.js   // Wrapper for protected routes
+    │   ├── PasskeyPromptModal.js // Post-signup modal inviting passkey enrolment
     │   ├── AddBudgetModal.js   // Modal for adding a budget
     │   ├── EditBudgetModal.js  // Modal for editing a budget
     │   ├── AddExpenseModal.js  // Modal for adding an expense
@@ -71,8 +76,9 @@ frontend/
     │   ├── ExpenseChart.js     // Chart.js-based expense visualization
     ├── pages/
     │   ├── Home.js             // Landing page with intro and quick links
-    │   ├── Login.js            // Login page with form
+    │   ├── Login.js            // Login page with form + "Sign in with a passkey"
     │   ├── Register.js         // Register page with form and confirm password
+    │   ├── Passkeys.js         // Passkey management page (add/rename/delete) (protected)
     │   ├── Profile.js          // User profile page (protected)
     │   ├── Budgets.js          // Budgets page with CRUD and chart
     │   ├── Expenses.js         // Expenses page with CRUD, search, and chart
@@ -107,15 +113,26 @@ frontend/
 - **Token Validation**: The navbar periodically verifies the token with a `POST /api/auth/verify-token` call.
 - **Automatic Logout**: If the token is invalid or expired, the user is logged out and redirected to `/login`.
 - **Protected Routes**: Components wrapped with `<ProtectedRoute>` require a valid token.
+- **Passkey Sign-in**: Users can also authenticate passwordlessly via the "Sign in with a passkey" option (see below), which returns the same JWT and is stored identically.
+
+## Passkeys (Passwordless Auth)
+The frontend supports [passkeys](https://fidoalliance.org/passkeys/) (WebAuthn) for passwordless, phishing-resistant sign-in, alongside the existing email/password flow.
+
+- **Library**: ceremonies are run with [`@simplewebauthn/browser`](https://simplewebauthn.dev/), wrapped by `src/services/passkeys.js`.
+- **Sign in with a passkey**: the `/login` page offers a passkey option that runs the discoverable-credential ceremony — the browser lets the user pick any passkey registered for the site, no email required. On success a JWT is stored just like password login.
+- **Enrolment after sign-up**: after registering, a `PasskeyPromptModal` invites the user to add a passkey right away (the backend auto-logs-in on register to make this possible). Custom modals/snackbars are used instead of native `alert`/`prompt`.
+- **Management page**: `/passkeys` (protected) lists the user's passkeys and lets them **add**, **rename**, and **delete** credentials, with an empty state, custom confirm dialogs, and snackbar feedback. It is reachable from the navbar **Account** dropdown.
+- **Graceful fallback**: passkey affordances are only shown when the browser supports WebAuthn; authenticator/cancellation errors are normalized into friendly, actionable messages.
 
 ## Pages and Components
 - **Home**: Showcases a welcome message, description, and quick links. On desktop, a large icon is shown beside the "keep track" text.
-- **Login/Register**: Simple forms for authentication. The Register page includes a confirm password field.
+- **Login/Register**: Simple forms for authentication. The Register page includes a confirm password field; Login also offers a "Sign in with a passkey" option.
+- **Passkeys**: Manage passwordless credentials — add, rename, and delete passkeys. Protected route, reached from the navbar Account dropdown.
 - **Profile**: Shows user details (e.g., email, join date). Only available for logged-in users.
 - **Budgets**: Create/edit/view budgets and see a bar chart summarizing them.
 - **Expenses**: Add/edit/delete expenses, search them, and view distribution charts.
 - **Users**: View and search other users (if allowed).
-- **Navbar**: Shows/hides links based on login state. On desktop, active links have a white bottom border; on mobile, active links appear in brown-ish color.
+- **Navbar**: Shows/hides links based on login state. The logout button is now an **Account** dropdown (Passkeys + a destructive Log Out) on desktop and in the mobile drawer. On desktop, active links have a white bottom border; on mobile, active links appear in brown-ish color.
 - **Footer**: Always pinned to the bottom. If content is short, footer stays at viewport bottom. If content is long, the page scrolls and footer stays below content.
 
 ## Charts and Visualization

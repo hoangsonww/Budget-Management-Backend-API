@@ -36,26 +36,31 @@ function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      try {
-        const [bRes, eRes, uRes, oRes, tRes, trRes] = await Promise.all([
-          api.get('/api/budgets'),
-          api.get('/api/expenses'),
-          api.get('/api/users'),
-          api.get('/api/orders'),
-          api.get('/api/tasks'),
-          api.get('/api/transactions'),
-        ]);
-        setBudgets(bRes.data || []);
-        setExpenses(eRes.data.expenses || []);
-        setUsers(uRes.data || []);
-        setOrders(oRes.data || []);
-        setTasks(tRes.data.tasks || []);
-        setTransactions(trRes.data.logs || []);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
+
+      // Resolve each source independently so one failing endpoint (e.g. the
+      // PostgreSQL-backed /api/transactions) doesn't blank out the entire
+      // dashboard. Failed requests are logged and fall back to an empty set.
+      const sources = [
+        { url: '/api/budgets', set: setBudgets, pick: data => data || [] },
+        { url: '/api/expenses', set: setExpenses, pick: data => data.expenses || [] },
+        { url: '/api/users', set: setUsers, pick: data => data || [] },
+        { url: '/api/orders', set: setOrders, pick: data => data || [] },
+        { url: '/api/tasks', set: setTasks, pick: data => data.tasks || [] },
+        { url: '/api/transactions', set: setTransactions, pick: data => data.logs || [] },
+      ];
+
+      const results = await Promise.allSettled(sources.map(s => api.get(s.url)));
+
+      results.forEach((result, i) => {
+        const { url, set, pick } = sources[i];
+        if (result.status === 'fulfilled') {
+          set(pick(result.value.data || {}));
+        } else {
+          console.error(`Dashboard: failed to load ${url}`, result.reason);
+        }
+      });
+
+      setLoading(false);
     };
     fetchData();
   }, []);
