@@ -1059,6 +1059,11 @@ code {
     color: var(--danger-color);
 }
 
+.method.patch {
+    background: rgba(103, 58, 183, 0.2);
+    color: #b39ddb;
+}
+
 .path {
     font-family: 'Fira Code', monospace;
     color: var(--primary-color);

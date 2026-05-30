@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Budget Management API is a production-ready microservices backend built with Node.js, Express, and TypeScript, supporting REST, GraphQL, gRPC, and WebSockets with MongoDB, PostgreSQL, Redis, RabbitMQ, Kafka, and Elasticsearch.">
-    <meta name="keywords" content="Budget Management API, Node.js, Express, TypeScript, Microservices, REST, GraphQL, gRPC, WebSockets, MongoDB, PostgreSQL, Redis, RabbitMQ, Kafka, Elasticsearch">
+    <meta name="keywords" content="Budget Management API, Node.js, Express, TypeScript, Microservices, REST, GraphQL, gRPC, WebSockets, MongoDB, PostgreSQL, Redis, RabbitMQ, Kafka, Elasticsearch, WebAuthn, Passkeys, Passwordless Authentication">
     <meta name="title" content="Budget Management API - Comprehensive Documentation">
     <meta name="author" content="Son Nguyen">
     <meta name="creator" content="Son Nguyen">
@@ -191,6 +191,7 @@
                         <span class="badge badge-warning status-chip"><i class="fas fa-bolt"></i> gRPC Gateway</span>
                         <span class="badge badge-danger status-chip"><i class="fas fa-wifi"></i> WebSocket Live</span>
                         <span class="badge badge-success status-chip"><i class="fas fa-shield-alt"></i> JWT Auth Secured</span>
+                        <span class="badge badge-success status-chip"><i class="fas fa-fingerprint"></i> Passkeys Enabled</span>
                         <span class="badge badge-info status-chip"><i class="fab fa-docker"></i> Dockerized Services</span>
                         <span class="badge badge-warning status-chip"><i class="fas fa-cubes"></i> Kubernetes Ready</span>
                         <span class="badge badge-danger status-chip"><i class="fas fa-rocket"></i> CI/CD Automated</span>
@@ -209,6 +210,7 @@
                         <span class="badge badge-warning status-chip"><i class="fas fa-bolt"></i> gRPC Gateway</span>
                         <span class="badge badge-danger status-chip"><i class="fas fa-wifi"></i> WebSocket Live</span>
                         <span class="badge badge-success status-chip"><i class="fas fa-shield-alt"></i> JWT Auth Secured</span>
+                        <span class="badge badge-success status-chip"><i class="fas fa-fingerprint"></i> Passkeys Enabled</span>
                         <span class="badge badge-info status-chip"><i class="fab fa-docker"></i> Dockerized Services</span>
                         <span class="badge badge-warning status-chip"><i class="fas fa-cubes"></i> Kubernetes Ready</span>
                         <span class="badge badge-danger status-chip"><i class="fas fa-rocket"></i> CI/CD Automated</span>
@@ -295,6 +297,7 @@
                     <ul class="feature-list">
                         <li><i class="fas fa-check"></i> Budget & expense tracking</li>
                         <li><i class="fas fa-check"></i> User authentication & management</li>
+                        <li><i class="fas fa-check"></i> Passwordless passkeys (WebAuthn)</li>
                         <li><i class="fas fa-check"></i> Real-time notifications</li>
                         <li><i class="fas fa-check"></i> Advanced search with Elasticsearch</li>
                         <li><i class="fas fa-check"></i> Asynchronous task processing</li>
@@ -522,12 +525,27 @@ flowchart LR
                         <i class="fas fa-lock"></i>
                     </div>
                     <h3>Authentication & Security</h3>
-                    <p>JWT-based authentication, bcrypt password hashing, role-based access control, and secure session management.</p>
+                    <p>JWT-based authentication, bcrypt password hashing, and passwordless passkeys (WebAuthn) for phishing-resistant sign-in, plus secure session management.</p>
                     <ul>
                         <li>User registration & login</li>
+                        <li>Passwordless passkeys (WebAuthn)</li>
                         <li>Email verification</li>
                         <li>Password reset</li>
                         <li>Token-based auth</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-fingerprint"></i>
+                    </div>
+                    <h3>Passkeys (WebAuthn)</h3>
+                    <p>Passwordless, phishing-resistant authentication built on the WebAuthn standard with <code>@simplewebauthn</code>, alongside the classic password flow.</p>
+                    <ul>
+                        <li>Passwordless sign-in</li>
+                        <li>Touch ID / Face ID / security keys</li>
+                        <li>Multiple passkeys per user</li>
+                        <li>Manage, rename & revoke</li>
                     </ul>
                 </div>
 
@@ -969,6 +987,47 @@ npm start</code></pre>
                             <span class="method post">POST</span>
                             <span class="path">/api/auth/reset-password</span>
                             <span class="desc">Reset user password</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="api-category">
+                    <h3><i class="fas fa-fingerprint"></i> Passkeys (WebAuthn)</h3>
+                    <div class="endpoint-list">
+                        <div class="endpoint">
+                            <span class="method post">POST</span>
+                            <span class="path">/api/passkeys/login/options</span>
+                            <span class="desc">Begin passwordless login</span>
+                        </div>
+                        <div class="endpoint">
+                            <span class="method post">POST</span>
+                            <span class="path">/api/passkeys/login/verify</span>
+                            <span class="desc">Complete login & get JWT</span>
+                        </div>
+                        <div class="endpoint">
+                            <span class="method post">POST</span>
+                            <span class="path">/api/passkeys/register/options</span>
+                            <span class="desc">Begin passkey registration</span>
+                        </div>
+                        <div class="endpoint">
+                            <span class="method post">POST</span>
+                            <span class="path">/api/passkeys/register/verify</span>
+                            <span class="desc">Store the new credential</span>
+                        </div>
+                        <div class="endpoint">
+                            <span class="method get">GET</span>
+                            <span class="path">/api/passkeys</span>
+                            <span class="desc">List the user's passkeys</span>
+                        </div>
+                        <div class="endpoint">
+                            <span class="method patch">PATCH</span>
+                            <span class="path">/api/passkeys/:id</span>
+                            <span class="desc">Rename a passkey</span>
+                        </div>
+                        <div class="endpoint">
+                            <span class="method delete">DELETE</span>
+                            <span class="path">/api/passkeys/:id</span>
+                            <span class="desc">Delete a passkey</span>
                         </div>
                     </div>
                 </div>
