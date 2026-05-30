@@ -49,6 +49,10 @@ const { JWT_SECRET } = process.env;
  *                 message:
  *                   type: string
  *                   example: User registered successfully
+ *                 token:
+ *                   type: string
+ *                   description: JWT for the newly created session (auto-login).
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *       400:
  *         description: Email already in use.
  *         content:
@@ -74,7 +78,10 @@ exports.register = async (req, res, next) => {
     const user = new User({ username, email, password });
     await user.save();
 
-    res.status(201).json({ message: 'User registered successfully' });
+    // Auto-login so the client can immediately offer passkey enrolment.
+    const token = generateToken(user._id);
+
+    res.status(201).json({ message: 'User registered successfully', token });
   } catch (error) {
     next(error);
   }

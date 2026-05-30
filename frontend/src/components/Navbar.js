@@ -10,6 +10,9 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Menu,
+  MenuItem,
+  Divider,
   Box,
   Stack,
   useMediaQuery,
@@ -27,14 +30,20 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import GroupIcon from '@mui/icons-material/Group';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LogoutIcon from '@mui/icons-material/Logout';
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { isLoggedIn as checkLoggedIn, getTokenExpiry, logout, onAuthChange } from '../services/auth';
 
 function Navbar({ mode, setMode }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(() => checkLoggedIn());
+  const [accountAnchor, setAccountAnchor] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const isMobileNav = useMediaQuery('(max-width:1350px)');
+
+  const openAccountMenu = e => setAccountAnchor(e.currentTarget);
+  const closeAccountMenu = () => setAccountAnchor(null);
 
   const handleToggleMode = () => {
     setMode(prev => (prev === 'light' ? 'dark' : 'light'));
@@ -64,8 +73,14 @@ function Navbar({ mode, setMode }) {
   }, [isLoggedIn]);
 
   const handleLogout = () => {
+    closeAccountMenu();
     logout();
     navigate('/login');
+  };
+
+  const goToPasskeys = () => {
+    closeAccountMenu();
+    navigate('/passkeys');
   };
 
   const baseNavLinks = [
@@ -77,13 +92,15 @@ function Navbar({ mode, setMode }) {
     { to: '/users', label: 'Users', icon: <GroupIcon /> },
   ];
 
+  // When signed in, account actions (Passkeys, Log Out) live in a dropdown
+  // instead of as flat nav buttons; guests get Login/Register instead.
   let navLinks = [...baseNavLinks];
-  if (isLoggedIn) {
-    navLinks.push({ to: '#', label: 'Logout', icon: <LogoutIcon />, action: handleLogout });
-  } else {
+  if (!isLoggedIn) {
     navLinks.push({ to: '/login', label: 'Login', icon: <LoginIcon /> });
     navLinks.push({ to: '/register', label: 'Register', icon: <PersonAddIcon /> });
   }
+
+  const accountActive = location.pathname === '/passkeys';
 
   return (
     <>
@@ -125,35 +142,68 @@ function Navbar({ mode, setMode }) {
             </Box>
           </Stack>
 
-          <Box sx={{ display: isMobileNav ? 'none' : 'flex', gap: 1 }}>
+          <Box sx={{ display: isMobileNav ? 'none' : 'flex', gap: 1, alignItems: 'center' }}>
             {navLinks.map(link => {
               const isActive = location.pathname === link.to;
-              const isLogout = link.label === 'Logout';
               const buttonStyle = {
                 px: 2,
                 borderRadius: 999,
                 bgcolor: isActive ? 'rgba(31, 122, 99, 0.14)' : 'transparent',
-                color: isLogout ? 'error.main' : 'text.primary',
+                color: 'text.primary',
                 border: isActive ? '1px solid rgba(31, 122, 99, 0.3)' : '1px solid transparent',
-                '&:hover': {
-                  bgcolor: isLogout ? 'rgba(216, 74, 74, 0.1)' : 'rgba(31, 122, 99, 0.12)',
-                },
+                '&:hover': { bgcolor: 'rgba(31, 122, 99, 0.12)' },
               };
-
-              if (link.action) {
-                return (
-                  <Button key={link.label} color="inherit" startIcon={link.icon} onClick={link.action} sx={buttonStyle}>
-                    {link.label}
-                  </Button>
-                );
-              }
               return (
                 <Button key={link.to} component={Link} to={link.to} color="inherit" startIcon={link.icon} sx={buttonStyle}>
                   {link.label}
                 </Button>
               );
             })}
+
+            {isLoggedIn && (
+              <Button
+                color="inherit"
+                onClick={openAccountMenu}
+                startIcon={<AccountCircleIcon />}
+                endIcon={<KeyboardArrowDownIcon />}
+                aria-haspopup="true"
+                aria-expanded={Boolean(accountAnchor)}
+                sx={{
+                  px: 2,
+                  borderRadius: 999,
+                  color: 'text.primary',
+                  bgcolor: accountActive || accountAnchor ? 'rgba(31, 122, 99, 0.14)' : 'transparent',
+                  border: accountActive || accountAnchor ? '1px solid rgba(31, 122, 99, 0.3)' : '1px solid transparent',
+                  '&:hover': { bgcolor: 'rgba(31, 122, 99, 0.12)' },
+                }}
+              >
+                Account
+              </Button>
+            )}
           </Box>
+
+          <Menu
+            anchorEl={accountAnchor}
+            open={Boolean(accountAnchor)}
+            onClose={closeAccountMenu}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            slotProps={{ paper: { sx: { mt: 1, minWidth: 200, borderRadius: 2, overflow: 'visible' } } }}
+          >
+            <MenuItem onClick={goToPasskeys} selected={accountActive} sx={{ py: 1.25 }}>
+              <ListItemIcon sx={{ color: 'primary.main' }}>
+                <FingerprintIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Passkeys" />
+            </MenuItem>
+            <Divider sx={{ my: 0.5 }} />
+            <MenuItem onClick={handleLogout} sx={{ py: 1.25, color: 'error.main' }}>
+              <ListItemIcon sx={{ color: 'inherit' }}>
+                <LogoutIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Log Out" />
+            </MenuItem>
+          </Menu>
 
           <IconButton color="inherit" onClick={handleToggleMode} sx={{ ml: 1 }}>
             {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
@@ -168,36 +218,58 @@ function Navbar({ mode, setMode }) {
           <List sx={{ width: '100%' }}>
             {navLinks.map(link => {
               const isActive = location.pathname === link.to;
-              const isLogout = link.label === 'Logout';
-              const listItemStyles = {
-                borderRadius: 2,
-                mb: 0.5,
-                bgcolor: isActive ? 'rgba(31, 122, 99, 0.14)' : 'transparent',
-                color: isLogout ? 'error.main' : 'text.primary',
-              };
-
-              if (link.action) {
-                return (
-                  <ListItemButton
-                    key={link.label}
-                    onClick={() => {
-                      setDrawerOpen(false);
-                      link.action();
-                    }}
-                    sx={listItemStyles}
-                  >
-                    <ListItemIcon sx={{ color: 'inherit' }}>{link.icon}</ListItemIcon>
-                    <ListItemText primary={link.label} />
-                  </ListItemButton>
-                );
-              }
               return (
-                <ListItemButton key={link.to} component={Link} to={link.to} onClick={() => setDrawerOpen(false)} sx={listItemStyles}>
+                <ListItemButton
+                  key={link.to}
+                  component={Link}
+                  to={link.to}
+                  onClick={() => setDrawerOpen(false)}
+                  sx={{
+                    borderRadius: 2,
+                    mb: 0.5,
+                    bgcolor: isActive ? 'rgba(31, 122, 99, 0.14)' : 'transparent',
+                    color: 'text.primary',
+                  }}
+                >
                   <ListItemIcon sx={{ color: 'inherit' }}>{link.icon}</ListItemIcon>
                   <ListItemText primary={link.label} />
                 </ListItemButton>
               );
             })}
+
+            {isLoggedIn && (
+              <>
+                <Divider sx={{ my: 1 }} />
+                <ListItemButton
+                  component={Link}
+                  to="/passkeys"
+                  onClick={() => setDrawerOpen(false)}
+                  sx={{
+                    borderRadius: 2,
+                    mb: 0.5,
+                    bgcolor: accountActive ? 'rgba(31, 122, 99, 0.14)' : 'transparent',
+                    color: 'text.primary',
+                  }}
+                >
+                  <ListItemIcon sx={{ color: 'inherit' }}>
+                    <FingerprintIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Passkeys" />
+                </ListItemButton>
+                <ListItemButton
+                  onClick={() => {
+                    setDrawerOpen(false);
+                    handleLogout();
+                  }}
+                  sx={{ borderRadius: 2, mb: 0.5, color: 'error.main' }}
+                >
+                  <ListItemIcon sx={{ color: 'inherit' }}>
+                    <LogoutIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Log Out" />
+                </ListItemButton>
+              </>
+            )}
           </List>
         </Box>
       </Drawer>

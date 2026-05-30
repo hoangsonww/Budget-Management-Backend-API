@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Paper, Box, Grid, Divider } from '@mui/material';
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import api from '../services/api';
 import { setToken } from '../services/auth';
 import { useNavigate, Link } from 'react-router-dom';
 import LoadingOverlay from '../components/LoadingOverlay';
+import { authenticateWithPasskey, isPasskeySupported, describePasskeyError } from '../services/passkeys';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [passkeyLoading, setPasskeyLoading] = useState(false);
   const navigate = useNavigate();
+  const passkeySupported = isPasskeySupported();
 
   const handleLogin = async () => {
     setLoading(true);
@@ -23,6 +27,21 @@ function Login() {
       setError('Invalid email or password, or an error has occurred.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePasskeyLogin = async () => {
+    setError(null);
+    setPasskeyLoading(true);
+    try {
+      const token = await authenticateWithPasskey();
+      setToken(token);
+      navigate('/budgets');
+    } catch (err) {
+      const { cancelled, message } = describePasskeyError(err);
+      if (!cancelled) setError(message);
+    } finally {
+      setPasskeyLoading(false);
     }
   };
 
@@ -64,6 +83,16 @@ function Login() {
               <Button variant="contained" fullWidth onClick={handleLogin} size="large">
                 Login
               </Button>
+
+              {passkeySupported && (
+                <>
+                  <Divider sx={{ my: 2.5 }}>or</Divider>
+                  <Button variant="outlined" fullWidth size="large" startIcon={<FingerprintIcon />} onClick={handlePasskeyLogin} disabled={passkeyLoading}>
+                    {passkeyLoading ? 'Waiting for your device…' : 'Sign in with a passkey'}
+                  </Button>
+                </>
+              )}
+
               <Divider sx={{ my: 3 }} />
               <Typography variant="body2" sx={{ textAlign: 'center', mb: 1 }}>
                 Don&apos;t have an account?{' '}
