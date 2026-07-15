@@ -45,7 +45,7 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
 
   kafka:
-    image: bitnami/kafka:3
+    image: soldevelo/kafka:3.9
     container_name: kafka
     ports:
       - "9092:9092"
@@ -60,10 +60,12 @@ services:
       - zookeeper
 
   zookeeper:
-    image: bitnami/zookeeper:3
+    image: soldevelo/zookeeper:3.9
     container_name: zookeeper
     ports:
       - "2181:2181"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
 
 volumes:
   mongo-data:

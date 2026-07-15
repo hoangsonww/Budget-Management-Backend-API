@@ -2,15 +2,15 @@ version: '3.8'
 
 services:
   zookeeper:
-    image: bitnami/zookeeper:3
+    image: soldevelo/zookeeper:3.9
     container_name: kafka_zookeeper
     ports:
       - "2181:2181"
     environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ALLOW_EMPTY_PASSWORD=yes
 
   kafka:
-    image: bitnami/kafka:3
+    image: soldevelo/kafka:3.9
     container_name: kafka_broker
     ports:
       - "9092:9092"
